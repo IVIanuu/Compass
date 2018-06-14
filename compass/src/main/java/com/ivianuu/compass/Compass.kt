@@ -25,18 +25,17 @@ import java.lang.reflect.Method
 @Suppress("UNCHECKED_CAST")
 object Compass {
 
-    @PublishedApi
-    internal val fromBundleMethods = mutableMapOf<Class<*>, Method>()
-    @PublishedApi
-    internal val toBundleMethods = mutableMapOf<Class<*>, Method>()
-    @PublishedApi
-    internal val routeMethods = mutableMapOf<Class<*>, Method>()
-    @PublishedApi
-    internal val detourMethods = mutableMapOf<Class<*>, Method>()
+    private val fromBundleMethods = mutableMapOf<Class<*>, Method>()
+    private val toBundleMethods = mutableMapOf<Class<*>, Method>()
+    private val routeMethods = mutableMapOf<Class<*>, Method>()
+    private val detourMethods = mutableMapOf<Class<*>, Method>()
     
     private val unexistingClasses = mutableSetOf<String>()
 
-    inline fun <reified T : CompassDetour> getDetour(destination: Any): T? {
+    inline fun <reified T : CompassDetour> getDetour(destination: Any): T? =
+            getDetour(T::class.java, destination)
+
+    fun <T : CompassDetour> getDetour(clazz: Class<T>, destination: Any): T? {
         val detourProviderClass = findClazz(
             destination::class.java.name + "DetourProvider",
             destination::class.java.classLoader
@@ -45,7 +44,7 @@ object Compass {
         val method = findMethod(detourProviderClass, "get", detourMethods)
         if (method != null) {
             try {
-                return method.invoke(null) as? T?
+                return clazz.cast(method.invoke(null))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -55,9 +54,16 @@ object Compass {
     }
 
     inline fun <reified T : CompassDetour> requireDetour(destination: Any) =
-            getDetour<T>(destination) ?: throw IllegalStateException("no detour found for $destination")
+            Compass.requireDetour(T::class.java, destination)
 
-    inline fun <reified T : Any> getRouteFactory(destination: Any): T? {
+    fun <T : CompassDetour> requireDetour(clazz: Class<T>, destination: Any) =
+        getDetour(clazz, destination) ?: throw IllegalStateException("no detour found for $destination")
+
+
+    inline fun <reified T : Any> getRouteFactory(destination: Any) =
+            Compass.getRouteFactory(T::class.java, destination)
+
+    fun <T : Any> getRouteFactory(clazz: Class<T>, destination: Any): T? {
         val routeProviderClass = findClazz(
             destination::class.java.name + "RouteProvider",
             destination::class.java.classLoader
@@ -66,7 +72,7 @@ object Compass {
         val method = findMethod(routeProviderClass, "get", routeMethods)
         if (method != null) {
             try {
-                return method.invoke(null) as? T?
+                return clazz.cast(method.invoke(null))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -75,8 +81,12 @@ object Compass {
         return null
     }
 
-    inline fun <reified T : Any> requireRouteFactory(destination: Any): T =
-            getRouteFactory(destination) ?: throw IllegalStateException("no route factory found for $destination")
+    fun <T : Any> requireRouteFactory(clazz: Class<T>, destination: Any) =
+        getRouteFactory(clazz, destination)
+                ?: throw IllegalStateException("no route factory found for $destination")
+
+    inline fun <reified T : Any> requireRouteFactory(destination: Any) =
+            Compass.requireRouteFactory(T::class.java, destination)
 
     fun toBundle(destination: Any, bundle: Bundle = Bundle()): Bundle {
         val toBundleMethod = findToBundleMethod(destination::class.java)
@@ -144,8 +154,7 @@ object Compass {
         return method
     }
 
-    @PublishedApi
-    internal fun findClazz(
+    private fun findClazz(
         className: String,
         classLoader: ClassLoader
     ): Class<*>? {
@@ -159,8 +168,7 @@ object Compass {
         }
     }
 
-    @PublishedApi
-    internal fun findMethod(
+    private fun findMethod(
         clazz: Class<*>,
         methodName: String,
         map: MutableMap<Class<*>, Method>
