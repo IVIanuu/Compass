@@ -60,8 +60,6 @@ class CompassProcessor : AbstractProcessor() {
         val packageName = base.serializerPackageName(processingEnv)
         val className = base.serializerClassName()
 
-        val fileUri = processingEnv.filer.createSourceFile(className.toString(), base).toUri()
-
         val type = TypeSpec.objectBuilder(className)
             .addSuperinterface(CLASS_SERIALIZER)
             .let { SerializerBuilder.addToBundleMethod(processingEnv, it, base) }
@@ -72,7 +70,7 @@ class CompassProcessor : AbstractProcessor() {
             .addType(type)
             .build()
 
-        file.writeTo(File(fileUri))
+        file.writeTo(File(path()))
     }
 
     private fun generateRouteFactory(base: TypeElement) {
@@ -82,13 +80,11 @@ class CompassProcessor : AbstractProcessor() {
             val packageName = base.serializerPackageName(processingEnv)
             val className = base.routeFactoryClassName()
 
-            val fileUri = processingEnv.filer.createSourceFile(className.toString(), base).toUri()
-
             val file = FileSpec.builder(packageName, className.toString())
                 .addType(type)
                 .build()
 
-            file.writeTo(File(fileUri))
+            file.writeTo(File(path()))
         }
     }
 
@@ -98,13 +94,11 @@ class CompassProcessor : AbstractProcessor() {
         val packageName = base.serializerPackageName(processingEnv)
         val className = base.routeProviderClassName()
 
-        val fileUri = processingEnv.filer.createSourceFile(className.toString(), base).toUri()
-
         val file = FileSpec.builder(packageName, className.toString())
             .addType(type)
             .build()
 
-        file.writeTo(File(fileUri))
+        file.writeTo(File(path()))
     }
 
     private fun generateDetourProvider(base: TypeElement) {
@@ -114,26 +108,27 @@ class CompassProcessor : AbstractProcessor() {
             val packageName = base.serializerPackageName(processingEnv)
             val className = base.detourProviderClassName()
 
-            val fileUri = processingEnv.filer.createSourceFile(className.toString(), base).toUri()
-
             val file = FileSpec.builder(packageName, className.toString())
                 .addType(type)
                 .build()
 
-            file.writeTo(File(fileUri))
+            file.writeTo(File(path()))
         }
     }
 
     private fun generateExtensions(base: TypeElement) {
         val packageName = processingEnv.elementUtils.getPackageOf(base).toString()
-        val fileName = "${base.qualifiedName}Ext"
-        val fileUri = processingEnv.filer.createSourceFile(fileName, base).toUri()
+        val fileName = "${base.simpleName}Ext"
         val fileSpec = FileSpec.builder(packageName, fileName)
 
         ExtensionBuilder
             .buildSerializerFunctions(processingEnv, fileSpec, base)
 
-        fileSpec.build().writeTo(File(fileUri))
+        fileSpec.build().writeTo(File(path()))
     }
 
+    private fun path(): String {
+        return processingEnv.options["kapt.kotlin.generated"]
+            ?.replace("kaptKotlin", "kapt")!!
+    }
 }
