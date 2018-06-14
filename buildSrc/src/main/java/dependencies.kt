@@ -13,7 +13,7 @@ object Versions {
     const val autoCommon = "0.8"
     const val autoService = "1.0-rc3"
 
-    const val kotlin = "1.2.41"
+    const val kotlin = "1.2.50"
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
