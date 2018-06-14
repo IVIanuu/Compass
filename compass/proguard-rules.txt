@@ -1,0 +1,11 @@
+-keep public class * implements com.ivianuu.compass.CompassDetour { *; }
+-keep public class * implements com.ivianuu.compass.CompassDetourProvider { *; }
+-keep public class * implements com.ivianuu.compass.CompassRouteFactory { *; }
+-keep public class * implements com.ivianuu.compass.CompassRouteFactoryProvider { *; }
+-keep public class * implements com.ivianuu.compass.CompassSerializer { *; }
+
+-keep class com.ivianuu.compass.*
+
+-keep @com.ivianuu.compass.Destination public class *
+-keep @com.ivianuu.compass.Detour public class *
+-keep @com.ivianuu.compass.RouteFactory public class *
