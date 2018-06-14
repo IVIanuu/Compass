@@ -2,7 +2,7 @@ package com.ivianuu.compass.sample
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.ivianuu.compass.CompassNavigator
+import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.traveler.Traveler
 
 class MainActivity : AppCompatActivity() {
@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
     val router get() = traveler.router
 
     private val navigator by lazy(LazyThreadSafetyMode.NONE) {
-        CompassNavigator(this, supportFragmentManager, android.R.id.content)
+        CompassFragmentAppNavigator(this, supportFragmentManager, android.R.id.content)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
