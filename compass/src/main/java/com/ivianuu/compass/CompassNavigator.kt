@@ -24,8 +24,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.commands.Forward
-import com.ivianuu.traveler.commands.Replace
 import com.ivianuu.traveler.fragments.FragmentAppNavigator
 
 /**
@@ -38,13 +36,11 @@ open class CompassNavigator(
     containerId: Int
 ) : FragmentAppNavigator(activity, fragmentManager, containerId) {
 
-    override fun createFragment(key: Any, data: Any?): Fragment? {
-        return Compass.getRouteFactory<FragmentRouteFactory<Any>>(key)
-            ?.createFragment(key)?.apply {
-                val args = arguments ?: Bundle().also { arguments = it }
-                Compass.toBundle(key, args)
-            }
-    }
+    private val compassAppNavigatorHelper = CompassAppNavigatorHelper()
+    private val compassFragmentNavigatorHelper = CompassFragmentNavigatorHelper()
+
+    override fun createFragment(key: Any, data: Any?): Fragment? =
+        compassFragmentNavigatorHelper.createFragment(key, data)
 
     override fun setupFragmentTransaction(
         command: Command,
@@ -52,34 +48,13 @@ open class CompassNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        val destination = when(command) {
-            is Replace -> command.key
-            is Forward -> command.key
-            else -> throw IllegalArgumentException()
-        }
-
-        val detour =
-            Compass.getDetour<FragmentDetour<Any>>(destination)
-        detour?.setup(destination, currentFragment, nextFragment, transaction)
+        compassFragmentNavigatorHelper.setupFragmentTransaction(
+            command, currentFragment, nextFragment, transaction)
     }
 
-    override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
-        return Compass.getRouteFactory<ActivityRouteFactory<Any>>(key)
-            ?.createIntent(context, key)?.apply {
-                extras.putAll(Compass.toBundle(key))
-            }
-    }
+    override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? =
+        compassAppNavigatorHelper.createActivityIntent(context, key, data)
 
-    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
-        val destination = when(command) {
-            is Replace -> command.key
-            is Forward -> command.key
-            else -> throw IllegalArgumentException() // this should never happen
-        }
-
-        val detour =
-            Compass.getDetour<ActivityDetour<Any>>(destination)
-
-        return detour?.createOptions(destination, activityIntent)
-    }
+    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
+        compassAppNavigatorHelper.createStartActivityOptions(command, activityIntent)
 }
