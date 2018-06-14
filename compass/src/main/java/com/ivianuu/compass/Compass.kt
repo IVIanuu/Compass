@@ -22,6 +22,7 @@ import java.lang.reflect.Method
 /**
  * @author Manuel Wrage (IVIanuu)
  */
+@Suppress("UNCHECKED_CAST")
 object Compass {
 
     private val fromBundleMethods = mutableMapOf<Class<*>, Method>()
@@ -31,7 +32,7 @@ object Compass {
     
     private val unexistingClasses = mutableSetOf<String>()
 
-    fun getDetour(destination: Any): CompassDetour? {
+    fun <T : CompassDetour> getDetour(destination: Any): T? {
         val detourProviderClass = findClazz(
             destination::class.java.name + "DetourProvider",
             destination::class.java.classLoader
@@ -40,7 +41,7 @@ object Compass {
         val method = findMethod(detourProviderClass, "get", detourMethods)
         if (method != null) {
             try {
-                return method.invoke(null) as CompassDetour?
+                return method.invoke(null) as? T?
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -49,7 +50,10 @@ object Compass {
         return null
     }
 
-    fun getRouteFactory(destination: Any): Any? {
+    fun <T : CompassDetour> requireDetour(destination: Any) =
+            getDetour<T>(destination) ?: throw IllegalStateException("no detour found for $destination")
+
+    fun <T : Any> getRouteFactory(destination: Any): T? {
         val routeProviderClass = findClazz(
             destination::class.java.name + "RouteProvider",
             destination::class.java.classLoader
@@ -58,7 +62,7 @@ object Compass {
         val method = findMethod(routeProviderClass, "get", routeMethods)
         if (method != null) {
             try {
-                return method.invoke(null)
+                return method.invoke(null) as T
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -66,6 +70,9 @@ object Compass {
 
         return null
     }
+
+    fun <T : Any> requireRouteFactory(destination: Any): T =
+            getRouteFactory(destination) ?: throw IllegalStateException("no route factory found for $destination")
 
     fun toBundle(destination: Any, bundle: Bundle = Bundle()): Bundle {
         val toBundleMethod = findToBundleMethod(destination::class.java)
@@ -80,7 +87,7 @@ object Compass {
         return bundle
     }
 
-    fun <T> fromBundle(clazz: Class<T>, bundle: Bundle): T? {
+    fun <T : Any> fromBundle(clazz: Class<T>, bundle: Bundle): T? {
         val method = findFromBundleMethod(clazz)
         if (method != null) {
             try {

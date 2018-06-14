@@ -39,17 +39,11 @@ open class CompassNavigator(
 ) : FragmentAppNavigator(activity, fragmentManager, containerId) {
 
     override fun createFragment(key: Any, data: Any?): Fragment? {
-        val routeFactory = Compass.getRouteFactory(key)
-
-        return when(routeFactory) {
-            is FragmentRouteFactory<*> -> {
-                val fragment =
-                    (routeFactory as FragmentRouteFactory<Any>).createFragment(key)
-                fragment.arguments = Compass.toBundle(key)
-                fragment
+        return Compass.getRouteFactory<FragmentRouteFactory<Any>>(key)
+            ?.createFragment(key)?.apply {
+                val args = arguments ?: Bundle().also { arguments = it }
+                Compass.toBundle(key, args)
             }
-            else -> null
-        }
     }
 
     override fun setupFragmentTransaction(
@@ -64,20 +58,16 @@ open class CompassNavigator(
             else -> throw IllegalArgumentException()
         }
 
-        val detour = Compass.getDetour(destination)
-
-        if (detour is FragmentDetour<*>) {
-            (detour as FragmentDetour<Any>)
-                .setup(destination, currentFragment, nextFragment, transaction)
-        }
+        val detour =
+            Compass.getDetour<FragmentDetour<Any>>(destination)
+        detour?.setup(destination, currentFragment, nextFragment, transaction)
     }
 
     override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
-        val routeFactory =
-            Compass.getRouteFactory(key) as? ActivityRouteFactory<Any>
-        return routeFactory?.createIntent(context, key)?.apply {
-            extras.putAll(Compass.toBundle(key))
-        }
+        return Compass.getRouteFactory<ActivityRouteFactory<Any>>(key)
+            ?.createIntent(context, key)?.apply {
+                extras.putAll(Compass.toBundle(key))
+            }
     }
 
     override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
@@ -88,13 +78,8 @@ open class CompassNavigator(
         }
 
         val detour =
-            Compass.getDetour(destination)
+            Compass.getDetour<ActivityDetour<Any>>(destination)
 
-        return if (detour is ActivityDetour<*>) {
-            (detour as ActivityDetour<Any>)
-                .createOptions(destination, activityIntent)
-        } else {
-            null
-        }
+        return detour?.createOptions(destination, activityIntent)
     }
 }
