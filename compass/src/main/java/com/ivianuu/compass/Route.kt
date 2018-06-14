@@ -20,10 +20,14 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.app.Fragment
 
-interface FragmentRouteFactory<T : Any> {
+interface CompassRouteFactory
+
+interface FragmentRouteFactory<T : Any> : CompassRouteFactory {
     fun createFragment(destination: T): Fragment
 }
 
-interface ActivityRouteFactory<T : Any> {
+interface ActivityRouteFactory<T : Any> : CompassRouteFactory {
     fun createIntent(context: Context, destination: T): Intent
 }
+
+interface CompassRouteFactoryProvider

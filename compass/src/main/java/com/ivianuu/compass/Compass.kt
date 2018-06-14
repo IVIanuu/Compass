@@ -37,7 +37,7 @@ object Compass {
 
     fun <T : CompassDetour> getDetour(clazz: Class<T>, destination: Any): T? {
         val detourProviderClass = findClazz(
-            destination::class.java.name + "DetourProvider",
+            destination::class.java.name + "__DetourProvider",
             destination::class.java.classLoader
         ) ?: return null
 
@@ -46,7 +46,6 @@ object Compass {
             try {
                 return clazz.cast(method.invoke(null))
             } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
 
@@ -60,32 +59,32 @@ object Compass {
         getDetour(clazz, destination) ?: throw IllegalStateException("no detour found for $destination")
 
 
-    inline fun <reified T : Any> getRouteFactory(destination: Any) =
+    inline fun <reified T : CompassRouteFactory> getRouteFactory(destination: Any) =
             Compass.getRouteFactory(T::class.java, destination)
 
-    fun <T : Any> getRouteFactory(clazz: Class<T>, destination: Any): T? {
+    fun <T : CompassRouteFactory> getRouteFactory(clazz: Class<T>, destination: Any): T? {
         val routeProviderClass = findClazz(
-            destination::class.java.name + "RouteProvider",
+            destination::class.java.name + "__RouteProvider",
             destination::class.java.classLoader
         ) ?: return null
 
         val method = findMethod(routeProviderClass, "get", routeMethods)
+
         if (method != null) {
             try {
                 return clazz.cast(method.invoke(null))
             } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
 
         return null
     }
 
-    fun <T : Any> requireRouteFactory(clazz: Class<T>, destination: Any) =
+    fun <T : CompassRouteFactory> requireRouteFactory(clazz: Class<T>, destination: Any) =
         getRouteFactory(clazz, destination)
                 ?: throw IllegalStateException("no route factory found for $destination")
 
-    inline fun <reified T : Any> requireRouteFactory(destination: Any) =
+    inline fun <reified T : CompassRouteFactory> requireRouteFactory(destination: Any) =
             Compass.requireRouteFactory(T::class.java, destination)
 
     fun toBundle(destination: Any, bundle: Bundle = Bundle()): Bundle {
@@ -94,7 +93,6 @@ object Compass {
             try {
                 toBundleMethod.invoke(null, destination, bundle)
             } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
 
@@ -123,7 +121,7 @@ object Compass {
         val clazzName = clazz.name
 
         try {
-            val serializerClass = clazz.classLoader.loadClass(clazzName + "")
+            val serializerClass = clazz.classLoader.loadClass(clazzName + "__Serializer")
             method = serializerClass.getDeclaredMethod("readFromBundle", Bundle::class.java)
         } catch (e: NoSuchMethodException) {
             throw RuntimeException("Unable to find fromBundle method for $clazzName", e)
@@ -143,7 +141,7 @@ object Compass {
         val clazzName = clazz.name
 
         try {
-            val serializerClass = clazz.classLoader.loadClass(clazzName + "Serializer")
+            val serializerClass = clazz.classLoader.loadClass(clazzName + "__Serializer")
             method = serializerClass.getDeclaredMethod("writeToBundle", clazz, Bundle::class.java)
         } catch (e: NoSuchMethodException) {
             throw RuntimeException("Unable to find fromBundle method for $clazzName", e)

@@ -34,19 +34,19 @@ fun Element.getCompassConstructor(): ExecutableElement {
 }
 
 fun Element.serializerClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}Serializer")
+    return ClassName.bestGuess("${this.simpleName}__Serializer")
 }
 
 fun Element.routeFactoryClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}RouteFactory")
+    return ClassName.bestGuess("${this.simpleName}__RouteFactory")
 }
 
 fun Element.routeProviderClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}RouteProvider")
+    return ClassName.bestGuess("${this.simpleName}__RouteProvider")
 }
 
 fun Element.detourProviderClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}DetourProvider")
+    return ClassName.bestGuess("${this.simpleName}__DetourProvider")
 }
 
 fun Element.serializerPackageName(environment: ProcessingEnvironment): String {

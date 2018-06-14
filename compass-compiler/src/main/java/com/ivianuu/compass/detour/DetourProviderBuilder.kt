@@ -17,6 +17,7 @@
 package com.ivianuu.compass.detour
 
 import com.ivianuu.compass.util.CLASS_DETOUR
+import com.ivianuu.compass.util.CLASS_DETOUR_PROVIDER
 import com.ivianuu.compass.util.detourClass
 import com.ivianuu.compass.util.isKotlinObject
 import com.squareup.kotlinpoet.ClassName
@@ -53,7 +54,8 @@ object DetourProviderBuilder {
             environment.messager.printMessage(Diagnostic.Kind.ERROR, "detour must have a empty constructor")
         }
 
-        val type = TypeSpec.objectBuilder("${element.simpleName}DetourProvider")
+        val type = TypeSpec.objectBuilder("${element.simpleName}__DetourProvider")
+            .addSuperinterface(CLASS_DETOUR_PROVIDER)
 
         val getBuilder = FunSpec.builder("get")
             .addAnnotation(JvmStatic::class)

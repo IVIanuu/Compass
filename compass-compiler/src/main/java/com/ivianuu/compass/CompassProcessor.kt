@@ -63,6 +63,7 @@ class CompassProcessor : AbstractProcessor() {
         val fileUri = processingEnv.filer.createSourceFile(className.toString(), base).toUri()
 
         val type = TypeSpec.objectBuilder(className)
+            .addSuperinterface(CLASS_SERIALIZER)
             .let { SerializerBuilder.addToBundleMethod(processingEnv, it, base) }
             .let { SerializerBuilder.addFromBundleMethod(processingEnv, it, base) }
             .build()

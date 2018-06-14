@@ -24,8 +24,13 @@ val CLASS_DETOUR = ClassName.bestGuess("com.ivianuu.compass.CompassDetour")
 val CLASS_ACTIVITY_DETOUR = ClassName.bestGuess("com.ivianuu.compass.ActivityDetour")
 val CLASS_FRAGMENT_DETOUR = ClassName.bestGuess("com.ivianuu.compass.FragmentDetour")
 
+val CLASS_DETOUR_PROVIDER = ClassName.bestGuess("com.ivianuu.compass.CompassDetourProvider")
+
 val CLASS_ROUTE_FACTORY = ClassName.bestGuess("com.ivianuu.compass.CompassRouteFactory")
+val CLASS_ROUTE_FACTORY_PROVIDER = ClassName.bestGuess("com.ivianuu.compass.CompassRouteFactoryProvider")
 val CLASS_ACTIVITY_ROUTE_FACTORY = ClassName.bestGuess("com.ivianuu.compass.ActivityRouteFactory")
 val CLASS_FRAGMENT_ROUTE_FACTORY = ClassName.bestGuess("com.ivianuu.compass.FragmentRouteFactory")
+
+val CLASS_SERIALIZER = ClassName.bestGuess("com.ivianuu.compass.CompassSerializer")
 
 val CLASS_BUNDLE = ClassName.bestGuess("android.os.Bundle")

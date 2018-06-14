@@ -16,7 +16,7 @@
 
 package com.ivianuu.compass
 
-import kotlin.reflect.KClass
-
-@Target(AnnotationTarget.CLASS)
-annotation class Destination(val target: KClass<*> = Nothing::class)
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+interface CompassSerializer

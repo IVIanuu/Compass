@@ -70,7 +70,7 @@ object RouteFactoryBuilder {
 
     private fun buildFragmentFactory(element: TypeElement,
                                      target: String): TypeSpec {
-        val type = TypeSpec.objectBuilder("${element.simpleName}RouteFactory")
+        val type = TypeSpec.objectBuilder("${element.simpleName}__RouteFactory")
             .addSuperinterface(
                 ParameterizedTypeName.get(
                     CLASS_FRAGMENT_ROUTE_FACTORY,
@@ -92,7 +92,7 @@ object RouteFactoryBuilder {
 
     private fun buildActivityFactory(element: TypeElement,
                                      target: String): TypeSpec {
-        val type = TypeSpec.classBuilder("${element.simpleName}RouteFactory")
+        val type = TypeSpec.classBuilder("${element.simpleName}__RouteFactory")
             .addSuperinterface(
                 ParameterizedTypeName.get(
                     CLASS_ACTIVITY_ROUTE_FACTORY,

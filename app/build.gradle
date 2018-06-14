@@ -30,11 +30,19 @@ android {
         versionName Versions.versionName
     }
 
+    buildTypes {
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            shrinkResources true
+        }
+    }
+
     androidExtensions {
         experimental = true
     }
     kapt {
-        generateStubs = true
+        correctErrorTypes = true
     }
 }
 

@@ -16,6 +16,7 @@
 
 package com.ivianuu.compass.route
 
+import com.ivianuu.compass.util.CLASS_ROUTE_FACTORY_PROVIDER
 import com.ivianuu.compass.util.destinationTarget
 import com.ivianuu.compass.util.isKotlinObject
 import com.ivianuu.compass.util.routeFactoryClass
@@ -48,11 +49,12 @@ object RouteProviderBuilder {
 
         val factoryName = when {
             routeFactory != null -> routeFactory.toString()
-            target != null -> element.asType().toString() + "RouteFactory"
+            target != null -> element.asType().toString() + "__RouteFactory"
             else -> null
         }
 
-        val type = TypeSpec.objectBuilder("${element.simpleName}RouteProvider")
+        val type = TypeSpec.objectBuilder("${element.simpleName}__RouteProvider")
+            .addSuperinterface(CLASS_ROUTE_FACTORY_PROVIDER)
 
         if (factoryName == null) {
             environment.messager.printMessage(

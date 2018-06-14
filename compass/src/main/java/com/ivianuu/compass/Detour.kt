@@ -35,3 +35,5 @@ interface FragmentDetour<T : Any> : CompassDetour {
 interface ActivityDetour<T : Any> : CompassDetour {
     fun createOptions(destination : T, intent: Intent): Bundle?
 }
+
+interface CompassDetourProvider

@@ -40,5 +40,4 @@ class AppInfoRouteFactory : ActivityRouteFactory<AppInfoDestination> {
 }
 
 fun haha() {
-    CounterDestinationRouteFactory
 }
