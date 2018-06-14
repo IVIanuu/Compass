@@ -25,14 +25,18 @@ import java.lang.reflect.Method
 @Suppress("UNCHECKED_CAST")
 object Compass {
 
-    private val fromBundleMethods = mutableMapOf<Class<*>, Method>()
-    private val toBundleMethods = mutableMapOf<Class<*>, Method>()
-    private val routeMethods = mutableMapOf<Class<*>, Method>()
-    private val detourMethods = mutableMapOf<Class<*>, Method>()
+    @PublishedApi
+    internal val fromBundleMethods = mutableMapOf<Class<*>, Method>()
+    @PublishedApi
+    internal val toBundleMethods = mutableMapOf<Class<*>, Method>()
+    @PublishedApi
+    internal val routeMethods = mutableMapOf<Class<*>, Method>()
+    @PublishedApi
+    internal val detourMethods = mutableMapOf<Class<*>, Method>()
     
     private val unexistingClasses = mutableSetOf<String>()
 
-    fun <T : CompassDetour> getDetour(destination: Any): T? {
+    inline fun <reified T : CompassDetour> getDetour(destination: Any): T? {
         val detourProviderClass = findClazz(
             destination::class.java.name + "DetourProvider",
             destination::class.java.classLoader
@@ -50,10 +54,10 @@ object Compass {
         return null
     }
 
-    fun <T : CompassDetour> requireDetour(destination: Any) =
+    inline fun <reified T : CompassDetour> requireDetour(destination: Any) =
             getDetour<T>(destination) ?: throw IllegalStateException("no detour found for $destination")
 
-    fun <T : Any> getRouteFactory(destination: Any): T? {
+    inline fun <reified T : Any> getRouteFactory(destination: Any): T? {
         val routeProviderClass = findClazz(
             destination::class.java.name + "RouteProvider",
             destination::class.java.classLoader
@@ -62,7 +66,7 @@ object Compass {
         val method = findMethod(routeProviderClass, "get", routeMethods)
         if (method != null) {
             try {
-                return method.invoke(null) as T
+                return method.invoke(null) as? T?
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -71,7 +75,7 @@ object Compass {
         return null
     }
 
-    fun <T : Any> requireRouteFactory(destination: Any): T =
+    inline fun <reified T : Any> requireRouteFactory(destination: Any): T =
             getRouteFactory(destination) ?: throw IllegalStateException("no route factory found for $destination")
 
     fun toBundle(destination: Any, bundle: Bundle = Bundle()): Bundle {
@@ -91,7 +95,7 @@ object Compass {
         val method = findFromBundleMethod(clazz)
         if (method != null) {
             try {
-                return method.invoke(null, bundle) as T
+                return method.invoke(null, bundle) as? T
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -140,7 +144,8 @@ object Compass {
         return method
     }
 
-    private fun findClazz(
+    @PublishedApi
+    internal fun findClazz(
         className: String,
         classLoader: ClassLoader
     ): Class<*>? {
@@ -154,7 +159,8 @@ object Compass {
         }
     }
 
-    private fun findMethod(
+    @PublishedApi
+    internal fun findMethod(
         clazz: Class<*>,
         methodName: String,
         map: MutableMap<Class<*>, Method>

@@ -31,7 +31,7 @@ class CompassAppNavigatorHelper {
     fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
         return Compass.getRouteFactory<ActivityRouteFactory<Any>>(key)
             ?.createIntent(context, key)?.apply {
-                extras.putAll(Compass.toBundle(key))
+                putExtras(Compass.toBundle(key))
             }
     }
 
