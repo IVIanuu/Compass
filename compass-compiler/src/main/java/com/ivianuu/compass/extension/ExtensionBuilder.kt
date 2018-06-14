@@ -34,6 +34,7 @@ object ExtensionBuilder {
     ) {
         buildBundleExtension(environment, builder, element)
         buildTargetExtension(environment, builder, element)
+        buildBindTargetExtension(environment, builder, element)
         buildDestinationToBundleExtension(environment, builder, element)
     }
 
@@ -139,4 +140,64 @@ object ExtensionBuilder {
             }
         }
     }
+
+    private fun buildBindTargetExtension(
+        environment: ProcessingEnvironment,
+        builder: FileSpec.Builder,
+        element: TypeElement
+    ) {
+
+        val name = "bind${element.simpleName}"
+
+        val targetName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, element.simpleName.toString())
+
+        val clazz = element.destinationTarget ?: return
+
+        when {
+            isSubtypeOfType(
+                clazz,
+                "android.support.v4.app.Fragment"
+            ) -> {
+                builder.addFunction(
+                    FunSpec.builder(name)
+                        .receiver(clazz.asTypeName())
+                        .returns(
+                            ParameterizedTypeName.get(
+                                Lazy::class.asClassName(),
+                                element.asClassName()
+                            )
+                        )
+                        .addCode(
+                            CodeBlock.builder()
+                                .addStatement("return lazy(LazyThreadSafetyMode.NONE) { $targetName() }")
+                                .build()
+                        )
+                        .build()
+                )
+            }
+            isSubtypeOfType(
+                clazz,
+                "android.app.Activity"
+            ) -> {
+                builder.addFunction(
+                    FunSpec.builder(name)
+                        .receiver(clazz.asTypeName())
+                        .returns(
+                            ParameterizedTypeName.get(
+                                Lazy::class.asClassName(),
+                                element.asClassName()
+                            )
+                        )
+                        .addCode(
+                            CodeBlock.builder()
+                                .addStatement("return lazy(LazyThreadSafetyMode.NONE) { $targetName() }")
+                                .build()
+                        )
+                        .build()
+                )
+            }
+        }
+    }
+
+
 }
