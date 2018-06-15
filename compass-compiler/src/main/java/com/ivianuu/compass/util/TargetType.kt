@@ -16,14 +16,11 @@
 
 package com.ivianuu.compass.util
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.asClassName
-
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-enum class TargetType(val className: ClassName) {
-    UNKNOWN(Unit::class.asClassName()),
-    ACTIVITY(CLASS_ACTIVITY),
-    FRAGMENT(CLASS_FRAGMENT)
+enum class TargetType {
+    UNKNOWN,
+    ACTIVITY,
+    FRAGMENT
 }

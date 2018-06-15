@@ -30,7 +30,7 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
             .filterIsInstance<TypeElement>()
-            .map(this::createDescriptor)
+            .mapNotNull(this::createDescriptor)
             .map(::ExtensionGenerator)
             .map(ExtensionGenerator::generate)
             .forEach { it.write(processingEnv) }
@@ -41,18 +41,19 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
     override fun annotations() =
         mutableSetOf(Destination::class.java)
 
-    private fun createDescriptor(element: TypeElement): ExtensionDescriptor {
+    private fun createDescriptor(element: TypeElement): ExtensionDescriptor? {
         val target = element.destinationTarget
-        val targetAsType = if (target != null) {
+        val targetAsType = (if (target != null) {
             processingEnv.elementUtils.getTypeElement(target.toString())
         } else {
             null
-        }
+        }) ?: return null
 
         return ExtensionDescriptor(
             element,
             element.packageName(processingEnv),
             element.asClassName(),
+            targetAsType.asClassName(),
             targetAsType.targetType(processingEnv),
             element.simpleName.toString() + "Ext",
             element.serializerClassName()

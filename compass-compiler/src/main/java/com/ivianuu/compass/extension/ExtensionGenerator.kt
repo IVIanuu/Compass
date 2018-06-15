@@ -82,7 +82,7 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
         return when(descriptor.targetType) {
             TargetType.ACTIVITY -> {
                 FunSpec.builder(functionName)
-                    .receiver(descriptor.targetType.className)
+                    .receiver(descriptor.target)
                     .returns(descriptor.destination)
                     .addCode(
                         CodeBlock.builder()
@@ -93,7 +93,7 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
             }
             TargetType.FRAGMENT -> {
                 FunSpec.builder(functionName)
-                    .receiver(descriptor.targetType.className)
+                    .receiver(descriptor.target)
                     .returns(descriptor.destination)
                     .addCode(
                         CodeBlock.builder()
@@ -115,7 +115,7 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
             TargetType.UNKNOWN -> null
             else -> {
                 FunSpec.builder(functionName)
-                    .receiver(descriptor.targetType.className)
+                    .receiver(descriptor.target)
                     .returns(
                         ParameterizedTypeName.get(
                             Lazy::class.asClassName(),

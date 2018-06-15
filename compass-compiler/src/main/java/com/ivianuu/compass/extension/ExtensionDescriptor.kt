@@ -27,6 +27,7 @@ data class ExtensionDescriptor(
     val element: TypeElement,
     val packageName: String,
     val destination: ClassName,
+    val target: ClassName,
     val targetType: TargetType,
     val fileName: String,
     val serializer: ClassName
