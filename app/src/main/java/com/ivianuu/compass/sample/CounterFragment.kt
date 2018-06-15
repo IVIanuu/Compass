@@ -74,6 +74,8 @@ class CounterFragment : Fragment() {
         title.text = "Count: ${destination.count}"
         view.setBackgroundColor(destination.color)
 
+        CounterDestination__Serializer
+
         destination.toBundle()
 
         up.setOnClickListener {

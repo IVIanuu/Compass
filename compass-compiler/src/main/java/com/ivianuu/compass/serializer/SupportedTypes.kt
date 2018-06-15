@@ -30,9 +30,6 @@ data class SerializerAttributeDescriptor(
     val wrapInArrayList: Boolean = false
 )
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 object SupportedTypes {
 
     lateinit var processingEnv: ProcessingEnvironment
