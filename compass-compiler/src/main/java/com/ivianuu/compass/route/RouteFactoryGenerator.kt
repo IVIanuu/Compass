@@ -16,10 +16,7 @@
 
 package com.ivianuu.compass.route
 
-import com.ivianuu.compass.util.CLASS_ACTIVITY_ROUTE_FACTORY
-import com.ivianuu.compass.util.CLASS_FRAGMENT_ROUTE_FACTORY
-import com.ivianuu.compass.util.CLASS_INTENT
-import com.ivianuu.compass.util.TargetType
+import com.ivianuu.compass.util.*
 import com.squareup.kotlinpoet.*
 
 class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
@@ -49,7 +46,7 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
         val createBuilder = FunSpec.builder("createFragment")
             .addModifiers(KModifier.OVERRIDE)
             .addParameter("destination", descriptor.destination)
-            .returns(ClassName.bestGuess("android.support.v4.app.Fragment"))
+            .returns(CLASS_FRAGMENT)
             .addStatement("return %T()", descriptor.target)
             .build()
 
