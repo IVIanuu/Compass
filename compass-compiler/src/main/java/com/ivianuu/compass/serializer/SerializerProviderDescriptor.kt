@@ -18,26 +18,13 @@ package com.ivianuu.compass.serializer
 
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
-import javax.lang.model.element.VariableElement
 
-data class SerializerDescriptor(
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+data class SerializerProviderDescriptor(
     val element: TypeElement,
     val packageName: String,
-    val destination: ClassName,
-    val serializer: ClassName,
-    val isKotlinObject: Boolean,
-    val attributes: Set<DestinationAttribute>,
-    val keys: Set<DestinationAttributeKey>
-)
-
-data class DestinationAttributeKey(
-    val name: String,
-    val value: String
-)
-
-data class DestinationAttribute(
-    val element: VariableElement,
-    val name: String,
-    val keyName: String,
-    val descriptor: SerializerAttributeDescriptor
+    val serializerProvider: ClassName,
+    val serializer: ClassName
 )

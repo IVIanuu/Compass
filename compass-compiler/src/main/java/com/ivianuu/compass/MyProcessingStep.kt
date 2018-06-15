@@ -21,8 +21,10 @@ import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.detour.DetourProviderBuilder
 import com.ivianuu.compass.route.RouteFactoryBuilder
 import com.ivianuu.compass.route.RouteProviderBuilder
-import com.ivianuu.compass.serializer.SerializerProviderBuilder
-import com.ivianuu.compass.util.*
+import com.ivianuu.compass.util.detourProviderClassName
+import com.ivianuu.compass.util.packageName
+import com.ivianuu.compass.util.routeFactoryClassName
+import com.ivianuu.compass.util.routeProviderClassName
 import com.squareup.kotlinpoet.FileSpec
 import java.io.File
 import javax.annotation.processing.ProcessingEnvironment
@@ -37,7 +39,6 @@ class MyProcessingStep(private val processingEnv: ProcessingEnvironment) : Basic
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
             .filterIsInstance<TypeElement>()
-            .onEach { element -> generateSerializerProvider(element) }
             .onEach { element -> generateRouteFactory(element) }
             .onEach { element -> generateRouteProvider(element) }
             .onEach { element -> generateDetourProvider(element) }
@@ -46,19 +47,6 @@ class MyProcessingStep(private val processingEnv: ProcessingEnvironment) : Basic
     }
 
     override fun annotations() = mutableSetOf(Destination::class.java)
-
-    private fun generateSerializerProvider(base: TypeElement) {
-        val type = SerializerProviderBuilder.buildSerializerProvider(processingEnv, base)
-
-        val packageName = base.packageName(processingEnv)
-        val className = base.serializerProviderClassName()
-
-        val file = FileSpec.builder(packageName, className.toString())
-            .addType(type)
-            .build()
-
-        file.writeTo(File(path()))
-    }
 
     private fun generateRouteFactory(base: TypeElement) {
         val type = RouteFactoryBuilder.buildRouteFactory(processingEnv, base)
