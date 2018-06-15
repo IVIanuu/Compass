@@ -23,9 +23,12 @@ import com.ivianuu.compass.extension.ExtensionBuilder
 import com.ivianuu.compass.route.RouteFactoryBuilder
 import com.ivianuu.compass.route.RouteProviderBuilder
 import com.ivianuu.compass.serializer.SerializerBuilder
+import com.ivianuu.compass.serializer.SerializerProviderBuilder
 import com.ivianuu.compass.util.*
 import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.ParameterizedTypeName
 import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.asTypeName
 import java.io.File
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
@@ -40,6 +43,7 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
         elementsByAnnotation[Destination::class.java]
             .filterIsInstance<TypeElement>()
             .onEach { element -> generateSerializer(element) }
+            .onEach { element -> generateSerializerProvider(element) }
             .onEach { element -> generateRouteFactory(element) }
             .onEach { element -> generateRouteProvider(element) }
             .onEach { element -> generateDetourProvider(element) }
@@ -55,10 +59,28 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
         val className = base.serializerClassName()
 
         val type = TypeSpec.objectBuilder(className)
-            .addSuperinterface(CLASS_SERIALIZER)
+            .addSuperinterface(
+                ParameterizedTypeName.get(
+                    CLASS_SERIALIZER,
+                    base.asType().asTypeName()
+                )
+            )
             .let { SerializerBuilder.addToBundleMethod(processingEnv, it, base) }
             .let { SerializerBuilder.addFromBundleMethod(processingEnv, it, base) }
             .build()
+
+        val file = FileSpec.builder(packageName, className.toString())
+            .addType(type)
+            .build()
+
+        file.writeTo(File(path()))
+    }
+
+    private fun generateSerializerProvider(base: TypeElement) {
+        val type = SerializerProviderBuilder.buildSerializerProvider(processingEnv, base)
+
+        val packageName = base.serializerPackageName(processingEnv)
+        val className = base.serializerProviderClassName()
 
         val file = FileSpec.builder(packageName, className.toString())
             .addType(type)

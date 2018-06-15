@@ -17,8 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        router.navigateTo(
-            WebsiteDestination("https://github.com/square/kotlinpoet/issues/310"))
+        ParcelableArrayDestination__Serializer
 
         if (savedInstanceState == null) {
             router.newRootScreen(

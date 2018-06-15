@@ -16,7 +16,7 @@
 
 package com.ivianuu.compass
 
-import android.os.Bundle
+import android.util.Log
 import java.lang.reflect.Method
 
 /**
@@ -25,11 +25,10 @@ import java.lang.reflect.Method
 @Suppress("UNCHECKED_CAST")
 object Compass {
 
-    private val fromBundleMethods = mutableMapOf<Class<*>, Method>()
-    private val toBundleMethods = mutableMapOf<Class<*>, Method>()
     private val routeMethods = mutableMapOf<Class<*>, Method>()
     private val detourMethods = mutableMapOf<Class<*>, Method>()
-    
+    private val serializerMethods = mutableMapOf<Class<*>, Method>()
+
     private val unexistingClasses = mutableSetOf<String>()
 
     inline fun <reified T : CompassDetour> getDetour(destination: Any): T? =
@@ -53,27 +52,35 @@ object Compass {
     }
 
     inline fun <reified T : CompassDetour> requireDetour(destination: Any) =
-            Compass.requireDetour(T::class.java, destination)
+            requireDetour(T::class.java, destination)
 
     fun <T : CompassDetour> requireDetour(clazz: Class<T>, destination: Any) =
         getDetour(clazz, destination) ?: throw IllegalStateException("no detour found for $destination")
 
 
     inline fun <reified T : CompassRouteFactory> getRouteFactory(destination: Any) =
-            Compass.getRouteFactory(T::class.java, destination)
+            getRouteFactory(T::class.java, destination)
 
     fun <T : CompassRouteFactory> getRouteFactory(clazz: Class<T>, destination: Any): T? {
+        Log.d("testtt", "get route factory for ${destination.javaClass.simpleName}")
+
         val routeProviderClass = findClazz(
             destination::class.java.name + "__RouteProvider",
             destination::class.java.classLoader
         ) ?: return null
 
+        Log.d("testtt", "provider class $routeProviderClass")
+
+
         val method = findMethod(routeProviderClass, "get", routeMethods)
+
+        Log.d("testtt", "get method $method")
 
         if (method != null) {
             try {
                 return clazz.cast(method.invoke(null))
             } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 
@@ -85,72 +92,36 @@ object Compass {
                 ?: throw IllegalStateException("no route factory found for $destination")
 
     inline fun <reified T : CompassRouteFactory> requireRouteFactory(destination: Any) =
-            Compass.requireRouteFactory(T::class.java, destination)
+            requireRouteFactory(T::class.java, destination)
 
-    fun toBundle(destination: Any, bundle: Bundle = Bundle()): Bundle {
-        val toBundleMethod = findToBundleMethod(destination::class.java)
-        if (toBundleMethod != null) {
-            try {
-                toBundleMethod.invoke(null, destination, bundle)
-            } catch (e: Exception) {
-            }
-        }
 
-        return bundle
-    }
+    inline fun <reified T : Any> getSerializer(destination: Any) =
+        getSerializer(T::class.java, destination)
 
-    fun <T : Any> fromBundle(clazz: Class<T>, bundle: Bundle): T? {
-        val method = findFromBundleMethod(clazz)
+    fun <T : Any> getSerializer(clazz: Class<T>, destination: Any): CompassSerializer<T>? {
+        val serializerProviderClass = findClazz(
+            destination::class.java.name + "__SerializerProvider",
+            destination::class.java.classLoader
+        ) ?: return null
+
+        val method = findMethod(serializerProviderClass, "get", serializerMethods)
+
         if (method != null) {
             try {
-                return method.invoke(null, bundle) as? T
+                return method.invoke(null) as CompassSerializer<T>
             } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
 
         return null
     }
 
-    private fun findFromBundleMethod(clazz: Class<*>): Method? {
-        var method = fromBundleMethods[clazz]
-        if (method != null) {
-            return method
-        }
+    fun <T : Any> requireSerializer(clazz: Class<T>, destination: Any) =
+        getSerializer(clazz, destination)
+                ?: throw IllegalStateException("no serializer found for $destination")
 
-        val clazzName = clazz.name
-
-        try {
-            val serializerClass = clazz.classLoader.loadClass(clazzName + "__Serializer")
-            method = serializerClass.getDeclaredMethod("readFromBundle", Bundle::class.java)
-        } catch (e: NoSuchMethodException) {
-            throw RuntimeException("Unable to find fromBundle method for $clazzName", e)
-        }
-
-        fromBundleMethods[clazz] = method
-
-        return method
-    }
-
-    private fun findToBundleMethod(clazz: Class<*>): Method? {
-        var method = toBundleMethods[clazz]
-        if (method != null) {
-            return method
-        }
-
-        val clazzName = clazz.name
-
-        try {
-            val serializerClass = clazz.classLoader.loadClass(clazzName + "__Serializer")
-            method = serializerClass.getDeclaredMethod("writeToBundle", clazz, Bundle::class.java)
-        } catch (e: NoSuchMethodException) {
-            throw RuntimeException("Unable to find fromBundle method for $clazzName", e)
-        }
-
-        toBundleMethods[clazz] = method
-
-        return method
-    }
+    inline fun <reified T : Any> requireSerializer(destination: Any) =
+        requireSerializer(T::class.java, destination)
 
     private fun findClazz(
         className: String,

@@ -19,8 +19,8 @@ package com.ivianuu.compass.sample
 import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.util.SparseArray
 import com.ivianuu.compass.Destination
-import com.ivianuu.compass.Detour
 import com.ivianuu.compass.FragmentDetour
 import kotlinx.android.parcel.Parcelize
 
@@ -28,11 +28,26 @@ import kotlinx.android.parcel.Parcelize
  * @author Manuel Wrage (IVIanuu)
  */
 
-@Detour(ParcelableDetour::class)
+//@Detour(ParcelableDetour::class)
 @Destination(ParcelableFragment::class)
 data class ParcelableDestination(val somethingParcelable: SomethingParcelable)
 
 class ParcelableFragment : Fragment()
+
+@Destination(ParcelableListFragment::class)
+data class ParcelableListDestination(val listt: List<SomethingParcelable>)
+
+@Destination(ParcelableArrayFragment::class)
+data class ParcelableArrayDestination(val arrayy: Array<SomethingParcelable>)
+
+@Destination(ParcelableSparseArrayFragment::class)
+data class ParcelabelSparseArrayDestination(val arrayy: SparseArray<SomethingParcelable>)
+
+class ParcelableArrayFragment : Fragment()
+
+class ParcelableListFragment : Fragment()
+
+class ParcelableSparseArrayFragment : Fragment()
 
 class ParcelableDetour : FragmentDetour<ParcelableDestination> {
     override fun setup(

@@ -16,7 +16,17 @@
 
 package com.ivianuu.compass
 
+import android.os.Bundle
+
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-interface CompassSerializer
+interface CompassSerializer<T : Any> {
+
+    fun fromBundle(bundle: Bundle): T
+
+    fun toBundle(destination: T): Bundle
+
+}
+
+interface CompassSerializerProvider

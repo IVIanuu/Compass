@@ -45,6 +45,10 @@ fun Element.routeProviderClassName(): ClassName {
     return ClassName.bestGuess("${this.simpleName}__RouteProvider")
 }
 
+fun Element.serializerProviderClassName(): ClassName {
+    return ClassName.bestGuess("${this.simpleName}__SerializerProvider")
+}
+
 fun Element.detourProviderClassName(): ClassName {
     return ClassName.bestGuess("${this.simpleName}__DetourProvider")
 }

@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass
+package com.ivianuu.compass.sample
 
-import com.google.auto.common.BasicAnnotationProcessor
-import com.google.auto.service.AutoService
-import com.ivianuu.compass.serializer.SupportedTypes
-import javax.annotation.processing.Processor
+import android.support.v4.app.Fragment
+import com.ivianuu.compass.Destination
+import java.io.Serializable
 
-@AutoService(Processor::class)
-class CompassProcessor : BasicAnnotationProcessor() {
+@Destination(SerializableFragment::class)
+data class SerializableDestination(val serializable: Serializable)
 
-    override fun initSteps(): MutableIterable<ProcessingStep> =
-        mutableSetOf(com.ivianuu.compass.ProcessingStep(processingEnv)).also {
-            SupportedTypes.processingEnv = processingEnv
-        }
+class SerializableFragment : Fragment()
+
+fun bh() {
+    SerializableDestination__Serializer
 }

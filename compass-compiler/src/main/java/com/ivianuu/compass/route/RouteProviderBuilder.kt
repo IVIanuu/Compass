@@ -63,7 +63,7 @@ object RouteProviderBuilder {
         }
 
         val getBuilder = FunSpec.builder("get")
-            .addAnnotation(JvmStatic::class)
+            .addAnnotation(JvmStatic::class.java)
             .returns(ClassName.bestGuess(factoryName))
             .addCode(
                 CodeBlock.builder()

@@ -16,7 +16,6 @@
 
 package com.ivianuu.compass
 
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import com.ivianuu.traveler.commands.Command
@@ -31,8 +30,8 @@ class CompassFragmentNavigatorHelper {
     fun createFragment(key: Any, data: Any?): Fragment? {
         return Compass.getRouteFactory<FragmentRouteFactory<Any>>(key)
             ?.createFragment(key)?.apply {
-                val args = arguments ?: Bundle().also { arguments = it }
-                Compass.toBundle(key, args)
+                val serializer = Compass.getSerializer<Any>(key)
+                serializer?.toBundle(key)?.let { arguments = it }
             }
     }
 

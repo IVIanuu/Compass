@@ -58,7 +58,7 @@ object DetourProviderBuilder {
             .addSuperinterface(CLASS_DETOUR_PROVIDER)
 
         val getBuilder = FunSpec.builder("get")
-            .addAnnotation(JvmStatic::class)
+            .addAnnotation(JvmStatic::class.java)
             .returns(CLASS_DETOUR)
             .addCode(
                 CodeBlock.builder()

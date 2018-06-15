@@ -35,6 +35,5 @@ dependencies {
     implementation Deps.kotlinPoet
 
     implementation Deps.kotlinReflect
-
     implementation Deps.kotlinStdLib
 }

@@ -89,14 +89,12 @@ object ConstructorSelector {
     private fun VariableElement.hasAccessor(base: Element): Throwable? {
         val containsFieldAccessor = ElementFilter
             .fieldsIn(base.enclosedElements)
-            .asSequence()
             .filter { it.modifiers.contains(Modifier.PUBLIC) }
             .filter { it.simpleName == this.simpleName }
-            .firstOrNull() != null
+            .any()
 
         val containsMethodAccessor = ElementFilter
             .methodsIn(base.enclosedElements)
-            .asSequence()
             .filter { it.modifiers.contains(Modifier.PUBLIC) }
             .filter { it.returnType.toString() == this.asType().toString() }
             .filter { it.parameters.isEmpty() }
@@ -105,7 +103,9 @@ object ConstructorSelector {
                         || it.simpleName.toString() ==
                         "get${this.simpleName.toString().capitalize()}"
             }
-            .firstOrNull() != null
+            .any()
+
+        return null
 
         return if (!containsFieldAccessor && !containsMethodAccessor) {
             getNoAccessorThrowable(

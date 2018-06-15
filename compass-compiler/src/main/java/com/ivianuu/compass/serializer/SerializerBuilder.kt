@@ -16,11 +16,11 @@
 
 package com.ivianuu.compass.serializer
 
-import com.ivianuu.compass.attribute.attributeSerializers
 import com.ivianuu.compass.util.CLASS_BUNDLE
 import com.ivianuu.compass.util.getCompassConstructor
 import com.ivianuu.compass.util.isKotlinObject
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import javax.annotation.processing.ProcessingEnvironment
@@ -29,46 +29,43 @@ import javax.tools.Diagnostic
 
 object SerializerBuilder {
 
-    const val PARAM_BUNDLE = "bundle"
-    const val PARAM_DESTINATION = "destination"
-
-    const val METHOD_NAME_FROM_BUNDLE = "readFromBundle"
-    const val METHOD_NAME_TO_BUNDLE = "writeToBundle"
-
-    private val logicParts = attributeSerializers()
-
     fun addToBundleMethod(
         environment: ProcessingEnvironment,
         builder: TypeSpec.Builder,
         element: TypeElement
     ): TypeSpec.Builder {
-        val funBuilder = FunSpec.builder(METHOD_NAME_TO_BUNDLE)
-            .addAnnotation(JvmStatic::class)
-            .addParameter(PARAM_DESTINATION, element.asClassName())
-            .addParameter(PARAM_BUNDLE, CLASS_BUNDLE)
+        val serializer = AttributeSerializer(environment)
+
+        val funBuilder = FunSpec.builder("toBundle")
+            .addModifiers(KModifier.OVERRIDE)
+            .addParameter("destination", element.asClassName())
+            .returns(CLASS_BUNDLE)
+
+        funBuilder.addStatement("val bundle = %T()", CLASS_BUNDLE)
 
         if (!element.isKotlinObject) {
             val constructor = element.getCompassConstructor()
-            constructor.parameters.asSequence()
-                .forEachIndexed { index, attribute ->
-                    if (index > 0) funBuilder.addCode("\n\n")
-                    val handled = logicParts.asSequence()
-                        .map {
-                            it.addAttributeSerializeLogic(
-                                environment, funBuilder,
-                                element, attribute
-                            )
-                        }
-                        .filter { it }
-                        .toList()
-                        .isNotEmpty()
+            constructor.parameters
+                .forEach { attribute ->
 
-                    if (!handled) environment.messager.printMessage(
-                        Diagnostic.Kind.ERROR,
-                        "unsupported type $attribute"
+                    if (!SupportedTypes.isSupported(attribute)) {
+                        environment.messager.printMessage(
+                            Diagnostic.Kind.ERROR,
+                            "unsupported type $attribute", element
+                        )
+                    }
+
+                    environment.messager.printMessage(
+                        Diagnostic.Kind.NOTE,
+                        "test type ${attribute.asType()} for -> ${element.asType()}"
                     )
+
+                    serializer.createBundlePut(
+                        funBuilder, attribute, element, attribute.simpleName.toString())
                 }
         }
+
+        funBuilder.addStatement("return bundle")
 
         return builder.addFunction(funBuilder.build())
 
@@ -79,40 +76,37 @@ object SerializerBuilder {
         builder: TypeSpec.Builder,
         element: TypeElement
     ): TypeSpec.Builder {
-        val funBuilder = FunSpec.builder(METHOD_NAME_FROM_BUNDLE)
-            .addAnnotation(JvmStatic::class)
+        val serializer = AttributeSerializer(environment)
+
+        val funBuilder = FunSpec.builder("fromBundle")
+            .addModifiers(KModifier.OVERRIDE)
             .returns(element.asClassName())
-            .addParameter(PARAM_BUNDLE, CLASS_BUNDLE)
+            .addParameter("bundle", CLASS_BUNDLE)
 
         if (!element.isKotlinObject) {
-            val CompassConstructor = element.getCompassConstructor()
+            val compassConstructor = element.getCompassConstructor()
 
             val valueNames = mutableListOf<String>()
 
-            CompassConstructor.parameters
-                .asSequence()
+            compassConstructor.parameters
                 .forEach { attribute ->
                     val valueName = attribute.simpleName.toString()
                     valueNames.add(valueName)
-                    val handled = logicParts.asSequence()
-                        .map {
-                            it.addBundleAccessorLogic(
-                                environment,
-                                funBuilder, element, attribute, valueName
-                            )
-                        }
-                        .filter { it }
-                        .toList().isNotEmpty()
 
-                    if (!handled) environment.messager.printMessage(
-                        Diagnostic.Kind.ERROR,
-                        "unsupported type $attribute"
-                    )
+                    if (!SupportedTypes.isSupported(attribute)) {
+                        environment.messager.printMessage(
+                            Diagnostic.Kind.ERROR,
+                            "unsupported type $attribute", element
+                        )
+                    }
+
+                    serializer.createBundleGet(
+                        funBuilder, attribute, element, attribute.simpleName.toString())
                 }
 
             funBuilder.addCode("\n")
             val constructorStatement = "return %T(${
-            CompassConstructor.parameters
+            compassConstructor.parameters
                 .asSequence()
                 .withIndex()
                 .map { valueNames[it.index] }

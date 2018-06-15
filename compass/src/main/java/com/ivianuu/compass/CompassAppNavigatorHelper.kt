@@ -31,7 +31,8 @@ class CompassAppNavigatorHelper {
     fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
         return Compass.getRouteFactory<ActivityRouteFactory<Any>>(key)
             ?.createIntent(context, key)?.apply {
-                putExtras(Compass.toBundle(key))
+                val serializer = Compass.getSerializer<Any>(key)
+                serializer?.toBundle(key)?.let(this::putExtras)
             }
     }
 

@@ -32,5 +32,6 @@ val CLASS_ACTIVITY_ROUTE_FACTORY = ClassName.bestGuess("com.ivianuu.compass.Acti
 val CLASS_FRAGMENT_ROUTE_FACTORY = ClassName.bestGuess("com.ivianuu.compass.FragmentRouteFactory")
 
 val CLASS_SERIALIZER = ClassName.bestGuess("com.ivianuu.compass.CompassSerializer")
+val CLASS_SERIALIZER_PROVIDER = ClassName.bestGuess("com.ivianuu.compass.CompassSerializerProvider")
 
 val CLASS_BUNDLE = ClassName.bestGuess("android.os.Bundle")
