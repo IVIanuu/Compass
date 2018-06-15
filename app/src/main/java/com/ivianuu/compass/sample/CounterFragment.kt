@@ -41,6 +41,7 @@ object CounterFragmentDetour : FragmentDetour<CounterDestination> {
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             currentFragment?.exitTransition = Slide(Gravity.START)
             currentFragment?.reenterTransition = Slide(Gravity.START)
@@ -71,10 +72,10 @@ class CounterFragment : Fragment() {
 
         val destination = counterDestination()
 
+        CounterDestination__DetourProvider
+
         title.text = "Count: ${destination.count}"
         view.setBackgroundColor(destination.color)
-
-        CounterDestination__Serializer
 
         destination.toBundle()
 

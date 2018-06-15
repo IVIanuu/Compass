@@ -51,9 +51,9 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
 
         return ExtensionDescriptor(
             element,
+            element.packageName(processingEnv),
             element.asClassName(),
             targetAsType.targetType(processingEnv),
-            element.packageName(processingEnv),
             element.simpleName.toString() + "Ext",
             element.serializerClassName()
         )

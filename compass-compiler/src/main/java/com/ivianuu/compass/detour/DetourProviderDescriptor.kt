@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.sample
+package com.ivianuu.compass.detour
 
-import android.support.v4.app.Fragment
-import com.ivianuu.compass.Destination
-import java.io.Serializable
+import com.squareup.kotlinpoet.ClassName
+import javax.lang.model.element.TypeElement
 
-@Destination(SerializableFragment::class)
-data class SerializableDestination(val serializable: Serializable)
-
-class SerializableFragment : Fragment()
-
-fun bh() {}
+data class DetourProviderDescriptor(
+    val element: TypeElement,
+    val packageName: String,
+    val detourProvider: ClassName,
+    val detour: ClassName,
+    val isKotlinObject: Boolean
+)

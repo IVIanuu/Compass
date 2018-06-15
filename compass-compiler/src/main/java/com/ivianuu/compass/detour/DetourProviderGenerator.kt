@@ -14,22 +14,26 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.serializer
+package com.ivianuu.compass.detour
 
-import com.ivianuu.compass.util.CLASS_SERIALIZER_PROVIDER
+import com.ivianuu.compass.util.CLASS_DETOUR
+import com.ivianuu.compass.util.CLASS_DETOUR_PROVIDER
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeSpec
 
-class SerializerProviderGenerator(private val descriptor: SerializerProviderDescriptor) {
+/**
+ * @author Manuel Wrage (IVIanuu)
+ */
+class DetourProviderGenerator(private val descriptor: DetourProviderDescriptor) {
 
     fun generate(): FileSpec {
         val file = FileSpec.builder(descriptor.packageName,
-            descriptor.serializerProvider.simpleName())
+            descriptor.detourProvider.simpleName())
 
-        val type = TypeSpec.objectBuilder(descriptor.serializerProvider)
-            .addSuperinterface(CLASS_SERIALIZER_PROVIDER)
+        val type =  TypeSpec.objectBuilder(descriptor.detourProvider)
+            .addSuperinterface(CLASS_DETOUR_PROVIDER)
             .addFunction(get())
 
         file.addType(type.build())
@@ -40,13 +44,19 @@ class SerializerProviderGenerator(private val descriptor: SerializerProviderDesc
     private fun get(): FunSpec {
         return FunSpec.builder("get")
             .addAnnotation(JvmStatic::class.java)
-            .returns(descriptor.serializer)
+            .returns(CLASS_DETOUR)
             .addCode(
                 CodeBlock.builder()
-                    .addStatement("return %T", descriptor.serializer)
+                    .apply {
+                        if (descriptor.isKotlinObject) {
+                            addStatement("return %T", descriptor.detour)
+                        } else {
+                            addStatement("return %T()", descriptor.detour)
+                        }
+                    }
                     .build()
             )
             .build()
-
     }
+
 }

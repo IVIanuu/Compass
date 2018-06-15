@@ -17,8 +17,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ParcelableArrayDestination__Serializer
-
         if (savedInstanceState == null) {
             router.newRootScreen(
                 CounterDestination(1, ColorGenerator.generate()))

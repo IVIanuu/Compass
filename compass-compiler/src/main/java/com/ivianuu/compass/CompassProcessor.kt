@@ -18,6 +18,7 @@ package com.ivianuu.compass
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.service.AutoService
+import com.ivianuu.compass.detour.DetourProviderProcessingStep
 import com.ivianuu.compass.extension.ExtensionProcessingStep
 import com.ivianuu.compass.serializer.SerializerProcessingStep
 import com.ivianuu.compass.serializer.SerializerProviderProcessingStep
@@ -31,6 +32,7 @@ class CompassProcessor : BasicAnnotationProcessor() {
         mutableSetOf(
             SerializerProcessingStep(processingEnv),
             SerializerProviderProcessingStep(processingEnv),
+            DetourProviderProcessingStep(processingEnv),
             MyProcessingStep(processingEnv),
             ExtensionProcessingStep(processingEnv)
         ).also {

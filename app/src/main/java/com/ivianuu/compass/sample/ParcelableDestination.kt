@@ -56,7 +56,6 @@ class ParcelableDetour : FragmentDetour<ParcelableDestination> {
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        ParcelableArrayDestination__Serializer
     }
 }
 

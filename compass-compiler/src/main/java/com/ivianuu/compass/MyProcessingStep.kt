@@ -18,15 +18,13 @@ package com.ivianuu.compass
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.collect.SetMultimap
-import com.ivianuu.compass.detour.DetourProviderBuilder
 import com.ivianuu.compass.route.RouteFactoryBuilder
 import com.ivianuu.compass.route.RouteProviderBuilder
-import com.ivianuu.compass.util.detourProviderClassName
 import com.ivianuu.compass.util.packageName
 import com.ivianuu.compass.util.routeFactoryClassName
 import com.ivianuu.compass.util.routeProviderClassName
+import com.ivianuu.compass.util.write
 import com.squareup.kotlinpoet.FileSpec
-import java.io.File
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
@@ -41,7 +39,6 @@ class MyProcessingStep(private val processingEnv: ProcessingEnvironment) : Basic
             .filterIsInstance<TypeElement>()
             .onEach { element -> generateRouteFactory(element) }
             .onEach { element -> generateRouteProvider(element) }
-            .onEach { element -> generateDetourProvider(element) }
 
         return mutableSetOf()
     }
@@ -59,7 +56,7 @@ class MyProcessingStep(private val processingEnv: ProcessingEnvironment) : Basic
                 .addType(type)
                 .build()
 
-            file.writeTo(File(path()))
+            file.write(processingEnv)
         }
     }
 
@@ -73,26 +70,6 @@ class MyProcessingStep(private val processingEnv: ProcessingEnvironment) : Basic
             .addType(type)
             .build()
 
-        file.writeTo(File(path()))
-    }
-
-    private fun generateDetourProvider(base: TypeElement) {
-        val type = DetourProviderBuilder.buildDetourProvider(processingEnv, base)
-
-        if (type != null) {
-            val packageName = base.packageName(processingEnv)
-            val className = base.detourProviderClassName()
-
-            val file = FileSpec.builder(packageName, className.toString())
-                .addType(type)
-                .build()
-
-            file.writeTo(File(path()))
-        }
-    }
-
-    private fun path(): String {
-        return processingEnv.options["kapt.kotlin.generated"]
-            ?.replace("kaptKotlin", "kapt")!!
+        file.write(processingEnv)
     }
 }

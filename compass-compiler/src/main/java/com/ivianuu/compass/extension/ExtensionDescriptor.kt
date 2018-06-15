@@ -25,9 +25,9 @@ import javax.lang.model.element.TypeElement
  */
 data class ExtensionDescriptor(
     val element: TypeElement,
+    val packageName: String,
     val destination: ClassName,
     val targetType: TargetType,
-    val packageName: String,
     val fileName: String,
     val serializer: ClassName
 )
