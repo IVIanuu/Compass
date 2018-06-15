@@ -30,6 +30,7 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
             .filterIsInstance<TypeElement>()
+            .filter { it.shouldBeSerialized() }
             .mapNotNull(this::createDescriptor)
             .map(::ExtensionGenerator)
             .map(ExtensionGenerator::generate)

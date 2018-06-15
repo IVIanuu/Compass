@@ -35,6 +35,7 @@ class SerializerProcessingStep(private val processingEnv: ProcessingEnvironment)
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
             .filterIsInstance<TypeElement>()
+            .filter { it.shouldBeSerialized() }
             .map(this::createDescriptor)
             .map(::SerializerGenerator)
             .map(SerializerGenerator::generate)

@@ -34,6 +34,9 @@ import kotlinx.android.synthetic.main.fragment_counter.*
 @Destination(CounterFragment::class)
 data class CounterDestination(val count: Int, val color: Int)
 
+fun CounterDestination.increment() =
+    copy(count = count + 1)
+
 object CounterFragmentDetour : FragmentDetour<CounterDestination> {
     override fun setup(
         destination: CounterDestination,
@@ -72,19 +75,10 @@ class CounterFragment : Fragment() {
 
         val destination = counterDestination()
 
-        CounterDestination__DetourProvider
-
         title.text = "Count: ${destination.count}"
         view.setBackgroundColor(destination.color)
 
-        destination.toBundle()
-
-        up.setOnClickListener {
-            val next = CounterDestination(
-                destination.count + 1, ColorGenerator.generate())
-            router.navigateTo(next)
-        }
-
+        up.setOnClickListener { router.navigateTo(destination.increment()) }
         down.setOnClickListener { router.exit() }
     }
 }

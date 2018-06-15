@@ -16,8 +16,10 @@
 
 package com.ivianuu.compass.util
 
+import com.google.auto.common.MoreElements
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
+import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
 import com.ivianuu.compass.serializer.ConstructorSelector
 import com.squareup.kotlinpoet.ClassName
@@ -31,6 +33,9 @@ import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.MirroredTypesException
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
+
+fun Element.shouldBeSerialized() =
+    !MoreElements.isAnnotationPresent(this, DoNotSerialize::class.java)
 
 fun Element.getCompassConstructor(): ExecutableElement {
     return ConstructorSelector.getCompassConstructor(this)

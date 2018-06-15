@@ -19,10 +19,7 @@ package com.ivianuu.compass.serializer
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
-import com.ivianuu.compass.util.packageName
-import com.ivianuu.compass.util.serializerClassName
-import com.ivianuu.compass.util.serializerProviderClassName
-import com.ivianuu.compass.util.write
+import com.ivianuu.compass.util.*
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
@@ -35,6 +32,7 @@ class SerializerProviderProcessingStep(private val processingEnv: ProcessingEnvi
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
             .filterIsInstance<TypeElement>()
+            .filter { it.shouldBeSerialized() }
             .map(this::createDescriptor)
             .map(::SerializerProviderGenerator)
             .map(SerializerProviderGenerator::generate)

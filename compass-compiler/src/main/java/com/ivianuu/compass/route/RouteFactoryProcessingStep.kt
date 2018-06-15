@@ -53,7 +53,7 @@ class RouteFactoryProcessingStep(private val processingEnv: ProcessingEnvironmen
             processingEnv.elementUtils.getTypeElement(it.toString())
         }
 
-        if (target == null) {
+        if (target == null || target.asType().toString() == "java.lang.Void") {
             processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
                 "either a valid target or route factory must be specified", element)
             return null
@@ -64,7 +64,7 @@ class RouteFactoryProcessingStep(private val processingEnv: ProcessingEnvironmen
         if (targetType == TargetType.UNKNOWN) {
             processingEnv.messager.printMessage(
                 Diagnostic.Kind.ERROR,
-                "unsupported target type for now only fragments and activities are support",
+                "unsupported target type for now only fragments and activities are supported",
                 element
             )
             return null
