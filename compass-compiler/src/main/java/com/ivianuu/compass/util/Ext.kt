@@ -19,6 +19,7 @@ package com.ivianuu.compass.util
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.compass.RouteFactory
+import com.ivianuu.compass.serializer.ConstructorSelector
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import java.io.File

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.util
+package com.ivianuu.compass.serializer
 
 import com.ivianuu.compass.CompassConstructor
 import javax.lang.model.element.*
@@ -104,8 +104,6 @@ object ConstructorSelector {
                         "get${this.simpleName.toString().capitalize()}"
             }
             .any()
-
-        return null
 
         return if (!containsFieldAccessor && !containsMethodAccessor) {
             getNoAccessorThrowable(

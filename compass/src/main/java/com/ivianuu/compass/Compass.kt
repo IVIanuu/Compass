@@ -16,7 +16,6 @@
 
 package com.ivianuu.compass
 
-import android.util.Log
 import java.lang.reflect.Method
 
 /**
@@ -62,19 +61,13 @@ object Compass {
             getRouteFactory(T::class.java, destination)
 
     fun <T : CompassRouteFactory> getRouteFactory(clazz: Class<T>, destination: Any): T? {
-        Log.d("testtt", "get route factory for ${destination.javaClass.simpleName}")
-
         val routeProviderClass = findClazz(
             destination::class.java.name + "__RouteProvider",
             destination::class.java.classLoader
         ) ?: return null
 
-        Log.d("testtt", "provider class $routeProviderClass")
-
 
         val method = findMethod(routeProviderClass, "get", routeMethods)
-
-        Log.d("testtt", "get method $method")
 
         if (method != null) {
             try {
