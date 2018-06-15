@@ -9,4 +9,5 @@
 
 -keep @com.ivianuu.compass.Destination public class *
 -keep @com.ivianuu.compass.Detour public class *
+-keep @com.ivianuu.compass.DoNotSerialize public class *
 -keep @com.ivianuu.compass.RouteFactory public class *

@@ -27,13 +27,7 @@ import com.ivianuu.traveler.commands.Replace
  */
 class CompassFragmentNavigatorHelper {
 
-    fun createFragment(key: Any, data: Any?): Fragment? {
-        return Compass.getRouteFactory<FragmentRouteFactory<Any>>(key)
-            ?.createFragment(key)?.apply {
-                val serializer = Compass.getSerializer<Any>(key)
-                serializer?.toBundle(key)?.let { arguments = it }
-            }
-    }
+    fun createFragment(key: Any, data: Any?): Fragment? = Compass.getFragment(key)
 
     fun setupFragmentTransaction(
         command: Command,

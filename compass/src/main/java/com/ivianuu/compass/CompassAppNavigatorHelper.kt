@@ -28,13 +28,8 @@ import com.ivianuu.traveler.commands.Replace
  */
 class CompassAppNavigatorHelper {
 
-    fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
-        return Compass.getRouteFactory<ActivityRouteFactory<Any>>(key)
-            ?.createIntent(context, key)?.apply {
-                val serializer = Compass.getSerializer<Any>(key)
-                serializer?.toBundle(key)?.let(this::putExtras)
-            }
-    }
+    fun createActivityIntent(context: Context, key: Any, data: Any?) =
+        Compass.getIntent(context, key)
 
     fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
         val destination = when(command) {

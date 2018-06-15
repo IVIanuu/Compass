@@ -16,6 +16,10 @@
 
 package com.ivianuu.compass
 
+import android.content.Context
+import android.content.Intent
+import android.support.v4.app.Fragment
+import android.util.Log
 import java.lang.reflect.Method
 
 /**
@@ -56,6 +60,64 @@ object Compass {
     fun <T : CompassDetour> requireDetour(clazz: Class<T>, destination: Any) =
         getDetour(clazz, destination) ?: throw IllegalStateException("no detour found for $destination")
 
+    fun requireIntent(context: Context, destination: Any): Intent =
+        getIntent(context, destination) ?: throw IllegalArgumentException("no intent found for $destination")
+
+    private fun d(m: () -> String) {
+        Log.d("Compass", m())
+    }
+
+    fun getIntent(context: Context, destination: Any): Intent? {
+        d { "get intent for $destination" }
+
+        val routeFactory =
+            getRouteFactory(ActivityRouteFactory::class.java, destination)
+                    as? ActivityRouteFactory<Any>
+                    ?: return null
+
+        val intent = routeFactory.createIntent(context, destination)
+
+        d { "intent is $intent" }
+
+        val serializer = getSerializer(Any::class.java, destination)
+        if (serializer != null) {
+            d { "serialize destination" }
+            intent.putExtras(serializer.toBundle(destination))
+        }
+
+        return intent
+    }
+
+    inline fun <reified T : Fragment> requireFragment(destination: Any) =
+        requireFragment(T::class.java, destination)
+
+    fun <T : Fragment> requireFragment(clazz: Class<T>, destination: Any) =
+        getFragment(clazz, destination) ?: throw IllegalStateException("no fragment found for $destination")
+
+    inline fun <reified T : Fragment> getFragment(destination: Any): T? =
+        getFragment(T::class.java, destination)
+
+    fun <T : Fragment> getFragment(clazz: Class<T>, destination: Any): T? {
+        d { "get fragment for $destination" }
+        val routeFactory =
+            getRouteFactory(FragmentRouteFactory::class.java, destination)
+                    as? FragmentRouteFactory<Any>
+                    ?: return null
+
+        val fragment = routeFactory.createFragment(destination) as? T
+
+        d { "fragment is $fragment" }
+
+        if (fragment != null) {
+            val serializer = getSerializer(Any::class.java, destination)
+            if (serializer != null) {
+                d { "serialized destination" }
+                fragment.arguments = serializer.toBundle(destination)
+            }
+        }
+
+        return fragment
+    }
 
     inline fun <reified T : CompassRouteFactory> getRouteFactory(destination: Any) =
             getRouteFactory(T::class.java, destination)
