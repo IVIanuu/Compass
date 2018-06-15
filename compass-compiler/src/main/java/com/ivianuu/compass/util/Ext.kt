@@ -20,6 +20,8 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.compass.RouteFactory
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FileSpec
+import java.io.File
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ExecutableElement
@@ -53,7 +55,7 @@ fun Element.detourProviderClassName(): ClassName {
     return ClassName.bestGuess("${this.simpleName}__DetourProvider")
 }
 
-fun Element.serializerPackageName(environment: ProcessingEnvironment): String {
+fun Element.packageName(environment: ProcessingEnvironment): String {
     return environment.elementUtils.getPackageOf(this).toString()
 }
 
@@ -144,3 +146,27 @@ val Element.detourClass: TypeMirror?
 
         return null
     }
+
+fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
+    return if (this != null) {
+        when {
+            processingEnv.typeUtils.isAssignable(
+                this.asType(),
+                processingEnv.elementUtils.getTypeElement(CLASS_ACTIVITY.toString()).asType()
+            ) -> TargetType.ACTIVITY
+            processingEnv.typeUtils.isAssignable(
+                this.asType(),
+                processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT.toString()).asType()
+            ) -> TargetType.FRAGMENT
+            else -> TargetType.UNKNOWN
+        }
+    } else {
+        TargetType.UNKNOWN
+    }
+}
+
+fun FileSpec.write(processingEnv: ProcessingEnvironment) {
+    val path = processingEnv.options["kapt.kotlin.generated"]
+        ?.replace("kaptKotlin", "kapt")!!
+    writeTo(File(path))
+}

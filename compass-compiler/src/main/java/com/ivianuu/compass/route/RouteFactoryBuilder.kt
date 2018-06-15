@@ -16,10 +16,7 @@
 
 package com.ivianuu.compass.route
 
-import com.ivianuu.compass.util.CLASS_ACTIVITY_ROUTE_FACTORY
-import com.ivianuu.compass.util.CLASS_FRAGMENT_ROUTE_FACTORY
-import com.ivianuu.compass.util.destinationTarget
-import com.ivianuu.compass.util.isSubtypeOfType
+import com.ivianuu.compass.util.*
 import com.squareup.kotlinpoet.*
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.ElementKind
@@ -51,10 +48,10 @@ object RouteFactoryBuilder {
             }
 
             return when {
-                isSubtypeOfType(target, "android.support.v4.app.Fragment") -> {
+                isSubtypeOfType(target, CLASS_FRAGMENT.toString()) -> {
                     buildFragmentFactory(element, target.toString())
                 }
-                isSubtypeOfType(target, "android.app.Activity") -> {
+                isSubtypeOfType(target, CLASS_ACTIVITY.toString()) -> {
                     buildActivityFactory(element, target.toString())
                 }
                 else -> {

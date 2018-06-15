@@ -19,7 +19,6 @@ package com.ivianuu.compass
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.detour.DetourProviderBuilder
-import com.ivianuu.compass.extension.ExtensionBuilder
 import com.ivianuu.compass.route.RouteFactoryBuilder
 import com.ivianuu.compass.route.RouteProviderBuilder
 import com.ivianuu.compass.serializer.SerializerBuilder
@@ -37,7 +36,7 @@ import javax.lang.model.element.TypeElement
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
+class MyProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
@@ -47,7 +46,6 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
             .onEach { element -> generateRouteFactory(element) }
             .onEach { element -> generateRouteProvider(element) }
             .onEach { element -> generateDetourProvider(element) }
-            .onEach { element -> generateExtensions(element) }
 
         return mutableSetOf()
     }
@@ -55,7 +53,7 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
     override fun annotations() = mutableSetOf(Destination::class.java)
 
     private fun generateSerializer(base: TypeElement) {
-        val packageName = base.serializerPackageName(processingEnv)
+        val packageName = base.packageName(processingEnv)
         val className = base.serializerClassName()
 
         val type = TypeSpec.objectBuilder(className)
@@ -79,7 +77,7 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
     private fun generateSerializerProvider(base: TypeElement) {
         val type = SerializerProviderBuilder.buildSerializerProvider(processingEnv, base)
 
-        val packageName = base.serializerPackageName(processingEnv)
+        val packageName = base.packageName(processingEnv)
         val className = base.serializerProviderClassName()
 
         val file = FileSpec.builder(packageName, className.toString())
@@ -93,7 +91,7 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
         val type = RouteFactoryBuilder.buildRouteFactory(processingEnv, base)
 
         if (type != null) {
-            val packageName = base.serializerPackageName(processingEnv)
+            val packageName = base.packageName(processingEnv)
             val className = base.routeFactoryClassName()
 
             val file = FileSpec.builder(packageName, className.toString())
@@ -107,7 +105,7 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
     private fun generateRouteProvider(base: TypeElement) {
         val type = RouteProviderBuilder.buildRouteProvider(processingEnv, base)
 
-        val packageName = base.serializerPackageName(processingEnv)
+        val packageName = base.packageName(processingEnv)
         val className = base.routeProviderClassName()
 
         val file = FileSpec.builder(packageName, className.toString())
@@ -121,7 +119,7 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
         val type = DetourProviderBuilder.buildDetourProvider(processingEnv, base)
 
         if (type != null) {
-            val packageName = base.serializerPackageName(processingEnv)
+            val packageName = base.packageName(processingEnv)
             val className = base.detourProviderClassName()
 
             val file = FileSpec.builder(packageName, className.toString())
@@ -130,17 +128,6 @@ class ProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAn
 
             file.writeTo(File(path()))
         }
-    }
-
-    private fun generateExtensions(base: TypeElement) {
-        val packageName = processingEnv.elementUtils.getPackageOf(base).toString()
-        val fileName = "${base.simpleName}Ext"
-        val fileSpec = FileSpec.builder(packageName, fileName)
-
-        ExtensionBuilder
-            .buildSerializerFunctions(processingEnv, fileSpec, base)
-
-        fileSpec.build().writeTo(File(path()))
     }
 
     private fun path(): String {

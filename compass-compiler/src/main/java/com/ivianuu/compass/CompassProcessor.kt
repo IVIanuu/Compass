@@ -18,6 +18,7 @@ package com.ivianuu.compass
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.service.AutoService
+import com.ivianuu.compass.extension.ExtensionProcessingStep
 import com.ivianuu.compass.serializer.SupportedTypes
 import javax.annotation.processing.Processor
 
@@ -25,7 +26,10 @@ import javax.annotation.processing.Processor
 class CompassProcessor : BasicAnnotationProcessor() {
 
     override fun initSteps(): MutableIterable<ProcessingStep> =
-        mutableSetOf(com.ivianuu.compass.ProcessingStep(processingEnv)).also {
+        mutableSetOf(
+            MyProcessingStep(processingEnv),
+            ExtensionProcessingStep(processingEnv)
+        ).also {
             SupportedTypes.processingEnv = processingEnv
         }
 }

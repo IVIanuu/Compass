@@ -18,8 +18,6 @@ package com.ivianuu.compass.util
 
 import com.squareup.kotlinpoet.ClassName
 
-val CLASS_TYPE_UTIL = ClassName.bestGuess("com.ivianuu.compass.util.TypeUtil")
-
 val CLASS_DETOUR = ClassName.bestGuess("com.ivianuu.compass.CompassDetour")
 val CLASS_ACTIVITY_DETOUR = ClassName.bestGuess("com.ivianuu.compass.ActivityDetour")
 val CLASS_FRAGMENT_DETOUR = ClassName.bestGuess("com.ivianuu.compass.FragmentDetour")
@@ -35,3 +33,6 @@ val CLASS_SERIALIZER = ClassName.bestGuess("com.ivianuu.compass.CompassSerialize
 val CLASS_SERIALIZER_PROVIDER = ClassName.bestGuess("com.ivianuu.compass.CompassSerializerProvider")
 
 val CLASS_BUNDLE = ClassName.bestGuess("android.os.Bundle")
+
+val CLASS_ACTIVITY = ClassName("android.app", "Activity")
+val CLASS_FRAGMENT = ClassName("android.support.v4.app", "Fragment")
