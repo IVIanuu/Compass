@@ -18,10 +18,8 @@ package com.ivianuu.compass
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.collect.SetMultimap
-import com.ivianuu.compass.route.RouteFactoryBuilder
 import com.ivianuu.compass.route.RouteProviderBuilder
 import com.ivianuu.compass.util.packageName
-import com.ivianuu.compass.util.routeFactoryClassName
 import com.ivianuu.compass.util.routeProviderClassName
 import com.ivianuu.compass.util.write
 import com.squareup.kotlinpoet.FileSpec
@@ -37,28 +35,12 @@ class MyProcessingStep(private val processingEnv: ProcessingEnvironment) : Basic
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
             .filterIsInstance<TypeElement>()
-            .onEach { element -> generateRouteFactory(element) }
             .onEach { element -> generateRouteProvider(element) }
 
         return mutableSetOf()
     }
 
     override fun annotations() = mutableSetOf(Destination::class.java)
-
-    private fun generateRouteFactory(base: TypeElement) {
-        val type = RouteFactoryBuilder.buildRouteFactory(processingEnv, base)
-
-        if (type != null) {
-            val packageName = base.packageName(processingEnv)
-            val className = base.routeFactoryClassName()
-
-            val file = FileSpec.builder(packageName, className.toString())
-                .addType(type)
-                .build()
-
-            file.write(processingEnv)
-        }
-    }
 
     private fun generateRouteProvider(base: TypeElement) {
         val type = RouteProviderBuilder.buildRouteProvider(processingEnv, base)
