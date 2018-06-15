@@ -66,8 +66,7 @@ class SerializerProcessingStep(private val processingEnv: ProcessingEnvironment)
                 val keyName = "KEY_" + CaseFormat.LOWER_CAMEL.converterTo(
                     CaseFormat.UPPER_UNDERSCORE
                 ).convert(simpleName)!!
-                val keyValue = element.asType().toString() + ".${element.simpleName}." +
-                        simpleName
+                val keyValue = element.asType().toString() + "." + attr.simpleName
 
                 attributes.add(
                     DestinationAttribute(attr, simpleName, keyName, SupportedTypes.get(attr))

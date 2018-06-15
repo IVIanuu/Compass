@@ -94,12 +94,8 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
 
     private fun FunSpec.Builder.addBundlePutter(attribute: DestinationAttribute) {
         addStatement(
-            "val ${attribute.name} = destination.${attribute.name}"
-        )
-
-        addStatement(
             "bundle.put${attribute.descriptor.typeMapping}(${attribute.keyName}, " +
-                    (if (attribute.descriptor.wrapInArrayList) "ArrayList(${attribute.name}))" else "${attribute.name})")
+                    (if (attribute.descriptor.wrapInArrayList) "ArrayList(destination.${attribute.name}))" else "destination.${attribute.name})")
         )
     }
 
