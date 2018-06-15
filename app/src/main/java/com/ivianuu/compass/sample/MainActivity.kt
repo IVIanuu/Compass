@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        CounterDestination__RouteProvider
+
         if (savedInstanceState == null) {
             router.newRootScreen(
                 CounterDestination(1, ColorGenerator.generate()))
