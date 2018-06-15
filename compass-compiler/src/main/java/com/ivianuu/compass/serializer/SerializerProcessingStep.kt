@@ -36,7 +36,7 @@ class SerializerProcessingStep(private val processingEnv: ProcessingEnvironment)
         elementsByAnnotation[Destination::class.java]
             .filterIsInstance<TypeElement>()
             .filter { it.shouldBeSerialized() }
-            .map(this::createDescriptor)
+            .mapNotNull(this::createDescriptor)
             .map(::SerializerGenerator)
             .map(SerializerGenerator::generate)
             .forEach { it.write(processingEnv) }
@@ -47,7 +47,7 @@ class SerializerProcessingStep(private val processingEnv: ProcessingEnvironment)
     override fun annotations() =
         mutableSetOf(Destination::class.java)
 
-    private fun createDescriptor(element: TypeElement): SerializerDescriptor {
+    private fun createDescriptor(element: TypeElement): SerializerDescriptor? {
         val attributes = mutableSetOf<DestinationAttribute>()
         val keys = mutableSetOf<DestinationAttributeKey>()
 
@@ -58,9 +58,8 @@ class SerializerProcessingStep(private val processingEnv: ProcessingEnvironment)
                 if (!SupportedTypes.isSupported(attr)) {
                     processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
                         "unsupported parameter $element -> ${attr.simpleName}", attr)
-                    return@forEach
+                    return null
                 }
-
 
                 val simpleName = attr.simpleName.toString()
 
