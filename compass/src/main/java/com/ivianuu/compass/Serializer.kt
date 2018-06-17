@@ -25,7 +25,13 @@ interface CompassSerializer<T : Any> {
 
     fun fromBundle(bundle: Bundle): T
 
-    fun toBundle(destination: T): Bundle
+    fun toBundle(destination: T, bundle: Bundle)
+
+    fun toBundle(destination: T): Bundle {
+        val bundle = Bundle()
+        toBundle(destination, bundle)
+        return bundle
+    }
 
 }
 

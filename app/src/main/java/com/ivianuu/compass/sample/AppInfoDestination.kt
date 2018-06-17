@@ -27,17 +27,20 @@ import com.ivianuu.compass.RouteFactory
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@RouteFactory(AppInfoRouteFactory::class)
+@RouteFactory(AppInfoDestination.RouteFactory::class)
 @Destination
-data class AppInfoDestination(val packageName: String)
-
-class AppInfoRouteFactory : ActivityRouteFactory<AppInfoDestination> {
-    override fun createIntent(context: Context, destination: AppInfoDestination): Intent {
-        return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            this.data = Uri.parse("package:${destination.packageName}")
+data class AppInfoDestination(val packageName: String) {
+    class RouteFactory : ActivityRouteFactory<AppInfoDestination> {
+        override fun createIntent(context: Context, destination: AppInfoDestination): Intent {
+            return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                this.data = Uri.parse("package:${destination.packageName}")
+            }
         }
     }
 }
 
 fun haha() {
+    AppInfoDestination__RouteProvider
+    AppInfoDestination__SerializerProvider
+    AppInfoDestination__Serializer
 }

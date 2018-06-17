@@ -60,11 +60,9 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
         val function = FunSpec.builder("toBundle")
             .addModifiers(KModifier.OVERRIDE)
             .addParameter("destination", descriptor.destination)
-            .returns(CLASS_BUNDLE)
+            .addParameter("bundle", CLASS_BUNDLE)
 
-        function.addStatement("val bundle = %T()", CLASS_BUNDLE)
         descriptor.attributes.forEach { function.addBundlePutter(it) }
-        function.addStatement("return bundle")
 
         return function.build()
     }
