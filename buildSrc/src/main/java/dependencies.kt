@@ -18,9 +18,9 @@ object Versions {
 
     const val mavenGradlePlugin = "2.1"
     const val support = "28.0.0-alpha3"
-    const val traveler = "891ec4518d"
+    const val traveler = "34853c0c1b"
 }
-//
+
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
 
