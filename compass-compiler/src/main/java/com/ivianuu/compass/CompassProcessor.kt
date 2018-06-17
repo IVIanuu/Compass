@@ -30,15 +30,15 @@ import javax.annotation.processing.Processor
 @AutoService(Processor::class)
 class CompassProcessor : BasicAnnotationProcessor() {
 
+    private val supportedTypes by lazy { SupportedTypes(processingEnv) }
+
     override fun initSteps(): MutableIterable<ProcessingStep> =
         mutableSetOf(
-            SerializerProcessingStep(processingEnv),
+            SerializerProcessingStep(processingEnv, supportedTypes),
             SerializerProviderProcessingStep(processingEnv),
             RouteFactoryProcessingStep(processingEnv),
             RouteProviderProcessingStep(processingEnv),
             DetourProviderProcessingStep(processingEnv),
             ExtensionProcessingStep(processingEnv)
-        ).also {
-            SupportedTypes.processingEnv = processingEnv
-        }
+        )
 }

@@ -30,7 +30,10 @@ import javax.tools.Diagnostic
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-class SerializerProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
+class SerializerProcessingStep(
+    private val processingEnv: ProcessingEnvironment,
+    private val supportedTypes: SupportedTypes
+) : BasicAnnotationProcessor.ProcessingStep {
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
@@ -55,7 +58,7 @@ class SerializerProcessingStep(private val processingEnv: ProcessingEnvironment)
             val constructor = element.getCompassConstructor()
 
             constructor.parameters.forEach { attr ->
-                if (!SupportedTypes.isSupported(attr)) {
+                if (!supportedTypes.isSupported(attr)) {
                     processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
                         "unsupported parameter $element -> ${attr.simpleName}", attr)
                     return null
@@ -69,7 +72,7 @@ class SerializerProcessingStep(private val processingEnv: ProcessingEnvironment)
                 val keyValue = element.asType().toString() + "." + attr.simpleName
 
                 attributes.add(
-                    DestinationAttribute(attr, simpleName, keyName, SupportedTypes.get(attr))
+                    DestinationAttribute(attr, simpleName, keyName, supportedTypes.get(attr))
                 )
 
                 keys.add(

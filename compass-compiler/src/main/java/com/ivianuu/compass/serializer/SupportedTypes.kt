@@ -30,9 +30,7 @@ data class SerializerAttributeDescriptor(
     val wrapInArrayList: Boolean = false
 )
 
-object SupportedTypes {
-
-    lateinit var processingEnv: ProcessingEnvironment
+class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
 
     private val TYPES: MutableMap<String, SerializerAttributeDescriptor> = mutableMapOf(
         "boolean" to SerializerAttributeDescriptor("Boolean"),
