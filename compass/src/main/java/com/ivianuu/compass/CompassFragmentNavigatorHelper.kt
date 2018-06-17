@@ -41,8 +41,7 @@ class CompassFragmentNavigatorHelper {
             else -> throw IllegalArgumentException()
         }
 
-        val detour =
-            Compass.getDetour<FragmentDetour<Any>>(destination)
-        detour?.setup(destination, currentFragment, nextFragment, transaction)
+        Compass.getFragmentDetour(destination)
+            ?.setupTransaction(destination, currentFragment, nextFragment, transaction)
     }
 }

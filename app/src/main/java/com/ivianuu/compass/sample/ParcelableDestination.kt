@@ -50,7 +50,7 @@ class ParcelableListFragment : Fragment()
 class ParcelableSparseArrayFragment : Fragment()
 
 class ParcelableDetour : FragmentDetour<ParcelableDestination> {
-    override fun setup(
+    override fun setupTransaction(
         destination: ParcelableDestination,
         currentFragment: Fragment?,
         nextFragment: Fragment,

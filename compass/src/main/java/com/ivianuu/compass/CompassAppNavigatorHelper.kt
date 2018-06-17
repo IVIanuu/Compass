@@ -38,9 +38,6 @@ class CompassAppNavigatorHelper {
             else -> throw IllegalArgumentException() // this should never happen
         }
 
-        val detour =
-            Compass.getDetour<ActivityDetour<Any>>(destination)
-
-        return detour?.createOptions(destination, activityIntent)
+        return Compass.getActivityDetour(destination)?.createOptions(destination, activityIntent)
     }
 }

@@ -24,7 +24,7 @@ import android.support.v4.app.FragmentTransaction
 interface CompassDetour
 
 interface FragmentDetour<T : Any> : CompassDetour {
-    fun setup(
+    fun setupTransaction(
         destination: T,
         currentFragment: Fragment?,
         nextFragment: Fragment,

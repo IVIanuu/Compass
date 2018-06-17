@@ -38,7 +38,7 @@ fun CounterDestination.increment() =
     copy(count = count + 1)
 
 object CounterFragmentDetour : FragmentDetour<CounterDestination> {
-    override fun setup(
+    override fun setupTransaction(
         destination: CounterDestination,
         currentFragment: Fragment?,
         nextFragment: Fragment,

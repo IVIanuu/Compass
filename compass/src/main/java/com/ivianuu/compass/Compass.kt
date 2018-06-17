@@ -19,7 +19,6 @@ package com.ivianuu.compass
 import android.content.Context
 import android.content.Intent
 import android.support.v4.app.Fragment
-import android.util.Log
 import java.lang.reflect.Method
 
 /**
@@ -28,22 +27,41 @@ import java.lang.reflect.Method
 @Suppress("UNCHECKED_CAST")
 object Compass {
 
+    private const val METHOD_NAME_GET = "get"
+    private const val SUFFIX_DETOUR_PROVIDER = "__DetourProvider"
+    private const val SUFFIX_ROUTE_PROVIDER = "__RouteProvider"
+    private const val SUFFIX_SERIALIZER_PROVIDER = "__SerializerProvider"
+
     private val routeMethods = mutableMapOf<Class<*>, Method>()
     private val detourMethods = mutableMapOf<Class<*>, Method>()
     private val serializerMethods = mutableMapOf<Class<*>, Method>()
 
     private val unexistingClasses = mutableSetOf<String>()
 
+    fun <T : Any> requireActivityDetour(destination: T) =
+        getFragmentDetour(destination) ?: throw IllegalArgumentException("no activity detour found for $destination")
+
+    fun <T : Any> getActivityDetour(destination: T): ActivityDetour<T>? =
+        getDetour(ActivityDetour::class.java, destination)
+                as? ActivityDetour<T>
+
+    fun <T : Any> requireFragmentDetour(destination: T) =
+        getFragmentDetour(destination) ?: throw IllegalArgumentException("no fragment detour found for $destination")
+
+    fun <T : Any> getFragmentDetour(destination: T): FragmentDetour<T>? =
+        getDetour(FragmentDetour::class.java, destination)
+                as? FragmentDetour<T>
+
     inline fun <reified T : CompassDetour> getDetour(destination: Any): T? =
             getDetour(T::class.java, destination)
 
     fun <T : CompassDetour> getDetour(clazz: Class<T>, destination: Any): T? {
         val detourProviderClass = findClazz(
-            destination::class.java.name + "__DetourProvider",
+            destination::class.java.name + SUFFIX_DETOUR_PROVIDER,
             destination::class.java.classLoader
         ) ?: return null
 
-        val method = findMethod(detourProviderClass, "get", detourMethods)
+        val method = findMethod(detourProviderClass, METHOD_NAME_GET, detourMethods)
         if (method != null) {
             try {
                 return clazz.cast(method.invoke(null))
@@ -63,13 +81,7 @@ object Compass {
     fun requireIntent(context: Context, destination: Any): Intent =
         getIntent(context, destination) ?: throw IllegalArgumentException("no intent found for $destination")
 
-    private fun d(m: () -> String) {
-        Log.d("Compass", m())
-    }
-
     fun getIntent(context: Context, destination: Any): Intent? {
-        d { "get intent for $destination" }
-
         val routeFactory =
             getRouteFactory(ActivityRouteFactory::class.java, destination)
                     as? ActivityRouteFactory<Any>
@@ -77,28 +89,18 @@ object Compass {
 
         val intent = routeFactory.createIntent(context, destination)
 
-        d { "intent is $intent" }
-
-        val serializer = getSerializer(Any::class.java, destination)
+        val serializer = getSerializer(destination)
         if (serializer != null) {
-            d { "serialize destination" }
             intent.putExtras(serializer.toBundle(destination))
         }
 
         return intent
     }
 
-    inline fun <reified T : Fragment> requireFragment(destination: Any) =
-        requireFragment(T::class.java, destination)
+    fun <T : Fragment> requireFragment(destination: Any) =
+        getFragment<T>(destination) ?: throw IllegalStateException("no fragment found for $destination")
 
-    fun <T : Fragment> requireFragment(clazz: Class<T>, destination: Any) =
-        getFragment(clazz, destination) ?: throw IllegalStateException("no fragment found for $destination")
-
-    inline fun <reified T : Fragment> getFragment(destination: Any): T? =
-        getFragment(T::class.java, destination)
-
-    fun <T : Fragment> getFragment(clazz: Class<T>, destination: Any): T? {
-        d { "get fragment for $destination" }
+    fun <T : Fragment> getFragment(destination: Any): T? {
         val routeFactory =
             getRouteFactory(FragmentRouteFactory::class.java, destination)
                     as? FragmentRouteFactory<Any>
@@ -106,12 +108,9 @@ object Compass {
 
         val fragment = routeFactory.createFragment(destination) as? T
 
-        d { "fragment is $fragment" }
-
         if (fragment != null) {
-            val serializer = getSerializer(Any::class.java, destination)
+            val serializer = getSerializer(destination)
             if (serializer != null) {
-                d { "serialized destination" }
                 fragment.arguments = serializer.toBundle(destination)
             }
         }
@@ -124,12 +123,12 @@ object Compass {
 
     fun <T : CompassRouteFactory> getRouteFactory(clazz: Class<T>, destination: Any): T? {
         val routeProviderClass = findClazz(
-            destination::class.java.name + "__RouteProvider",
+            destination::class.java.name + SUFFIX_ROUTE_PROVIDER,
             destination::class.java.classLoader
         ) ?: return null
 
 
-        val method = findMethod(routeProviderClass, "get", routeMethods)
+        val method = findMethod(routeProviderClass, METHOD_NAME_GET, routeMethods)
 
         if (method != null) {
             try {
@@ -149,17 +148,13 @@ object Compass {
     inline fun <reified T : CompassRouteFactory> requireRouteFactory(destination: Any) =
             requireRouteFactory(T::class.java, destination)
 
-
-    inline fun <reified T : Any> getSerializer(destination: Any) =
-        getSerializer(T::class.java, destination)
-
-    fun <T : Any> getSerializer(clazz: Class<T>, destination: Any): CompassSerializer<T>? {
+    fun <T : Any> getSerializer(destination: T): CompassSerializer<T>? {
         val serializerProviderClass = findClazz(
-            destination::class.java.name + "__SerializerProvider",
+            destination::class.java.name + SUFFIX_SERIALIZER_PROVIDER,
             destination::class.java.classLoader
         ) ?: return null
 
-        val method = findMethod(serializerProviderClass, "get", serializerMethods)
+        val method = findMethod(serializerProviderClass, METHOD_NAME_GET, serializerMethods)
 
         if (method != null) {
             try {
@@ -171,12 +166,9 @@ object Compass {
         return null
     }
 
-    fun <T : Any> requireSerializer(clazz: Class<T>, destination: Any) =
-        getSerializer(clazz, destination)
+    fun <T : Any> requireSerializer(destination: T) =
+        getSerializer(destination)
                 ?: throw IllegalStateException("no serializer found for $destination")
-
-    inline fun <reified T : Any> requireSerializer(destination: Any) =
-        requireSerializer(T::class.java, destination)
 
     private fun findClazz(
         className: String,
