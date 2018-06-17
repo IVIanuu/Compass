@@ -31,7 +31,7 @@ import com.ivianuu.compass.RouteFactory
 @Destination
 object NoSerializeDestination {
     object RouteFactory : ActivityRouteFactory<NoSerializeDestination> {
-        override fun createIntent(context: Context, destination: NoSerializeDestination): Intent {
+        override fun createActivityIntent(context: Context, destination: NoSerializeDestination): Intent {
             return Intent()
         }
     }

@@ -31,7 +31,7 @@ import com.ivianuu.compass.RouteFactory
 data class WebsiteDestination(val url : String)
 
 object WebsiteRouteFactory : ActivityRouteFactory<WebsiteDestination> {
-    override fun createIntent(context: Context, destination: WebsiteDestination): Intent {
+    override fun createActivityIntent(context: Context, destination: WebsiteDestination): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(destination.url)
         }

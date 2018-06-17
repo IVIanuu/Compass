@@ -87,7 +87,7 @@ object Compass {
                     as? ActivityRouteFactory<Any>
                     ?: return null
 
-        val intent = routeFactory.createIntent(context, destination)
+        val intent = routeFactory.createActivityIntent(context, destination)
 
         val serializer = getSerializer(destination)
         if (serializer != null) {

@@ -27,7 +27,7 @@ interface FragmentRouteFactory<T : Any> : CompassRouteFactory {
 }
 
 interface ActivityRouteFactory<T : Any> : CompassRouteFactory {
-    fun createIntent(context: Context, destination: T): Intent
+    fun createActivityIntent(context: Context, destination: T): Intent
 }
 
 interface CompassRouteFactoryProvider

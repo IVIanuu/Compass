@@ -38,6 +38,7 @@ class CompassAppNavigatorHelper {
             else -> throw IllegalArgumentException() // this should never happen
         }
 
-        return Compass.getActivityDetour(destination)?.createOptions(destination, activityIntent)
+        return Compass.getActivityDetour(destination)
+            ?.createStartActivityOptions(destination, activityIntent)
     }
 }

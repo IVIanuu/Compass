@@ -31,7 +31,7 @@ import com.ivianuu.compass.RouteFactory
 @Destination
 data class AppInfoDestination(val packageName: String) {
     class RouteFactory : ActivityRouteFactory<AppInfoDestination> {
-        override fun createIntent(context: Context, destination: AppInfoDestination): Intent {
+        override fun createActivityIntent(context: Context, destination: AppInfoDestination): Intent {
             return Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                 this.data = Uri.parse("package:${destination.packageName}")
             }

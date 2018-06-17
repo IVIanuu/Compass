@@ -64,7 +64,7 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
                 )
             )
 
-        val createBuilder = FunSpec.builder("createIntent")
+        val createBuilder = FunSpec.builder("createActivityIntent")
             .addModifiers(KModifier.OVERRIDE)
             .addParameter("destination", descriptor.destination)
             .returns(CLASS_INTENT)
