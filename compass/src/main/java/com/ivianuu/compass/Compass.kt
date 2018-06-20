@@ -42,7 +42,7 @@ object Compass {
         requireActivityDetour(T::class.java)
 
     fun <T : Any> requireActivityDetour(destination: T) =
-        getActivityDetour(destination::class.java)
+        getActivityDetour(destination::class.java) as ActivityDetour<T>
 
     fun <T : Any> requireActivityDetour(destinationClass: Class<T>) =
         getActivityDetour(destinationClass)
@@ -61,7 +61,7 @@ object Compass {
         requireFragmentDetour(T::class.java)
 
     fun <T : Any> requireFragmentDetour(destination: T) =
-        requireFragmentDetour(destination::class.java)
+        requireFragmentDetour(destination::class.java) as FragmentDetour<T>
 
     fun <T : Any> requireFragmentDetour(destinationClass: Class<T>) =
         getFragmentDetour(destinationClass)
@@ -206,7 +206,7 @@ object Compass {
         requireSerializer(T::class.java)
 
     fun <T : Any> requireSerializer(destination: T) =
-        requireSerializer(destination::class.java)
+        requireSerializer(destination::class.java) as CompassSerializer<T>
 
     fun <T : Any> requireSerializer(destinationClass: Class<T>) =
         getSerializer(destinationClass)
