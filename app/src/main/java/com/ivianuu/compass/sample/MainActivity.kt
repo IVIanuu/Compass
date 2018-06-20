@@ -2,6 +2,7 @@ package com.ivianuu.compass.sample
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.traveler.Traveler
 
@@ -31,5 +32,9 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         traveler.navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    private inline fun d(m: () -> String) {
+        Log.d("Main", m())
     }
 }

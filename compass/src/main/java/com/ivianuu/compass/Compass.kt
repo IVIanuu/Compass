@@ -38,33 +38,76 @@ object Compass {
 
     private val unexistingClasses = mutableSetOf<String>()
 
-    fun <T : Any> requireActivityDetour(destination: T) =
-        getFragmentDetour(destination) ?: throw IllegalArgumentException("no activity detour found for $destination")
+    inline fun <reified T : Any> requireActivityDetour() =
+        requireActivityDetour(T::class.java)
 
-    fun <T : Any> getActivityDetour(destination: T): ActivityDetour<T>? =
-        getDetour(ActivityDetour::class.java, destination)
-                as? ActivityDetour<T>
+    fun <T : Any> requireActivityDetour(destination: T) =
+        getActivityDetour(destination::class.java)
+
+    fun <T : Any> requireActivityDetour(destinationClass: Class<T>) =
+        getActivityDetour(destinationClass)
+                ?: throw IllegalArgumentException("no activity detour found for $destinationClass")
+
+    inline fun <reified T : Any> getActivityDetour() =
+        getActivityDetour(T::class.java)
+
+    fun <T : Any> getActivityDetour(destination: T) =
+        getActivityDetour(destination::class.java) as? ActivityDetour<T>
+
+    fun <T : Any> getActivityDetour(destinationClass: Class<T>) =
+        getDetour(ActivityDetour::class.java, destinationClass) as? ActivityDetour<T>
+
+    inline fun <reified T : Any> requireFragmentDetour() =
+        requireFragmentDetour(T::class.java)
 
     fun <T : Any> requireFragmentDetour(destination: T) =
-        getFragmentDetour(destination) ?: throw IllegalArgumentException("no fragment detour found for $destination")
+        requireFragmentDetour(destination::class.java)
 
-    fun <T : Any> getFragmentDetour(destination: T): FragmentDetour<T>? =
-        getDetour(FragmentDetour::class.java, destination)
-                as? FragmentDetour<T>
+    fun <T : Any> requireFragmentDetour(destinationClass: Class<T>) =
+        getFragmentDetour(destinationClass)
+                ?: throw IllegalArgumentException("no fragment detour found for $destinationClass")
 
-    inline fun <reified T : CompassDetour> getDetour(destination: Any): T? =
+    inline fun <reified T : Any> getFragmentDetour() =
+        getFragmentDetour(T::class.java)
+
+    fun <T : Any> getFragmentDetour(destination: T) =
+        getFragmentDetour(destination::class.java) as? FragmentDetour<T>
+
+    fun <T : Any> getFragmentDetour(destinationClass: Class<T>) =
+        getDetour(FragmentDetour::class.java, destinationClass) as? FragmentDetour<T>
+
+    inline fun <reified T : CompassDetour, reified D : Any> requireDetour() =
+        requireDetour(T::class.java, D::class.java)
+
+    inline fun <reified T : CompassDetour> requireDetour(destination: Any) =
+        requireDetour(T::class.java, destination)
+
+    fun <T : CompassDetour> requireDetour(detourClass: Class<T>, destination: Any) =
+        requireDetour(detourClass, destination::class.java)
+
+    fun <T : CompassDetour> requireDetour(detourClass: Class<T>, destinationClass: Class<*>) =
+        getDetour(detourClass, destinationClass)
+                ?: throw IllegalStateException("no detour found for $destinationClass")
+
+    inline fun <reified T : CompassDetour> getDetour(destination: Any) =
             getDetour(T::class.java, destination)
 
-    fun <T : CompassDetour> getDetour(clazz: Class<T>, destination: Any): T? {
+    inline fun <reified T : CompassDetour, reified D : Any> getDetour() =
+        getDetour(T::class.java, D::class.java)
+
+    fun <T : CompassDetour> getDetour(clazz: Class<T>, destination: Any) =
+        Compass.getDetour(clazz, destination::class.java)
+
+    fun <T : CompassDetour> getDetour(detourClass: Class<T>, destinationClass: Class<*>): T? {
         val detourProviderClass = findClazz(
-            destination::class.java.name + SUFFIX_DETOUR_PROVIDER,
-            destination::class.java.classLoader
+            destinationClass.name + SUFFIX_DETOUR_PROVIDER,
+            destinationClass.classLoader
         ) ?: return null
 
         val method = findMethod(detourProviderClass, METHOD_NAME_GET, detourMethods)
         if (method != null) {
             try {
-                return clazz.cast(method.invoke(null))
+                return detourClass.cast(method.invoke(null))
             } catch (e: Exception) {
             }
         }
@@ -72,13 +115,7 @@ object Compass {
         return null
     }
 
-    inline fun <reified T : CompassDetour> requireDetour(destination: Any) =
-            requireDetour(T::class.java, destination)
-
-    fun <T : CompassDetour> requireDetour(clazz: Class<T>, destination: Any) =
-        getDetour(clazz, destination) ?: throw IllegalStateException("no detour found for $destination")
-
-    fun requireIntent(context: Context, destination: Any): Intent =
+    fun requireIntent(context: Context, destination: Any) =
         getIntent(context, destination) ?: throw IllegalArgumentException("no intent found for $destination")
 
     fun getIntent(context: Context, destination: Any): Intent? {
@@ -118,13 +155,37 @@ object Compass {
         return fragment
     }
 
+    inline fun <reified T : CompassRouteFactory> requireRouteFactory(destination: Any) =
+        requireRouteFactory(T::class.java, destination)
+
+    fun <T : CompassRouteFactory> requireRouteFactory(
+        routeFactoryClass: Class<T>,
+        destination: Any
+    ) =
+        requireRouteFactory(routeFactoryClass, destination::class.java)
+
+    fun <T : CompassRouteFactory> requireRouteFactory(
+        routeFactoryClass: Class<T>,
+        destinationClass: Class<*>
+    ) =
+        getRouteFactory(routeFactoryClass, destinationClass)
+                ?: throw IllegalStateException("no route factory found for $destinationClass")
+
+
+
     inline fun <reified T : CompassRouteFactory> getRouteFactory(destination: Any) =
             getRouteFactory(T::class.java, destination)
 
-    fun <T : CompassRouteFactory> getRouteFactory(clazz: Class<T>, destination: Any): T? {
+    fun <T : CompassRouteFactory> getRouteFactory(routeFactoryClass: Class<T>, destination: Any) =
+        getRouteFactory(routeFactoryClass, destination::class.java)
+
+    fun <T : CompassRouteFactory> getRouteFactory(
+        routeFactoryClass: Class<T>,
+        destinationClass: Class<*>
+    ): T? {
         val routeProviderClass = findClazz(
-            destination::class.java.name + SUFFIX_ROUTE_PROVIDER,
-            destination::class.java.classLoader
+            destinationClass.name + SUFFIX_ROUTE_PROVIDER,
+            destinationClass.classLoader
         ) ?: return null
 
 
@@ -132,26 +193,36 @@ object Compass {
 
         if (method != null) {
             try {
-                return clazz.cast(method.invoke(null))
+                return routeFactoryClass.cast(method.invoke(null))
             } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
 
         return null
     }
 
-    fun <T : CompassRouteFactory> requireRouteFactory(clazz: Class<T>, destination: Any) =
-        getRouteFactory(clazz, destination)
-                ?: throw IllegalStateException("no route factory found for $destination")
 
-    inline fun <reified T : CompassRouteFactory> requireRouteFactory(destination: Any) =
-            requireRouteFactory(T::class.java, destination)
+    inline fun <reified T : Any> requireSerializer() =
+        requireSerializer(T::class.java)
 
-    fun <T : Any> getSerializer(destination: T): CompassSerializer<T>? {
+    fun <T : Any> requireSerializer(destination: T) =
+        requireSerializer(destination::class.java)
+
+    fun <T : Any> requireSerializer(destinationClass: Class<T>) =
+        getSerializer(destinationClass)
+                ?: throw IllegalStateException("no serializer found for $destinationClass")
+
+
+    inline fun <reified T : Any> getSerializer() =
+        getSerializer(T::class.java)
+
+    fun <T : Any> getSerializer(destination: T) =
+        getSerializer(destination::class.java) as? CompassSerializer<T>?
+
+    fun <T : Any> getSerializer(destinationClass: Class<T>): CompassSerializer<T>? {
         val serializerProviderClass = findClazz(
-            destination::class.java.name + SUFFIX_SERIALIZER_PROVIDER,
-            destination::class.java.classLoader
+            destinationClass.name + SUFFIX_SERIALIZER_PROVIDER,
+            destinationClass.classLoader
         ) ?: return null
 
         val method = findMethod(serializerProviderClass, METHOD_NAME_GET, serializerMethods)
@@ -165,10 +236,6 @@ object Compass {
 
         return null
     }
-
-    fun <T : Any> requireSerializer(destination: T) =
-        getSerializer(destination)
-                ?: throw IllegalStateException("no serializer found for $destination")
 
     private fun findClazz(
         className: String,
