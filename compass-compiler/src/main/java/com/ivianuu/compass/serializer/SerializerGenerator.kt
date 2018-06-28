@@ -91,19 +91,36 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
     }
 
     private fun FunSpec.Builder.addBundlePutter(attribute: DestinationAttribute) {
+        if (attribute.isNullable) {
+            beginControlFlow("if (destination.${attribute.name} != null)")
+        }
         addStatement(
             "bundle.put${attribute.descriptor.typeMapping}(${attribute.keyName}, " +
                     (if (attribute.descriptor.wrapInArrayList) "ArrayList(destination.${attribute.name}))" else "destination.${attribute.name})")
         )
+        if (attribute.isNullable) {
+            endControlFlow()
+        }
     }
 
     private fun FunSpec.Builder.addBundleGetter(attribute: DestinationAttribute) {
-        addStatement(
-            "val ${attribute.name} = " +
-                    "bundle" + ".get${attribute.descriptor.typeMapping}" +
-                    (if (attribute.descriptor.typeParameter != null) "<${attribute.descriptor.typeParameter}>" else "") +
-                    "(${attribute.keyName}) " +
-                    (if (attribute.descriptor.castTo != null) "as ${attribute.descriptor.castTo}" else "")
-        )
+        if (attribute.isNullable) {
+            addStatement(
+                "val ${attribute.name} = if (bundle.containsKey(${attribute.keyName})) {\n" +
+                        "bundle.get${attribute.descriptor.typeMapping}" +
+                        (if (attribute.descriptor.typeParameter != null) "<${attribute.descriptor.typeParameter}>" else "") +
+                        "(${attribute.keyName}) " +
+                        (if (attribute.descriptor.castTo != null) "as ${attribute.descriptor.castTo}" else "") +
+                        "\n} else {\nnull\n}"
+            )
+        } else {
+            addStatement(
+                "val ${attribute.name} = " +
+                        "bundle.get${attribute.descriptor.typeMapping}" +
+                        (if (attribute.descriptor.typeParameter != null) "<${attribute.descriptor.typeParameter}>" else "") +
+                        "(${attribute.keyName}) " +
+                        (if (attribute.descriptor.castTo != null) "as ${attribute.descriptor.castTo}" else "")
+            )
+        }
     }
 }

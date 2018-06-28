@@ -17,11 +17,13 @@
 package com.ivianuu.compass.serializer
 
 import com.google.auto.common.BasicAnnotationProcessor
+import com.google.auto.common.MoreElements
 import com.google.common.base.CaseFormat
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.util.*
 import com.squareup.kotlinpoet.asClassName
+import org.jetbrains.annotations.Nullable
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
@@ -71,9 +73,16 @@ class SerializerProcessingStep(
                 ).convert(simpleName)!!
                 val keyValue = element.asType().toString() + "." + attr.simpleName
 
-                attributes.add(
-                    DestinationAttribute(attr, simpleName, keyName, supportedTypes.get(attr))
-                )
+                val isNullable = MoreElements.isAnnotationPresent(attr, Nullable::class.java)
+
+                val hasDefaultParameter =
+
+                    attributes.add(
+                        DestinationAttribute(
+                            attr, simpleName, keyName, supportedTypes.get(attr),
+                            isNullable
+                        )
+                    )
 
                 keys.add(
                     DestinationAttributeKey(keyName, keyValue)

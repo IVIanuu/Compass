@@ -39,5 +39,6 @@ data class DestinationAttribute(
     val element: VariableElement,
     val name: String,
     val keyName: String,
-    val descriptor: SerializerAttributeDescriptor
+    val descriptor: SerializerAttributeDescriptor,
+    val isNullable: Boolean
 )
