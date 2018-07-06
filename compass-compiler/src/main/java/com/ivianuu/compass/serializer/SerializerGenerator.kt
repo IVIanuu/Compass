@@ -105,6 +105,7 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
 
     private fun FunSpec.Builder.addBundleGetter(attribute: DestinationAttribute) {
         if (attribute.isNullable) {
+            // clean this up
             addStatement(
                 "val ${attribute.name} = if (bundle.containsKey(${attribute.keyName})) {\n" +
                         "bundle.get${attribute.descriptor.typeMapping}" +
