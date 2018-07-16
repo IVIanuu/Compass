@@ -31,13 +31,9 @@ object ColorGenerator {
     private var lastColor = -1
 
     fun generate(): Int {
-        var color = -1
-
-        while (color == -1 || color == lastColor) {
-            color = COLORS.toList().shuffled().first()
-        }
-
-        return color.also { lastColor = it }
+        return COLORS.toList()
+            .first { it != lastColor }
+            .also { lastColor = it }
     }
 
 }
