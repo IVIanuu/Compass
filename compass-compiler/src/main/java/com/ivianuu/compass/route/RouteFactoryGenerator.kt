@@ -56,7 +56,7 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
     }
 
     private fun activityRouteFactory(): TypeSpec {
-        val type = TypeSpec.classBuilder(descriptor.routeFactory)
+        val type = TypeSpec.objectBuilder(descriptor.routeFactory)
             .addSuperinterface(
                 ParameterizedTypeName.get(
                     CLASS_ACTIVITY_ROUTE_FACTORY,
@@ -66,9 +66,10 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
 
         val createBuilder = FunSpec.builder("createActivityIntent")
             .addModifiers(KModifier.OVERRIDE)
+            .addParameter("context", CLASS_CONTEXT)
             .addParameter("destination", descriptor.destination)
             .returns(CLASS_INTENT)
-            .addStatement("return %T(context, %T::class)", CLASS_INTENT, descriptor.target)
+            .addStatement("return %T(context, %T::class.java)", CLASS_INTENT, descriptor.target)
             .build()
 
         type.addFunction(createBuilder)

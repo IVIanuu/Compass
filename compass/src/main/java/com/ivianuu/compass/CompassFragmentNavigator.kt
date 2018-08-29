@@ -28,8 +28,7 @@ import com.ivianuu.traveler.fragments.FragmentNavigator
 abstract class CompassFragmentNavigator(
     fragmentManager: FragmentManager,
     containerId: Int
-) :
-    FragmentNavigator(fragmentManager, containerId) {
+) : FragmentNavigator(fragmentManager, containerId) {
 
     private val fragmentNavigatorHelper = CompassFragmentNavigatorHelper()
 

@@ -4,7 +4,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.ivianuu.compass.CompassFragmentAppNavigator
+import com.ivianuu.compass.Destination
 import com.ivianuu.traveler.Traveler
+
+@Destination(MainActivity::class)
+data class MainDestination(val something: String)
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MainDestination__RouteFactory
 
         if (savedInstanceState == null) {
             router.newRootScreen(

@@ -171,8 +171,6 @@ object Compass {
         getRouteFactory(routeFactoryClass, destinationClass)
                 ?: throw IllegalStateException("no route factory found for $destinationClass")
 
-
-
     inline fun <reified T : CompassRouteFactory> getRouteFactory(destination: Any) =
             getRouteFactory(T::class.java, destination)
 
@@ -200,7 +198,6 @@ object Compass {
 
         return null
     }
-
 
     inline fun <reified T : Any> requireSerializer() =
         requireSerializer(T::class.java)
