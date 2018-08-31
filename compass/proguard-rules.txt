@@ -1,3 +1,5 @@
+-dontobfuscate
+
 -keep public class * implements com.ivianuu.compass.CompassDetour { *; }
 -keep public class * implements com.ivianuu.compass.CompassDetourProvider { *; }
 -keep public class * implements com.ivianuu.compass.CompassRouteFactory { *; }

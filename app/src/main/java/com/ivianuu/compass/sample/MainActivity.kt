@@ -19,11 +19,8 @@ class MainActivity : AppCompatActivity() {
         CompassFragmentAppNavigator(this, supportFragmentManager, android.R.id.content)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        MainDestination__RouteFactory
 
         if (savedInstanceState == null) {
             router.newRootScreen(

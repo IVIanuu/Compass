@@ -13,12 +13,12 @@ object Versions {
     const val autoCommon = "0.10"
     const val autoService = "1.0-rc4"
 
-    const val kotlin = "1.2.51"
+    const val kotlin = "1.2.61"
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
     const val support = "28.0.0-alpha3"
-    const val traveler = "1eca65e728"
+    const val traveler = "bc1ba011ee"
 }
 
 object Deps {

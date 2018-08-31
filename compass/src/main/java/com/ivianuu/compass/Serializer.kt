@@ -32,7 +32,6 @@ interface CompassSerializer<T : Any> {
         toBundle(destination, bundle)
         return bundle
     }
-
 }
 
 interface CompassSerializerProvider

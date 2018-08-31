@@ -75,6 +75,8 @@ class CounterFragment : Fragment() {
 
         val destination = counterDestination()
 
+        val bundle = destination.toBundle()
+
         title.text = "Count: ${destination.count}"
         view.setBackgroundColor(destination.color)
 
