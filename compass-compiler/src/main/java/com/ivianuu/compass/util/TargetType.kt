@@ -22,5 +22,6 @@ package com.ivianuu.compass.util
 enum class TargetType {
     UNKNOWN,
     ACTIVITY,
-    FRAGMENT
+    FRAGMENT,
+    FRAGMENTX
 }

@@ -25,16 +25,16 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
         val file = FileSpec.builder(descriptor.packageName,
             descriptor.routeFactory.simpleName())
 
-        if (descriptor.targetType == TargetType.ACTIVITY) {
-            file.addType(activityRouteFactory())
-        } else if (descriptor.targetType == TargetType.FRAGMENT) {
-            file.addType(fragmentRouteFactory())
+        when {
+            descriptor.targetType == TargetType.ACTIVITY -> file.addType(activityRouteFactory())
+            descriptor.targetType == TargetType.FRAGMENT -> file.addType(fragmentRouteFactory(false))
+            descriptor.targetType == TargetType.FRAGMENTX -> file.addType(fragmentRouteFactory(true))
         }
 
         return file.build()
     }
 
-    private fun fragmentRouteFactory(): TypeSpec {
+    private fun fragmentRouteFactory(useAndroidX: Boolean): TypeSpec {
         val type = TypeSpec.objectBuilder(descriptor.routeFactory)
             .addSuperinterface(
                 ParameterizedTypeName.get(
@@ -46,7 +46,7 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
         val createBuilder = FunSpec.builder("createFragment")
             .addModifiers(KModifier.OVERRIDE)
             .addParameter("destination", descriptor.destination)
-            .returns(CLASS_FRAGMENT)
+            .returns(if (useAndroidX) CLASS_FRAGMENT_X else CLASS_FRAGMENT)
             .addStatement("return %T()", descriptor.target)
             .build()
 
