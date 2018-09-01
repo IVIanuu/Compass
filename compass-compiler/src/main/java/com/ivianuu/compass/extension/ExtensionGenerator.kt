@@ -91,7 +91,7 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
                     )
                     .build()
             }
-            TargetType.FRAGMENT -> {
+            TargetType.FRAGMENT, TargetType.FRAGMENTX -> {
                 FunSpec.builder(functionName)
                     .receiver(descriptor.target)
                     .returns(descriptor.destination)
