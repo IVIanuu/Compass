@@ -164,10 +164,6 @@ fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
                 this.asType(),
                 processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT.toString()).asType()
             ) -> TargetType.FRAGMENT
-            processingEnv.typeUtils.isAssignable(
-                this.asType(),
-                processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT_X.toString()).asType()
-            ) -> TargetType.FRAGMENTX
             else -> TargetType.UNKNOWN
         }
     } else {
