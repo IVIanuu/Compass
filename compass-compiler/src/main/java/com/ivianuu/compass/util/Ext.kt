@@ -155,20 +155,24 @@ val Element.detourClass: TypeMirror?
 
 fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
     return if (this != null) {
-        when {
-            processingEnv.typeUtils.isAssignable(
-                this.asType(),
-                processingEnv.elementUtils.getTypeElement(CLASS_ACTIVITY.toString()).asType()
-            ) -> TargetType.ACTIVITY
-            processingEnv.typeUtils.isAssignable(
-                this.asType(),
-                processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT.toString()).asType()
-            ) -> TargetType.FRAGMENT
-            processingEnv.typeUtils.isAssignable(
-                this.asType(),
-                processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT_X.toString()).asType()
-            ) -> TargetType.FRAGMENTX
-            else -> TargetType.UNKNOWN
+        try {
+            when {
+                processingEnv.typeUtils.isAssignable(
+                    this.asType(),
+                    processingEnv.elementUtils.getTypeElement(CLASS_ACTIVITY.toString()).asType()
+                ) -> TargetType.ACTIVITY
+                processingEnv.typeUtils.isAssignable(
+                    this.asType(),
+                    processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT.toString()).asType()
+                ) -> TargetType.FRAGMENT
+                processingEnv.typeUtils.isAssignable(
+                    this.asType(),
+                    processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT_X.toString()).asType()
+                ) -> TargetType.FRAGMENTX
+                else -> TargetType.UNKNOWN
+            }
+        } catch (e: Exception) {
+            TargetType.UNKNOWN
         }
     } else {
         TargetType.UNKNOWN
