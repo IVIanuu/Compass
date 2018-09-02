@@ -20,9 +20,6 @@ import com.ivianuu.compass.util.TargetType
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 data class ExtensionDescriptor(
     val element: TypeElement,
     val packageName: String,

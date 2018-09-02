@@ -22,9 +22,6 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeSpec
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 class RouteProviderGenerator(private val descriptor: RouteProviderDescriptor) {
 
     fun generate(): FileSpec {

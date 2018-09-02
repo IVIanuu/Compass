@@ -19,9 +19,6 @@ package com.ivianuu.compass.serializer
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 data class SerializerProviderDescriptor(
     val element: TypeElement,
     val packageName: String,

@@ -19,9 +19,6 @@ package com.ivianuu.compass.route
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 data class RouteProviderDescriptor(
     val element: TypeElement,
     val packageName: String,

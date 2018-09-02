@@ -21,9 +21,6 @@ import com.ivianuu.compass.util.CLASS_BUNDLE
 import com.ivianuu.compass.util.TargetType
 import com.squareup.kotlinpoet.*
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
 
     fun generate(): FileSpec {

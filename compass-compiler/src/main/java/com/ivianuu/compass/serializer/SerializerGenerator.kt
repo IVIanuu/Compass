@@ -20,9 +20,6 @@ import com.ivianuu.compass.util.CLASS_BUNDLE
 import com.ivianuu.compass.util.CLASS_SERIALIZER
 import com.squareup.kotlinpoet.*
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 class SerializerGenerator(private val descriptor: SerializerDescriptor) {
 
     fun generate(): FileSpec {

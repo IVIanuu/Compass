@@ -29,9 +29,6 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 import javax.tools.Diagnostic
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 class SerializerProcessingStep(
     private val processingEnv: ProcessingEnvironment,
     private val supportedTypes: SupportedTypes

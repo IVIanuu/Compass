@@ -23,9 +23,6 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeSpec
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
 class DetourProviderGenerator(private val descriptor: DetourProviderDescriptor) {
 
     fun generate(): FileSpec {
