@@ -19,8 +19,8 @@ package com.ivianuu.compass
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import com.ivianuu.traveler.android.FragmentNavigator
 import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.fragments.FragmentNavigator
 
 /**
  * @author Manuel Wrage (IVIanuu)

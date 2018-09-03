@@ -23,8 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            router.newRootScreen(
-                CounterDestination(1, ColorGenerator.generate()))
+            router.setRoot(CounterDestination(1, ColorGenerator.generate()))
         }
     }
 

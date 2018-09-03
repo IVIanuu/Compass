@@ -18,7 +18,7 @@ object Versions {
 
     const val mavenGradlePlugin = "2.1"
     const val support = "28.0.0-alpha3"
-    const val traveler = "bc1ba011ee"
+    const val traveler = "bc59314d40"
 }
 
 object Deps {
@@ -37,6 +37,5 @@ object Deps {
 
     const val supportAppCompat = "com.android.support:appcompat-v7:${Versions.support}"
 
-    const val traveler = "com.github.IVIanuu.Traveler:traveler:${Versions.traveler}"
-    const val travelerFragments = "com.github.IVIanuu.Traveler:traveler-fragments:${Versions.traveler}"
+    const val traveler = "com.github.IVIanuu:traveler:${Versions.traveler}"
 }

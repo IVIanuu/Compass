@@ -33,7 +33,7 @@ android {
 dependencies {
     api project(':compass-annotations')
 
-    api Deps.travelerFragments
+    api Deps.traveler
 
     api Deps.kotlinStdLib
 }

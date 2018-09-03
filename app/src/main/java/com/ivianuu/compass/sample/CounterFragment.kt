@@ -81,6 +81,6 @@ class CounterFragment : Fragment() {
         view.setBackgroundColor(destination.color)
 
         up.setOnClickListener { router.navigateTo(destination.increment()) }
-        down.setOnClickListener { router.exit() }
+        down.setOnClickListener { router.pop() }
     }
 }

@@ -23,8 +23,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import com.ivianuu.traveler.android.FragmentAppNavigator
 import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.fragments.FragmentAppNavigator
 
 /**
  * Compass navigator
