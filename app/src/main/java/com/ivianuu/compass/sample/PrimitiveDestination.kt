@@ -25,23 +25,60 @@ data class PrimitiveDestination(
     val bytee: Byte,
     val charr: Char,
     val doublee: Double,
+    val floatt: Float,
     val integerr: Int,
-    val longg: Long
+    val longg: Long,
+    val shortt: Short
 )
 
 class PrimitiveFragment : Fragment()
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
+@Destination(NullablePrimitiveFragment::class)
+data class NullablePrimitiveDestination(
+    val bool: Boolean?,
+    val bytee: Byte?,
+    val charr: Char?,
+    val doublee: Double?,
+    val floatt: Float?,
+    val integerr: Int?,
+    val lonng: Long?,
+    val shortt: Short?
+)
+
+class NullablePrimitiveFragment : Fragment()
+
 @Destination(PrimitiveArrayFragment::class)
 data class PrimitiveArrayDestination(
     val booleann: BooleanArray,
     val bytee: ByteArray,
     val charr: CharArray,
     val doublee: DoubleArray,
+    val floatt: FloatArray,
     val integerr: IntArray,
-    val longg: LongArray
+    val longg: LongArray,
+    val shortt: ShortArray
 )
 
-class PrimitiveArrayFragment : Fragment()
+class PrimitiveArrayFragment : Fragment() {
+    init {
+        PrimitiveArrayDestination__Serializer
+    }
+}
+
+@Destination(NullablePrimitiveArrayFragment::class)
+data class NullablePrimitiveArrayDestination(
+    val booleann: BooleanArray?,
+    val bytee: ByteArray?,
+    val charr: CharArray?,
+    val doublee: DoubleArray?,
+    val floatt: FloatArray?,
+    val integerr: IntArray?,
+    val longg: LongArray?,
+    val shortt: ShortArray?
+)
+
+class NullablePrimitiveArrayFragment : Fragment() {
+    init {
+        NullablePrimitiveArrayDestination__Serializer
+    }
+}

@@ -22,8 +22,16 @@ import com.ivianuu.compass.Destination
 @Destination(DefaultNullableFragment::class)
 data class DefaultNullableDestination(
     val name: String,
-    val subs: String?,
-    val purchased: String = ""
+    val subs: Int?,
+    val purchased: String = "",
+    val score: Float,
+    val hasSomething: Boolean = true
 )
 
-class DefaultNullableFragment : Fragment()
+class DefaultNullableFragment : Fragment() {
+
+    init {
+        DefaultNullableDestination__Serializer
+    }
+
+}

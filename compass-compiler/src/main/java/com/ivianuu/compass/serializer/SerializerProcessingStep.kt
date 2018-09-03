@@ -72,18 +72,15 @@ class SerializerProcessingStep(
 
                 val isNullable = MoreElements.isAnnotationPresent(attr, Nullable::class.java)
 
-                val hasDefaultParameter =
-
-                    attributes.add(
+                //val hasDefaultParameter =
+                attributes.add(
                         DestinationAttribute(
                             attr, simpleName, keyName, supportedTypes.get(attr),
                             isNullable
                         )
                     )
 
-                keys.add(
-                    DestinationAttributeKey(keyName, keyValue)
-                )
+                keys.add(DestinationAttributeKey(keyName, keyValue))
             }
         }
 

@@ -16,6 +16,7 @@
 
 package com.ivianuu.compass.serializer
 
+import com.google.auto.common.MoreElements
 import com.ivianuu.compass.CompassConstructor
 import javax.lang.model.element.*
 import javax.lang.model.util.ElementFilter
@@ -39,15 +40,14 @@ object ConstructorSelector {
 
     private fun List<ExecutableElement>.getAnnotatedConstructor(base: Element): ExecutableElement? {
         val annotatedConstructors = this
-            .filter { it.getAnnotation(CompassConstructor::class.java) != null }
+            .filter { MoreElements.isAnnotationPresent(it, CompassConstructor::class.java) }
             .toList()
 
         return when {
             annotatedConstructors.isEmpty() -> null
             annotatedConstructors.size == 1 -> annotatedConstructors.first()
             annotatedConstructors.size > 1 -> throw Exception(
-                "" +
-                        "${base.simpleName} has more than one constructors annotated with " +
+                "${base.simpleName} has more than one constructors annotated with " +
                         "'CompassConstructor'."
             )
             else -> null
