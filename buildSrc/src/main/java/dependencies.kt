@@ -18,7 +18,7 @@ object Versions {
 
     const val mavenGradlePlugin = "2.1"
     const val support = "28.0.0-alpha3"
-    const val traveler = "bc59314d40"
+    const val traveler = "a7a26380d9"
 }
 
 object Deps {
