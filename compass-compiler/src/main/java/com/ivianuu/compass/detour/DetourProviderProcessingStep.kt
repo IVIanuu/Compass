@@ -62,7 +62,6 @@ class DetourProviderProcessingStep(private val processingEnv: ProcessingEnvironm
             return null
         }
 
-
         val hasEmptyConstructor = detour.enclosedElements
             .filterIsInstance<ExecutableElement>()
             .filter { it.kind == ElementKind.CONSTRUCTOR }

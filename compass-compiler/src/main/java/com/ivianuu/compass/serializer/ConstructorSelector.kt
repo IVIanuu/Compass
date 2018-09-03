@@ -77,7 +77,6 @@ object ConstructorSelector {
             "No suitable constructor found. No error message available. " +
                     "This is a bug, for sure!"
         )
-
     }
 
     private fun ExecutableElement.isSuitable(base: Element): Throwable? {
