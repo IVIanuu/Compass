@@ -74,10 +74,7 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
             descriptor.attributes.forEach { function.addBundleGetter(it) }
 
             val constructorStatement = "return %T(${
-            descriptor.attributes
-                .map(DestinationAttribute::name)
-                .joinToString(", ")
-            })"
+            descriptor.attributes.joinToString(", ") { "${it.name} = ${it.name}" }})"
 
             function.addStatement(constructorStatement,descriptor.destination)
         } else {
@@ -91,9 +88,12 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
         if (attribute.isNullable) {
             beginControlFlow("if (destination.${attribute.name} != null)")
         }
+
+        val descriptor = attribute.descriptor
+
         addStatement(
-            "bundle.put${attribute.descriptor.typeMapping}(${attribute.keyName}, " +
-                    (if (attribute.descriptor.wrapInArrayList) "ArrayList(destination.${attribute.name}))" else "destination.${attribute.name})")
+            "bundle.put${descriptor.typeMapping}(${attribute.keyName}, " +
+                    (if (descriptor.wrapInArrayList) "ArrayList(destination.${attribute.name}))" else "destination.${attribute.name})")
         )
         if (attribute.isNullable) {
             endControlFlow()
