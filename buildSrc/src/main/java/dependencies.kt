@@ -8,7 +8,9 @@ object Versions {
     const val versionCode = 1
     const val versionName = "1.0"
 
-    const val androidGradlePlugin = "3.1.4"
+    const val androidGradlePlugin = "3.2.0-rc02"
+
+    const val androidx = "1.0.0-rc02"
 
     const val autoCommon = "0.10"
     const val autoService = "1.0-rc4"
@@ -17,12 +19,13 @@ object Versions {
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
-    const val support = "28.0.0-alpha3"
-    const val traveler = "7c4b2ea85e"
+    const val traveler = "a46a5e6204"
 }
 
 object Deps {
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.androidGradlePlugin}"
+
+    const val androidxAppCompat = "androidx.appcompat:appcompat:${Versions.androidx}"
 
     const val autoCommon = "com.google.auto:auto-common:${Versions.autoCommon}"
 
@@ -34,8 +37,6 @@ object Deps {
     const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradlePlugin}"
-
-    const val supportAppCompat = "com.android.support:appcompat-v7:${Versions.support}"
 
     const val traveler = "com.github.IVIanuu:traveler:${Versions.traveler}"
 }

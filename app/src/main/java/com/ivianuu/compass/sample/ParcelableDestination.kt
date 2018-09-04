@@ -17,9 +17,9 @@
 package com.ivianuu.compass.sample
 
 import android.os.Parcelable
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import android.util.SparseArray
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.FragmentDetour
 import kotlinx.android.parcel.Parcelize

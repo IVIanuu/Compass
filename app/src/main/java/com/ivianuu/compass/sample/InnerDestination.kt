@@ -16,7 +16,7 @@
 
 package com.ivianuu.compass.sample
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.FragmentRouteFactory
 import com.ivianuu.compass.RouteFactory

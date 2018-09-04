@@ -36,6 +36,6 @@ val CLASS_BUNDLE = ClassName("android.os", "Bundle")
 val CLASS_INTENT = ClassName("android.content", "Intent")
 
 val CLASS_ACTIVITY = ClassName("android.app", "Activity")
-val CLASS_FRAGMENT = ClassName("android.support.v4.app", "Fragment")
+val CLASS_FRAGMENT = ClassName("androidx.fragment.app", "Fragment")
 
 val CLASS_CONTEXT = ClassName("android.content", "Context")

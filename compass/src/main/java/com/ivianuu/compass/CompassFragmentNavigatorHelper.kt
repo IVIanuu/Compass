@@ -16,11 +16,11 @@
 
 package com.ivianuu.compass
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
-import com.ivianuu.traveler.commands.Command
-import com.ivianuu.traveler.commands.Forward
-import com.ivianuu.traveler.commands.Replace
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import com.ivianuu.traveler.command.Command
+import com.ivianuu.traveler.command.Forward
+import com.ivianuu.traveler.command.Replace
 
 /**
  * @author Manuel Wrage (IVIanuu)

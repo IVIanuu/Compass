@@ -18,13 +18,13 @@ package com.ivianuu.compass.sample
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import android.transition.Slide
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.compass.FragmentDetour
