@@ -54,8 +54,8 @@ class RouteFactoryProcessingStep(private val processingEnv: ProcessingEnvironmen
         }
 
         if (target == null || target.asType().toString() == "java.lang.Void") {
-            processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
-                "either a valid target or route factory must be specified", element)
+            /*processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
+                "either a valid target or route factory must be specified", element)*/
             return null
         }
 

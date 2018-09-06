@@ -24,10 +24,10 @@ import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeMirror
 
 data class SerializerAttributeDescriptor(
-    val typeMapping: String,
-    val castTo: String? = null,
+    val typeName: String,
     val typeParameter: String? = null,
-    val wrapInArrayList: Boolean = false
+    val wrapInArrayList: Boolean = false,
+    val importFunctions: Boolean = false
 )
 
 class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
@@ -36,31 +36,71 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
         "boolean" to SerializerAttributeDescriptor("Boolean"),
         "boolean[]" to SerializerAttributeDescriptor("BooleanArray"),
         "java.lang.Boolean" to SerializerAttributeDescriptor("Boolean"),
+        "java.util.List<java.lang.Boolean>" to SerializerAttributeDescriptor(
+            "BooleanList",
+            importFunctions = true
+        ),
         "byte" to SerializerAttributeDescriptor("Byte"),
         "byte[]" to SerializerAttributeDescriptor("ByteArray"),
         "java.lang.Byte" to SerializerAttributeDescriptor("Byte"),
+        "java.util.List<java.lang.Byte>" to SerializerAttributeDescriptor(
+            "ByteList",
+            importFunctions = true
+        ),
         "char" to SerializerAttributeDescriptor("Char"),
         "char[]" to SerializerAttributeDescriptor("CharArray"),
         "java.lang.Character" to SerializerAttributeDescriptor("Char"),
+        "java.util.List<java.lang.Character>" to SerializerAttributeDescriptor(
+            "CharList",
+            importFunctions = true
+        ),
         "double" to SerializerAttributeDescriptor("Double"),
         "double[]" to SerializerAttributeDescriptor("DoubleArray"),
         "java.lang.Double" to SerializerAttributeDescriptor("Double"),
+        "java.util.List<java.lang.Double>" to SerializerAttributeDescriptor(
+            "DoubleList",
+            importFunctions = true
+        ),
         "float" to SerializerAttributeDescriptor("Float"),
         "float[]" to SerializerAttributeDescriptor("FloatArray"),
         "java.lang.Float" to SerializerAttributeDescriptor("Float"),
+        "java.util.List<java.lang.Float>" to SerializerAttributeDescriptor(
+            "FloatList",
+            importFunctions = true
+        ),
         "int" to SerializerAttributeDescriptor("Int"),
         "int[]" to SerializerAttributeDescriptor("IntArray"),
         "java.lang.Integer" to SerializerAttributeDescriptor("Int"),
+        "java.util.List<java.lang.Integer>" to SerializerAttributeDescriptor(
+            "IntList",
+            importFunctions = true
+        ),
         "long" to SerializerAttributeDescriptor("Long"),
         "long[]" to SerializerAttributeDescriptor("LongArray"),
         "java.lang.Long" to SerializerAttributeDescriptor("Long"),
+        "java.util.List<java.lang.Long>" to SerializerAttributeDescriptor(
+            "LongList",
+            importFunctions = true
+        ),
         "short" to SerializerAttributeDescriptor("Short"),
         "short[]" to SerializerAttributeDescriptor("ShortArray"),
         "java.lang.Short" to SerializerAttributeDescriptor("Short"),
+        "java.util.List<java.lang.Short>" to SerializerAttributeDescriptor(
+            "ShortList",
+            importFunctions = true
+        ),
         "java.lang.CharSequence" to SerializerAttributeDescriptor("CharSequence"),
         "java.lang.CharSequence[]" to SerializerAttributeDescriptor("CharSequenceArray"),
+        "java.util.List<java.lang.CharSequence>" to SerializerAttributeDescriptor(
+            "CharSequenceList",
+            importFunctions = true
+        ),
         "java.lang.String" to SerializerAttributeDescriptor("String"),
         "java.lang.String[]" to SerializerAttributeDescriptor("StringArray"),
+        "java.util.List<java.lang.String>" to SerializerAttributeDescriptor(
+            "StringList",
+            importFunctions = true
+        ),
         "java.util.ArrayList<java.lang.CharSequence>" to SerializerAttributeDescriptor("CharSequenceArrayList"),
         "java.util.ArrayList<java.lang.Integer>" to SerializerAttributeDescriptor("IntegerArrayList"),
         "java.util.ArrayList<java.lang.String>" to SerializerAttributeDescriptor("StringArrayList"),
@@ -70,14 +110,11 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
 
     fun isSupported(
         attribute: VariableElement
-    ): Boolean {
-        return TYPES.containsKey(attribute.asType().toString())
-                || checkExtraTypes(attribute)
-    }
+    ): Boolean = (TYPES.containsKey(attribute.asType().toString())
+            || checkExtraTypes(attribute))
 
-    fun get(attribute: VariableElement): SerializerAttributeDescriptor {
-        return TYPES[attribute.asType().toString()]!!
-    }
+    fun get(attribute: VariableElement): SerializerAttributeDescriptor =
+        TYPES[attribute.asType().toString()]!!
 
     private fun checkExtraTypes(attribute: VariableElement): Boolean {
         // parcelable
@@ -86,8 +123,7 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                 processingEnv.elementUtils.getTypeElement("android.os.Parcelable").asType()
             )) {
             TYPES[attribute.asType().toString()] =
-                    SerializerAttributeDescriptor("Parcelable", null,
-                        attribute.asType().toString())
+                    SerializerAttributeDescriptor("Parcelable", attribute.asType().toString())
             return true
         }
 
@@ -98,8 +134,12 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                 arrayType,
                 processingEnv.elementUtils.getTypeElement("android.os.Parcelable").asType()
             )) {
+
             TYPES[attribute.asType().toString()] =
-                    SerializerAttributeDescriptor("ParcelableArray", "Array<$arrayType>")
+                    SerializerAttributeDescriptor(
+                        "ParcelableArrayTyped",
+                        arrayType.toString(), false, true
+                    )
             return true
         }
 
@@ -119,7 +159,8 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                         processingEnv.elementUtils.getTypeElement("java.util.List").asType()
                     )) {
                     TYPES[attribute.asType().toString()] =
-                            SerializerAttributeDescriptor("ParcelableArrayList", null,
+                            SerializerAttributeDescriptor(
+                                "ParcelableArrayList",
                                 typeArguments[0].toString(), true)
                     return true
                 }
@@ -129,7 +170,8 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                         processingEnv.elementUtils.getTypeElement("android.util.SparseArray").asType()
                     )) {
                     TYPES[attribute.asType().toString()] =
-                            SerializerAttributeDescriptor("SparseParcelableArray", null,
+                            SerializerAttributeDescriptor(
+                                "SparseParcelableArray",
                                 typeArguments[0].toString())
                     return true
                 }
@@ -142,7 +184,12 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                 processingEnv.elementUtils.getTypeElement("java.io.Serializable").asType()
             )) {
             TYPES[attribute.asType().toString()] =
-                    SerializerAttributeDescriptor("Serializable", attribute.asType().toString())
+                    SerializerAttributeDescriptor(
+                        "SerializableTyped",
+                        attribute.asType().toString(),
+                        false,
+                        true
+                    )
             return true
         }
 

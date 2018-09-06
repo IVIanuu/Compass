@@ -80,5 +80,7 @@ data class PrimitiveListDestination(
     val floatt: List<Float>,
     val integerr: List<Int>,
     val longg: List<Long>,
-    val shortt: List<Short>
+    val shortt: List<Short>,
+    val string: List<String>,
+    val charSequence: List<String>
 )

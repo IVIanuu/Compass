@@ -26,6 +26,15 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
         val file = FileSpec.builder(descriptor.packageName,
             descriptor.serializer.simpleName())
 
+        descriptor.attributes
+            .filter { it.descriptor.importFunctions }
+            .forEach {
+                // put
+                file.addStaticImport("com.ivianuu.compass", "put${it.descriptor.typeName}")
+                // get
+                file.addStaticImport("com.ivianuu.compass", "get${it.descriptor.typeName}")
+            }
+
         val type = TypeSpec.objectBuilder(descriptor.serializer)
             .addSuperinterface(
                 ParameterizedTypeName.get(
@@ -74,7 +83,7 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
             descriptor.attributes.forEach { function.addBundleGetter(it) }
 
             val constructorStatement = "return %T(${
-            descriptor.attributes.joinToString(", ") { "${it.name} = ${it.name}" }})"
+            descriptor.attributes.joinToString(", ") { it.name }})"
 
             function.addStatement(constructorStatement,descriptor.destination)
         } else {
@@ -92,7 +101,7 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
         val descriptor = attribute.descriptor
 
         addStatement(
-            "bundle.put${descriptor.typeMapping}(${attribute.keyName}, " +
+            "bundle.put${descriptor.typeName}(${attribute.keyName}, " +
                     (if (descriptor.wrapInArrayList) "ArrayList(destination.${attribute.name}))" else "destination.${attribute.name})")
         )
         if (attribute.isNullable) {
@@ -105,19 +114,17 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
             // clean this up
             addStatement(
                 "val ${attribute.name} = if (bundle.containsKey(${attribute.keyName})) {\n" +
-                        "bundle.get${attribute.descriptor.typeMapping}" +
+                        "bundle.get${attribute.descriptor.typeName}" +
                         (if (attribute.descriptor.typeParameter != null) "<${attribute.descriptor.typeParameter}>" else "") +
                         "(${attribute.keyName}) " +
-                        (if (attribute.descriptor.castTo != null) "as ${attribute.descriptor.castTo}" else "") +
                         "\n} else {\nnull\n}"
             )
         } else {
             addStatement(
                 "val ${attribute.name} = " +
-                        "bundle.get${attribute.descriptor.typeMapping}" +
+                        "bundle.get${attribute.descriptor.typeName}" +
                         (if (attribute.descriptor.typeParameter != null) "<${attribute.descriptor.typeParameter}>" else "") +
-                        "(${attribute.keyName}) " +
-                        (if (attribute.descriptor.castTo != null) "as ${attribute.descriptor.castTo}" else "")
+                        "(${attribute.keyName})"
             )
         }
     }
