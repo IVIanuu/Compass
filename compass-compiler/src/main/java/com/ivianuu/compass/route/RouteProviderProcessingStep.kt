@@ -25,6 +25,7 @@ import com.squareup.kotlinpoet.asTypeName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
+import javax.tools.Diagnostic
 
 class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
 
@@ -54,6 +55,14 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
             true
         }
 
+        if (routeFactory != null && target != null && target.toString() != "java.lang.Void") {
+            processingEnv.messager.printMessage(
+                Diagnostic.Kind.ERROR,
+                "you cannot specify a target AND a route factory", element
+            )
+            return null
+        }
+
         val factoryName = when {
             routeFactory != null -> routeFactory.asTypeName() as ClassName
             target != null && target.toString() != "java.lang.Void" -> element.routeFactoryClassName()
@@ -61,10 +70,10 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
         }
 
         if (factoryName == null) {
-            // todo check
-            /*processingEnv.messager.printMessage(
+            processingEnv.messager.printMessage(
                 Diagnostic.Kind.ERROR,
-                "either a valid target or route factory must be specified", element)*/
+                "either a valid target or route factory must be specified", element
+            )
             return null
         }
 

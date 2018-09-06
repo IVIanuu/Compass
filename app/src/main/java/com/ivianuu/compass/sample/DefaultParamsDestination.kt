@@ -6,7 +6,7 @@ import com.ivianuu.compass.Destination
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Destination
+@Destination(DummyFragment::class)
 data class DefaultParamsDestination(
     val name: String = "",
     val age: Int = 0,

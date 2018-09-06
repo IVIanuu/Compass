@@ -21,19 +21,19 @@ import android.util.SparseArray
 import com.ivianuu.compass.Destination
 import kotlinx.android.parcel.Parcelize
 
-@Destination
+@Destination(DummyFragment::class)
 data class ParcelableDestination(val somethingParcelable: SomethingParcelable)
 
-@Destination
+@Destination(DummyFragment::class)
 data class ParcelableListDestination(val list: List<SomethingParcelable>)
 
-@Destination
+@Destination(DummyFragment::class)
 data class ParcelableArrayListDestination(val arrayList: ArrayList<SomethingParcelable>)
 
-@Destination
+@Destination(DummyFragment::class)
 data class ParcelableArrayDestination(val array: Array<SomethingParcelable>)
 
-@Destination
+@Destination(DummyFragment::class)
 data class ParcelableSparseArrayDestination(val array: SparseArray<SomethingParcelable>)
 
 @Parcelize

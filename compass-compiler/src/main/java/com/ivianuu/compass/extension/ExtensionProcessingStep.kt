@@ -17,13 +17,18 @@
 package com.ivianuu.compass.extension
 
 import com.google.auto.common.BasicAnnotationProcessor
+import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.Serializer
 import com.ivianuu.compass.util.*
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asClassName
+import com.squareup.kotlinpoet.asTypeName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
+import javax.tools.Diagnostic
 
 class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) : BasicAnnotationProcessor.ProcessingStep {
 
@@ -50,6 +55,26 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
             null
         }) ?: return null
 
+        val serializerClassName =
+            if (MoreElements.isAnnotationPresent(element, Serializer::class.java)) {
+                if (!MoreElements.isAnnotationPresent(element, Destination::class.java)) {
+                    processingEnv.messager.printMessage(
+                        Diagnostic.Kind.ERROR,
+                        "you cannot annotate a non @destination class with @serializer", element
+                    )
+                    return null
+                }
+
+                val serializerClass =
+                    element.serializerClass ?: return null // todo should this be a error?
+
+                // todo check provided class
+
+                serializerClass.asTypeName() as ClassName
+            } else {
+                element.serializerClassName()
+            }
+
         return ExtensionDescriptor(
             element,
             element.packageName(),
@@ -57,7 +82,7 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
             targetAsType.asClassName(),
             targetAsType.targetType(processingEnv),
             element.simpleName.toString() + "Ext",
-            element.serializerClassName()
+            serializerClassName
         )
     }
 }

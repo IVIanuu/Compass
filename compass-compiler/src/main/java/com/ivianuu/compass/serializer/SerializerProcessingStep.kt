@@ -23,6 +23,7 @@ import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Key
 import com.ivianuu.compass.Serialize
+import com.ivianuu.compass.Serializer
 import com.ivianuu.compass.util.*
 import com.squareup.kotlinpoet.asClassName
 import org.jetbrains.annotations.Nullable
@@ -57,6 +58,10 @@ class SerializerProcessingStep(
         mutableSetOf(Destination::class.java, Serialize::class.java)
 
     private fun createDescriptor(element: TypeElement): SerializerDescriptor? {
+        if (MoreElements.isAnnotationPresent(element, Serializer::class.java)) {
+            return null
+        }
+
         val attributes = mutableSetOf<SerializerAttribute>()
         val keys = mutableSetOf<SerializerAttributeKey>()
 
@@ -89,7 +94,8 @@ class SerializerProcessingStep(
                     if (value.isEmpty()) {
                         processingEnv.messager.printMessage(
                             Diagnostic.Kind.ERROR,
-                            "key value must be not empty"
+                            "key value must be not empty",
+                            field
                         )
                         return null
                     }

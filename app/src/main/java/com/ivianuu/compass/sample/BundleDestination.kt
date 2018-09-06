@@ -6,5 +6,5 @@ import com.ivianuu.compass.Destination
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Destination
+@Destination(DummyFragment::class)
 data class BundleDestination(val bundle: Bundle)

@@ -17,10 +17,7 @@
 package com.ivianuu.compass.util
 
 import com.google.auto.common.MoreElements
-import com.ivianuu.compass.Destination
-import com.ivianuu.compass.Detour
-import com.ivianuu.compass.DoNotSerialize
-import com.ivianuu.compass.RouteFactory
+import com.ivianuu.compass.*
 import com.ivianuu.compass.serializer.ConstructorSelector
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
@@ -102,6 +99,19 @@ val Element.detourClass: TypeMirror?
     get() {
         try {
             this.getAnnotation(Detour::class.java).clazz
+        } catch (e: MirroredTypesException) {
+            return e.typeMirrors.firstOrNull()
+        } catch (e: Exception) {
+            return null
+        }
+
+        return null
+    }
+
+val Element.serializerClass: TypeMirror?
+    get() {
+        try {
+            this.getAnnotation(Serializer::class.java).clazz
         } catch (e: MirroredTypesException) {
             return e.typeMirrors.firstOrNull()
         } catch (e: Exception) {

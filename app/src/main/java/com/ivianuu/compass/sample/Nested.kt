@@ -8,8 +8,8 @@ import com.ivianuu.compass.Destination
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Destination
+@Destination(DummyFragment::class)
 data class OuterDestination(val value: String) {
-    @Destination
+    @Destination(DummyFragment::class)
     data class InnerDestination(val value: String)
 }

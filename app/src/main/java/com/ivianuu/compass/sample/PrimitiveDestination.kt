@@ -16,10 +16,9 @@
 
 package com.ivianuu.compass.sample
 
-import androidx.fragment.app.Fragment
 import com.ivianuu.compass.Destination
 
-@Destination(PrimitiveFragment::class)
+@Destination(DummyFragment::class)
 data class PrimitiveDestination(
     val bool: Boolean,
     val bytee: Byte,
@@ -31,9 +30,7 @@ data class PrimitiveDestination(
     val shortt: Short
 )
 
-class PrimitiveFragment : Fragment()
-
-@Destination(NullablePrimitiveFragment::class)
+@Destination(DummyFragment::class)
 data class NullablePrimitiveDestination(
     val bool: Boolean?,
     val bytee: Byte?,
@@ -45,9 +42,7 @@ data class NullablePrimitiveDestination(
     val shortt: Short?
 )
 
-class NullablePrimitiveFragment : Fragment()
-
-@Destination
+@Destination(DummyFragment::class)
 data class PrimitiveArrayDestination(
     val booleann: BooleanArray,
     val bytee: ByteArray,
@@ -59,7 +54,7 @@ data class PrimitiveArrayDestination(
     val shortt: ShortArray
 )
 
-@Destination
+@Destination(DummyFragment::class)
 data class NullablePrimitiveArrayDestination(
     val booleann: BooleanArray?,
     val bytee: ByteArray?,
@@ -71,7 +66,7 @@ data class NullablePrimitiveArrayDestination(
     val shortt: ShortArray?
 )
 
-@Destination
+@Destination(DummyFragment::class)
 data class PrimitiveListDestination(
     val bool: List<Boolean>,
     val bytee: List<Byte>,

@@ -16,18 +16,14 @@
 
 package com.ivianuu.compass.sample
 
-import androidx.fragment.app.Fragment
 import com.ivianuu.compass.Destination
 import java.io.Serializable
 
-@Destination(SerializableFragment::class)
+@Destination(DummyFragment::class)
 data class SerializableDestination(val serializable: Serializable)
 
-class SerializableFragment : Fragment()
-
-data class MySerializable(val value: String) : Serializable
-
-@Destination(TypedSerializableFragment::class)
+@Destination(DummyFragment::class)
 data class TypedSerializableDestination(val mySerializable: MySerializable)
 
-class TypedSerializableFragment : Fragment()
+
+data class MySerializable(val value: String) : Serializable

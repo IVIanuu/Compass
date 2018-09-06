@@ -5,5 +5,5 @@ import com.ivianuu.compass.Destination
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-@Destination
+@Destination(DummyFragment::class)
 data class CharSequenceDestination(val sequence: CharSequence)

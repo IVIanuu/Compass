@@ -18,7 +18,7 @@ package com.ivianuu.compass.sample
 
 import com.ivianuu.compass.Destination
 
-@Destination
+@Destination(DummyFragment::class)
 data class DefaultNullableDestination(
     val name: String,
     val subs: Int?,
