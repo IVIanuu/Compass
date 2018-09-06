@@ -38,9 +38,3 @@ data class AppInfoDestination(val packageName: String) {
         }
     }
 }
-
-fun haha() {
-    AppInfoDestination__RouteProvider
-    AppInfoDestination__SerializerProvider
-    AppInfoDestination__Serializer
-}

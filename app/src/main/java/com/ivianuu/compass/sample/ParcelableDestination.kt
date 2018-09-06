@@ -18,46 +18,20 @@ package com.ivianuu.compass.sample
 
 import android.os.Parcelable
 import android.util.SparseArray
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.compass.Destination
-import com.ivianuu.compass.FragmentDetour
 import kotlinx.android.parcel.Parcelize
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-
-//@Detour(ParcelableDetour::class)
-@Destination(ParcelableFragment::class)
+@Destination
 data class ParcelableDestination(val somethingParcelable: SomethingParcelable)
 
-class ParcelableFragment : Fragment()
-
-@Destination(ParcelableListFragment::class)
+@Destination
 data class ParcelableListDestination(val listt: List<SomethingParcelable>)
 
-@Destination(ParcelableArrayFragment::class)
+@Destination
 data class ParcelableArrayDestination(val arrayy: Array<SomethingParcelable>)
 
-@Destination(ParcelableSparseArrayFragment::class)
-data class ParcelabelSparseArrayDestination(val arrayy: SparseArray<SomethingParcelable>)
-
-class ParcelableArrayFragment : Fragment()
-
-class ParcelableListFragment : Fragment()
-
-class ParcelableSparseArrayFragment : Fragment()
-
-class ParcelableDetour : FragmentDetour<ParcelableDestination> {
-    override fun setupTransaction(
-        destination: ParcelableDestination,
-        currentFragment: Fragment?,
-        nextFragment: Fragment,
-        transaction: FragmentTransaction
-    ) {
-    }
-}
+@Destination
+data class ParcelableSparseArrayDestination(val arrayy: SparseArray<SomethingParcelable>)
 
 @Parcelize
 data class SomethingParcelable(val hehe: String) : Parcelable

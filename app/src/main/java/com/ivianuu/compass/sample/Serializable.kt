@@ -25,4 +25,9 @@ data class SerializableDestination(val serializable: Serializable)
 
 class SerializableFragment : Fragment()
 
-fun bh() {}
+data class MySerializable(val value: String) : Serializable
+
+@Destination(TypedSerializableFragment::class)
+data class TypedSerializableDestination(val mySerializable: MySerializable)
+
+class TypedSerializableFragment : Fragment()

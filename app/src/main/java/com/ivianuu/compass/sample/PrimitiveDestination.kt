@@ -47,7 +47,7 @@ data class NullablePrimitiveDestination(
 
 class NullablePrimitiveFragment : Fragment()
 
-@Destination(PrimitiveArrayFragment::class)
+@Destination
 data class PrimitiveArrayDestination(
     val booleann: BooleanArray,
     val bytee: ByteArray,
@@ -59,13 +59,7 @@ data class PrimitiveArrayDestination(
     val shortt: ShortArray
 )
 
-class PrimitiveArrayFragment : Fragment() {
-    init {
-        PrimitiveArrayDestination__Serializer
-    }
-}
-
-@Destination(NullablePrimitiveArrayFragment::class)
+@Destination
 data class NullablePrimitiveArrayDestination(
     val booleann: BooleanArray?,
     val bytee: ByteArray?,
@@ -77,8 +71,14 @@ data class NullablePrimitiveArrayDestination(
     val shortt: ShortArray?
 )
 
-class NullablePrimitiveArrayFragment : Fragment() {
-    init {
-        NullablePrimitiveArrayDestination__Serializer
-    }
-}
+@Destination
+data class PrimitiveListDestination(
+    val bool: List<Boolean>,
+    val bytee: List<Byte>,
+    val charr: List<Char>,
+    val doublee: List<Double>,
+    val floatt: List<Float>,
+    val integerr: List<Int>,
+    val longg: List<Long>,
+    val shortt: List<Short>
+)

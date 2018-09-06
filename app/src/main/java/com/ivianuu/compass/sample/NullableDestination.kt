@@ -16,10 +16,9 @@
 
 package com.ivianuu.compass.sample
 
-import androidx.fragment.app.Fragment
 import com.ivianuu.compass.Destination
 
-@Destination(DefaultNullableFragment::class)
+@Destination
 data class DefaultNullableDestination(
     val name: String,
     val subs: Int?,
@@ -27,11 +26,3 @@ data class DefaultNullableDestination(
     val score: Float,
     val hasSomething: Boolean = true
 )
-
-class DefaultNullableFragment : Fragment() {
-
-    init {
-        DefaultNullableDestination__Serializer
-    }
-
-}
