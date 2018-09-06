@@ -25,13 +25,16 @@ import kotlinx.android.parcel.Parcelize
 data class ParcelableDestination(val somethingParcelable: SomethingParcelable)
 
 @Destination
-data class ParcelableListDestination(val listt: List<SomethingParcelable>)
+data class ParcelableListDestination(val list: List<SomethingParcelable>)
 
 @Destination
-data class ParcelableArrayDestination(val arrayy: Array<SomethingParcelable>)
+data class ParcelableArrayListDestination(val arrayList: ArrayList<SomethingParcelable>)
 
 @Destination
-data class ParcelableSparseArrayDestination(val arrayy: SparseArray<SomethingParcelable>)
+data class ParcelableArrayDestination(val array: Array<SomethingParcelable>)
+
+@Destination
+data class ParcelableSparseArrayDestination(val array: SparseArray<SomethingParcelable>)
 
 @Parcelize
 data class SomethingParcelable(val hehe: String) : Parcelable

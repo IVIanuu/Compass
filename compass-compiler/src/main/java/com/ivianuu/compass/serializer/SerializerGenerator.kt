@@ -26,14 +26,17 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
         val file = FileSpec.builder(descriptor.packageName,
             descriptor.serializer.simpleName())
 
+        // import
         descriptor.attributes
-            .filter { it.descriptor.importFunctions }
-            .forEach {
-                // put
-                file.addStaticImport("com.ivianuu.compass", "put${it.descriptor.typeName}")
-                // get
-                file.addStaticImport("com.ivianuu.compass", "get${it.descriptor.typeName}")
+            .flatMap {
+                listOf(
+                    it.descriptor.getFunction,
+                    it.descriptor.getOrThrowFunction,
+                    it.descriptor.putFunction
+                )
             }
+            .filter { it.import }
+            .forEach { file.addStaticImport("com.ivianuu.compass", it.name) }
 
         val type = TypeSpec.objectBuilder(descriptor.serializer)
             .addSuperinterface(
@@ -98,11 +101,8 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
             beginControlFlow("if (destination.${attribute.name} != null)")
         }
 
-        val descriptor = attribute.descriptor
-
         addStatement(
-            "bundle.put${descriptor.typeName}(${attribute.keyName}, " +
-                    (if (descriptor.wrapInArrayList) "ArrayList(destination.${attribute.name}))" else "destination.${attribute.name})")
+            "bundle.${attribute.descriptor.putFunction.name}(${attribute.keyName}, destination.${attribute.name})"
         )
         if (attribute.isNullable) {
             endControlFlow()
@@ -110,21 +110,20 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
     }
 
     private fun FunSpec.Builder.addBundleGetter(attribute: DestinationAttribute) {
-        if (attribute.isNullable) {
-            // clean this up
+        val descriptor = attribute.descriptor
+        val function =
+            if (attribute.isNullable) descriptor.getFunction else descriptor.getOrThrowFunction
+
+        val typeParameter = function.typeParameter
+
+        if (typeParameter != null) {
             addStatement(
-                "val ${attribute.name} = if (bundle.containsKey(${attribute.keyName})) {\n" +
-                        "bundle.get${attribute.descriptor.typeName}" +
-                        (if (attribute.descriptor.typeParameter != null) "<${attribute.descriptor.typeParameter}>" else "") +
-                        "(${attribute.keyName}) " +
-                        "\n} else {\nnull\n}"
+                "val ${attribute.name} = bundle.${function.name}<%T>(${attribute.keyName})",
+                typeParameter
             )
         } else {
             addStatement(
-                "val ${attribute.name} = " +
-                        "bundle.get${attribute.descriptor.typeName}" +
-                        (if (attribute.descriptor.typeParameter != null) "<${attribute.descriptor.typeParameter}>" else "") +
-                        "(${attribute.keyName})"
+                "val ${attribute.name} = bundle.${function.name}(${attribute.keyName})"
             )
         }
     }

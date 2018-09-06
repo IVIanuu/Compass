@@ -41,5 +41,5 @@ data class DestinationAttribute(
     val keyName: String,
     val descriptor: SerializerAttributeDescriptor,
     val isNullable: Boolean,
-    val hasDefaultParame: Boolean
+    val hasDefaultParameter: Boolean
 )
