@@ -79,3 +79,17 @@ data class PrimitiveListDestination(
     val string: List<String>,
     val charSequence: List<String>
 )
+
+@Destination(DummyFragment::class)
+data class NullablePrimitiveListDestination(
+    val bool: List<Boolean>?,
+    val bytee: List<Byte>?,
+    val charr: List<Char>?,
+    val doublee: List<Double>?,
+    val floatt: List<Float>?,
+    val integerr: List<Int>?,
+    val longg: List<Long>?,
+    val shortt: List<Short>?,
+    val string: List<String>?,
+    val charSequence: List<String>?
+)
