@@ -58,7 +58,7 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
     private fun keyProperties(): Set<PropertySpec> {
         return descriptor.keys
             .map {
-                PropertySpec.builder(it.name, String::class.asTypeName(), KModifier.PRIVATE, KModifier.CONST)
+                PropertySpec.builder(it.name, String::class.asTypeName(), KModifier.CONST)
                     .initializer("\"${it.value}\"")
                     .build()
             }
