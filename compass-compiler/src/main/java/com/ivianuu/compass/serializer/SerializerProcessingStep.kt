@@ -21,6 +21,7 @@ import com.google.auto.common.MoreElements
 import com.google.common.base.CaseFormat
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.Serialize
 import com.ivianuu.compass.util.*
 import com.squareup.kotlinpoet.asClassName
 import org.jetbrains.annotations.Nullable
@@ -35,7 +36,11 @@ class SerializerProcessingStep(
 ) : BasicAnnotationProcessor.ProcessingStep {
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
-        elementsByAnnotation[Destination::class.java]
+        val elements = mutableSetOf<Element>()
+        elements.addAll(elementsByAnnotation[Destination::class.java])
+        elements.addAll(elementsByAnnotation[Serialize::class.java])
+
+        elements
             .filterIsInstance<TypeElement>()
             .filter { it.shouldBeSerialized() }
             .mapNotNull(this::createDescriptor)
@@ -47,11 +52,11 @@ class SerializerProcessingStep(
     }
 
     override fun annotations() =
-        mutableSetOf(Destination::class.java)
+        mutableSetOf(Destination::class.java, Serialize::class.java)
 
     private fun createDescriptor(element: TypeElement): SerializerDescriptor? {
-        val attributes = mutableSetOf<DestinationAttribute>()
-        val keys = mutableSetOf<DestinationAttributeKey>()
+        val attributes = mutableSetOf<SerializerAttribute>()
+        val keys = mutableSetOf<SerializerAttributeKey>()
 
         if (!element.isKotlinObject) {
             val constructor = element.getCompassConstructor()
@@ -73,13 +78,13 @@ class SerializerProcessingStep(
                 val isNullable = MoreElements.isAnnotationPresent(attr, Nullable::class.java)
 
                 attributes.add(
-                        DestinationAttribute(
+                    SerializerAttribute(
                             attr, simpleName, keyName, supportedTypes.get(attr),
                             isNullable, false
                         )
                     )
 
-                keys.add(DestinationAttributeKey(keyName, keyValue))
+                keys.add(SerializerAttributeKey(keyName, keyValue))
             }
         }
 

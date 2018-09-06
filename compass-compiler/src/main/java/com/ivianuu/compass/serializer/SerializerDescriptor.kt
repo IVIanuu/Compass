@@ -26,20 +26,20 @@ data class SerializerDescriptor(
     val destination: ClassName,
     val serializer: ClassName,
     val isKotlinObject: Boolean,
-    val attributes: Set<DestinationAttribute>,
-    val keys: Set<DestinationAttributeKey>
+    val attributes: Set<SerializerAttribute>,
+    val keys: Set<SerializerAttributeKey>
 )
 
-data class DestinationAttributeKey(
-    val name: String,
-    val value: String
-)
-
-data class DestinationAttribute(
+data class SerializerAttribute(
     val element: VariableElement,
     val name: String,
     val keyName: String,
     val descriptor: SerializerAttributeDescriptor,
     val isNullable: Boolean,
     val hasDefaultParameter: Boolean
+)
+
+data class SerializerAttributeKey(
+    val name: String,
+    val value: String
 )

@@ -96,7 +96,7 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
         return function.build()
     }
 
-    private fun FunSpec.Builder.addBundlePutter(attribute: DestinationAttribute) {
+    private fun FunSpec.Builder.addBundlePutter(attribute: SerializerAttribute) {
         if (attribute.isNullable) {
             beginControlFlow("if (destination.${attribute.name} != null)")
         }
@@ -109,7 +109,7 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
         }
     }
 
-    private fun FunSpec.Builder.addBundleGetter(attribute: DestinationAttribute) {
+    private fun FunSpec.Builder.addBundleGetter(attribute: SerializerAttribute) {
         val descriptor = attribute.descriptor
         val function =
             if (attribute.isNullable) descriptor.getFunction else descriptor.getOrThrowFunction
