@@ -49,7 +49,7 @@ class SerializerProviderProcessingStep(private val processingEnv: ProcessingEnvi
     private fun createDescriptor(element: TypeElement): SerializerProviderDescriptor {
         return SerializerProviderDescriptor(
             element,
-            element.packageName(processingEnv),
+            element.packageName(),
             element.serializerProviderClassName(),
             element.serializerClassName()
         )

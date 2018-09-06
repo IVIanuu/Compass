@@ -113,7 +113,7 @@ class SerializerProcessingStep(
 
         return SerializerDescriptor(
             element,
-            element.packageName(processingEnv),
+            element.packageName(),
             element.asClassName(),
             element.serializerClassName(),
             element.isKotlinObject,

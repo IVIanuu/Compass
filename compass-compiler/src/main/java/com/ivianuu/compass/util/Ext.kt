@@ -32,6 +32,7 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.type.MirroredTypesException
 import javax.lang.model.type.TypeMirror
 
+
 fun Element.shouldBeSerialized() =
     !MoreElements.isAnnotationPresent(this, DoNotSerialize::class.java)
 
@@ -39,29 +40,28 @@ fun Element.getCompassConstructor(): ExecutableElement {
     return ConstructorSelector.getCompassConstructor(this)
 }
 
-fun Element.serializerClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}__Serializer")
+fun TypeElement.serializerClassName() = className("__Serializer")
+
+fun TypeElement.routeFactoryClassName() = className("__RouteFactory")
+
+fun TypeElement.routeProviderClassName() = className("__RouteProvider")
+
+fun TypeElement.serializerProviderClassName() = className("__SerializerProvider")
+
+fun TypeElement.detourProviderClassName() = className("__DetourProvider")
+
+private fun TypeElement.className(suffix: String) =
+    ClassName(packageName(), baseClassName() + suffix)
+
+private fun TypeElement.baseClassName(): String {
+    val packageName = packageName()
+    return qualifiedName.toString().substring(
+        packageName.length + 1
+    ).replace('.', '_')
 }
 
-fun Element.routeFactoryClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}__RouteFactory")
-}
-
-fun Element.routeProviderClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}__RouteProvider")
-}
-
-fun Element.serializerProviderClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}__SerializerProvider")
-}
-
-fun Element.detourProviderClassName(): ClassName {
-    return ClassName.bestGuess("${this.simpleName}__DetourProvider")
-}
-
-fun Element.packageName(environment: ProcessingEnvironment): String {
-    return environment.elementUtils.getPackageOf(this).toString()
-}
+fun Element.packageName() =
+    MoreElements.getPackage(enclosingElement).qualifiedName.toString()
 
 val Element.isKotlinObject: Boolean get() {
     return if (this is TypeElement) {

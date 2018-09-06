@@ -10,5 +10,5 @@ import com.ivianuu.compass.Destination
 data class DefaultParamsDestination(
     val name: String = "",
     val age: Int = 0,
-    val score: Float = 0f
+    val score: Float
 )

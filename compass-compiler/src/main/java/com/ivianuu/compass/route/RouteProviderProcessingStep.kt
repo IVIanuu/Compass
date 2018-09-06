@@ -70,7 +70,7 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
 
         return RouteProviderDescriptor(
             element,
-            element.packageName(processingEnv),
+            element.packageName(),
             element.routeProviderClassName(),
             factoryName,
             isKotlinObject

@@ -72,7 +72,7 @@ class RouteFactoryProcessingStep(private val processingEnv: ProcessingEnvironmen
 
         return RouteFactoryDescriptor(
             element,
-            element.packageName(processingEnv),
+            element.packageName(),
             element.routeFactoryClassName(),
             element.asClassName(),
             target.asClassName(),

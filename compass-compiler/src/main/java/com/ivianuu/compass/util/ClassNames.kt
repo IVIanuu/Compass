@@ -18,6 +18,8 @@ package com.ivianuu.compass.util
 
 import com.squareup.kotlinpoet.ClassName
 
+val CLASS_BUNDLE_HOLDER = ClassName("com.ivianuu.compass", "BundleHolder")
+
 val CLASS_DETOUR = ClassName("com.ivianuu.compass", "CompassDetour")
 val CLASS_ACTIVITY_DETOUR = ClassName("com.ivianuu.compass", "ActivityDetour")
 val CLASS_FRAGMENT_DETOUR = ClassName("com.ivianuu.compass", "FragmentDetour")

@@ -75,7 +75,7 @@ class DetourProviderProcessingStep(private val processingEnv: ProcessingEnvironm
 
         return DetourProviderDescriptor(
             element,
-            element.packageName(processingEnv),
+            element.packageName(),
             element.detourProviderClassName(),
             detour.asClassName(),
             detour.isKotlinObject

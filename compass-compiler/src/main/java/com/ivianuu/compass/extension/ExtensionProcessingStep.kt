@@ -52,7 +52,7 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
 
         return ExtensionDescriptor(
             element,
-            element.packageName(processingEnv),
+            element.packageName(),
             element.asClassName(),
             targetAsType.asClassName(),
             targetAsType.targetType(processingEnv),
