@@ -41,7 +41,7 @@ object Compass {
 
     fun <T : Any> getDetour(destinationClass: KClass<out T>): CompassDetour? {
         val detourProviderClass = findClazz(
-            destinationClass.java.name + SUFFIX_DETOUR_PROVIDER,
+            destinationClass.java.name.replace("\$", "_") + SUFFIX_DETOUR_PROVIDER,
             destinationClass.java.classLoader
         ) ?: return null
 
@@ -62,7 +62,7 @@ object Compass {
 
     fun <T : Any> getRouteFactory(destinationClass: KClass<T>): CompassRouteFactory? {
         val routeProviderClass = findClazz(
-            destinationClass.java.name + SUFFIX_ROUTE_PROVIDER,
+            destinationClass.java.name.replace("\$", "_") + SUFFIX_ROUTE_PROVIDER,
             destinationClass.java.classLoader
         ) ?: return null
 
@@ -86,7 +86,7 @@ object Compass {
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getSerializer(destinationClass: KClass<out T>): CompassSerializer<T>? {
         val serializerProviderClass = findClazz(
-            destinationClass.java.name + SUFFIX_SERIALIZER_PROVIDER,
+            destinationClass.java.name.replace("\$", "_") + SUFFIX_SERIALIZER_PROVIDER,
             destinationClass.java.classLoader
         ) ?: return null
 
@@ -136,4 +136,5 @@ object Compass {
             null
         }
     }
+
 }

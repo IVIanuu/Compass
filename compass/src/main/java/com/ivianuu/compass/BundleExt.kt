@@ -102,17 +102,17 @@ fun Bundle.getStringArrayOrThrow(key: String) =
 fun Bundle.getParcelableArrayOrThrow(key: String) =
     getParcelableArray(key) ?: throw missingKeyException(key)
 
-inline fun <reified T : Parcelable> Bundle.getParcelableArrayTyped(key: String) =
+fun <T : Parcelable> Bundle.getParcelableArrayTyped(key: String) =
     getParcelableArray(key) as? Array<T>
 
-inline fun <reified T : Parcelable> Bundle.getParcelableArrayTypedOrThrow(key: String) =
+fun <T : Parcelable> Bundle.getParcelableArrayTypedOrThrow(key: String) =
     getParcelableArrayTyped<T>(key) ?: throw missingKeyException(key)
 
-inline fun <reified T : Parcelable> Bundle.putParcelableArrayTyped(key: String, value: Array<T>) {
+fun <T : Parcelable> Bundle.putParcelableArrayTyped(key: String, value: Array<T>) {
     putParcelableArray(key, value)
 }
 
-inline fun <reified T : Parcelable> Bundle.getSparseParcelableArrayOrThrow(key: String) =
+fun <T : Parcelable> Bundle.getSparseParcelableArrayOrThrow(key: String) =
     getSparseParcelableArray<T>(key) ?: throw missingKeyException(key)
 
 fun Bundle.getBooleanList(key: String) = getBooleanArray(key)?.toList()
@@ -251,6 +251,5 @@ fun <T : Serializable> Bundle.putSerializableTyped(key: String, value: T?) {
     putSerializable(key, value)
 }
 
-@PublishedApi
-internal fun missingKeyException(key: String) =
+private fun missingKeyException(key: String) =
     IllegalStateException("missing value for $key")

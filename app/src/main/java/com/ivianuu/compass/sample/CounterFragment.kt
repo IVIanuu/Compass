@@ -30,16 +30,18 @@ import com.ivianuu.compass.Detour
 import com.ivianuu.compass.FragmentDetour
 import kotlinx.android.synthetic.main.fragment_counter.*
 
-@Detour(CounterFragmentDetour::class)
-@Destination(CounterFragment::class)
-data class CounterDestination(val count: Int, val color: Int)
+object Dummy {
+    @Detour(CounterFragmentDetour::class)
+    @Destination(CounterFragment::class)
+    data class CounterDestination(val count: Int, val color: Int)
+}
 
-fun CounterDestination.increment() =
+fun Dummy.CounterDestination.increment() =
     copy(count = count + 1)
 
-object CounterFragmentDetour : FragmentDetour<CounterDestination> {
+object CounterFragmentDetour : FragmentDetour<Dummy.CounterDestination> {
     override fun setupTransaction(
-        destination: CounterDestination,
+        destination: Dummy.CounterDestination,
         currentFragment: Fragment?,
         nextFragment: Fragment,
         transaction: FragmentTransaction
