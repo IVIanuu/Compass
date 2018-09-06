@@ -21,6 +21,7 @@ import com.google.auto.common.MoreElements
 import com.google.common.base.CaseFormat
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.Key
 import com.ivianuu.compass.Serialize
 import com.ivianuu.compass.util.*
 import com.squareup.kotlinpoet.asClassName
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.Nullable
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 import javax.tools.Diagnostic
 
 class SerializerProcessingStep(
@@ -73,7 +75,28 @@ class SerializerProcessingStep(
                 val keyName = "KEY_" + CaseFormat.LOWER_CAMEL.converterTo(
                     CaseFormat.UPPER_UNDERSCORE
                 ).convert(simpleName)!!
-                val keyValue = element.asType().toString() + "." + attr.simpleName
+
+                // find the field for the constructor element
+                // to check if a @key annotation is present
+                val field = element.enclosedElements
+                    .filterIsInstance<VariableElement>()
+                    .firstOrNull { it.simpleName.toString() == simpleName }
+
+                val keyValue = if (field != null
+                    && MoreElements.isAnnotationPresent(field, Key::class.java)
+                ) {
+                    val value = field.getAnnotation(Key::class.java).value
+                    if (value.isEmpty()) {
+                        processingEnv.messager.printMessage(
+                            Diagnostic.Kind.ERROR,
+                            "key value must be not empty"
+                        )
+                        return null
+                    }
+                    value
+                } else {
+                    element.asType().toString() + "." + attr.simpleName
+                }
 
                 val isNullable = MoreElements.isAnnotationPresent(attr, Nullable::class.java)
 
