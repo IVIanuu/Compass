@@ -21,7 +21,11 @@ import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
-import com.ivianuu.compass.util.*
+import com.ivianuu.compass.util.detourClass
+import com.ivianuu.compass.util.detourProviderClassName
+import com.ivianuu.compass.util.isKotlinObject
+import com.ivianuu.compass.util.packageName
+import com.ivianuu.compass.util.write
 import com.squareup.kotlinpoet.asClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
@@ -34,10 +38,12 @@ class DetourProviderProcessingStep(private val processingEnv: ProcessingEnvironm
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Detour::class.java]
+            .asSequence()
             .filterIsInstance<TypeElement>()
             .mapNotNull(this::createDescriptor)
             .map(::DetourProviderGenerator)
             .map(DetourProviderGenerator::generate)
+            .toList()
             .forEach { it.write(processingEnv) }
 
         return mutableSetOf()
@@ -63,6 +69,7 @@ class DetourProviderProcessingStep(private val processingEnv: ProcessingEnvironm
         }
 
         val hasEmptyConstructor = detour.enclosedElements
+            .asSequence()
             .filterIsInstance<ExecutableElement>()
             .filter { it.kind == ElementKind.CONSTRUCTOR }
             .all { it.parameters.isEmpty() }

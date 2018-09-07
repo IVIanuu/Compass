@@ -22,7 +22,12 @@ import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Serialize
 import com.ivianuu.compass.Serializer
-import com.ivianuu.compass.util.*
+import com.ivianuu.compass.util.packageName
+import com.ivianuu.compass.util.serializerClass
+import com.ivianuu.compass.util.serializerClassName
+import com.ivianuu.compass.util.serializerProviderClassName
+import com.ivianuu.compass.util.shouldBeSerialized
+import com.ivianuu.compass.util.write
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asTypeName
 import javax.annotation.processing.ProcessingEnvironment
@@ -38,12 +43,13 @@ class SerializerProviderProcessingStep(private val processingEnv: ProcessingEnvi
         elements.addAll(elementsByAnnotation[Serialize::class.java])
 
         elements
+            .asSequence()
             .filterIsInstance<TypeElement>()
             .filter { it.shouldBeSerialized() }
-            .map(this::createDescriptor)
-            .filterNotNull()
+            .mapNotNull(this::createDescriptor)
             .map(::SerializerProviderGenerator)
             .map(SerializerProviderGenerator::generate)
+            .toList()
             .forEach { it.write(processingEnv) }
 
         return mutableSetOf()

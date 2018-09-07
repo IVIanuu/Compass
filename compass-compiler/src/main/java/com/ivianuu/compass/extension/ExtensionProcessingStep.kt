@@ -21,7 +21,13 @@ import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Serializer
-import com.ivianuu.compass.util.*
+import com.ivianuu.compass.util.destinationTarget
+import com.ivianuu.compass.util.packageName
+import com.ivianuu.compass.util.serializerClass
+import com.ivianuu.compass.util.serializerClassName
+import com.ivianuu.compass.util.shouldBeSerialized
+import com.ivianuu.compass.util.targetType
+import com.ivianuu.compass.util.write
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
@@ -34,11 +40,13 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
+            .asSequence()
             .filterIsInstance<TypeElement>()
             .filter { it.shouldBeSerialized() }
             .mapNotNull(this::createDescriptor)
             .map(::ExtensionGenerator)
             .map(ExtensionGenerator::generate)
+            .toList()
             .forEach { it.write(processingEnv) }
 
         return mutableSetOf()

@@ -3,7 +3,6 @@ package com.ivianuu.compass
 import android.os.Bundle
 import android.os.Parcelable
 import java.io.Serializable
-import java.lang.IllegalStateException
 
 fun Bundle.getBooleanOrNull(key: String): Boolean? {
     if (!containsKey(key)) return null
@@ -93,13 +92,13 @@ fun Bundle.getLongArrayOrThrow(key: String) =
 fun Bundle.getShortArrayOrThrow(key: String) =
     getShortArray(key) ?: throw missingKeyException(key)
 
-fun Bundle.getCharSequenceArrayOrThrow(key: String) =
+fun Bundle.getCharSequenceArrayOrThrow(key: String): Array<out CharSequence> =
     getCharSequenceArray(key) ?: throw missingKeyException(key)
 
 fun Bundle.getStringArrayOrThrow(key: String) =
     getStringArray(key) ?: throw missingKeyException(key)
 
-fun Bundle.getParcelableArrayOrThrow(key: String) =
+fun Bundle.getParcelableArrayOrThrow(key: String): Array<out Parcelable> =
     getParcelableArray(key) ?: throw missingKeyException(key)
 
 fun <T : Parcelable> Bundle.getParcelableArrayTyped(key: String) =

@@ -42,7 +42,7 @@ data class BundleFunctionDescriptor(
 
 class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
 
-    private val TYPES: MutableMap<String, SerializerAttributeDescriptor> = mutableMapOf(
+    private val types = mutableMapOf(
         "boolean" to SerializerAttributeDescriptor(
             getFun("BooleanOrNull", import = true),
             getOrThrowFun("Boolean"),
@@ -262,11 +262,11 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
 
     fun isSupported(
         attribute: VariableElement
-    ): Boolean = (TYPES.containsKey(attribute.asType().toString())
+    ): Boolean = (types.containsKey(attribute.asType().toString())
             || checkExtraTypes(attribute))
 
     fun get(attribute: VariableElement): SerializerAttributeDescriptor =
-        TYPES[attribute.asType().toString()]!!
+        types[attribute.asType().toString()]!!
 
     private fun checkExtraTypes(attribute: VariableElement): Boolean {
         // parcelable
@@ -275,7 +275,7 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                 processingEnv.elementUtils.getTypeElement("android.os.Parcelable").asType()
             )) {
             val typeName = attribute.asType().asTypeName()
-            TYPES[attribute.asType().toString()] =
+            types[attribute.asType().toString()] =
                     SerializerAttributeDescriptor(
                         getFun("Parcelable", typeName),
                         getOrThrowFun("Parcelable", typeName),
@@ -294,7 +294,7 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
 
             val arrayTypeName = arrayType.asTypeName()
 
-            TYPES[attribute.asType().toString()] =
+            types[attribute.asType().toString()] =
                     SerializerAttributeDescriptor(
                         getFun("ParcelableArrayTyped", arrayTypeName, true),
                         getOrThrowFun("ParcelableArrayTyped", arrayTypeName),
@@ -322,7 +322,7 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                         processingEnv.elementUtils.getTypeElement("java.util.ArrayList").asType()
                     )
                 ) {
-                    TYPES[attribute.asType().toString()] =
+                    types[attribute.asType().toString()] =
                             SerializerAttributeDescriptor(
                                 getFun("ParcelableArrayList", listTypeName),
                                 getOrThrowFun("ParcelableArrayList", listTypeName),
@@ -333,7 +333,7 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                         processingEnv.typeUtils.erasure(declaredType),
                         processingEnv.elementUtils.getTypeElement("java.util.List").asType()
                     )) {
-                    TYPES[attribute.asType().toString()] =
+                    types[attribute.asType().toString()] =
                             SerializerAttributeDescriptor(
                                 getFun("ParcelableList", listTypeName, true),
                                 getOrThrowFun("ParcelableList", listTypeName),
@@ -346,7 +346,7 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                         processingEnv.typeUtils.erasure(declaredType),
                         processingEnv.elementUtils.getTypeElement("android.util.SparseArray").asType()
                     )) {
-                    TYPES[attribute.asType().toString()] =
+                    types[attribute.asType().toString()] =
                             SerializerAttributeDescriptor(
                                 getFun("SparseParcelableArray", listTypeName),
                                 getOrThrowFun("SparseParcelableArray", listTypeName),
@@ -363,7 +363,7 @@ class SupportedTypes(private val processingEnv: ProcessingEnvironment) {
                 processingEnv.elementUtils.getTypeElement("java.io.Serializable").asType()
             )) {
             val typeName = attribute.asType().asTypeName()
-            TYPES[attribute.asType().toString()] =
+            types[attribute.asType().toString()] =
                     SerializerAttributeDescriptor(
                         getFun("SerializableTyped", typeName, true),
                         getOrThrowFun("SerializableTyped", typeName),

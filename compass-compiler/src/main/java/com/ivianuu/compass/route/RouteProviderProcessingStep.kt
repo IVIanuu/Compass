@@ -19,7 +19,13 @@ package com.ivianuu.compass.route
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
-import com.ivianuu.compass.util.*
+import com.ivianuu.compass.util.destinationTarget
+import com.ivianuu.compass.util.isKotlinObject
+import com.ivianuu.compass.util.packageName
+import com.ivianuu.compass.util.routeFactoryClass
+import com.ivianuu.compass.util.routeFactoryClassName
+import com.ivianuu.compass.util.routeProviderClassName
+import com.ivianuu.compass.util.write
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asTypeName
 import javax.annotation.processing.ProcessingEnvironment
@@ -31,10 +37,12 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
+            .asSequence()
             .filterIsInstance<TypeElement>()
             .mapNotNull(this::createDescriptor)
             .map(::RouteProviderGenerator)
             .map(RouteProviderGenerator::generate)
+            .toList()
             .forEach { it.write(processingEnv) }
 
         return mutableSetOf()

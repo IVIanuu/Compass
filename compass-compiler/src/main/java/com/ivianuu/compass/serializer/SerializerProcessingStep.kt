@@ -24,7 +24,12 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Key
 import com.ivianuu.compass.Serialize
 import com.ivianuu.compass.Serializer
-import com.ivianuu.compass.util.*
+import com.ivianuu.compass.util.getCompassConstructor
+import com.ivianuu.compass.util.isKotlinObject
+import com.ivianuu.compass.util.packageName
+import com.ivianuu.compass.util.serializerClassName
+import com.ivianuu.compass.util.shouldBeSerialized
+import com.ivianuu.compass.util.write
 import com.squareup.kotlinpoet.asClassName
 import org.jetbrains.annotations.Nullable
 import javax.annotation.processing.ProcessingEnvironment
@@ -44,11 +49,13 @@ class SerializerProcessingStep(
         elements.addAll(elementsByAnnotation[Serialize::class.java])
 
         elements
+            .asSequence()
             .filterIsInstance<TypeElement>()
             .filter { it.shouldBeSerialized() }
             .mapNotNull(this::createDescriptor)
             .map(::SerializerGenerator)
             .map(SerializerGenerator::generate)
+            .toList()
             .forEach { it.write(processingEnv) }
 
         return mutableSetOf()
@@ -84,6 +91,7 @@ class SerializerProcessingStep(
                 // find the field for the constructor element
                 // to check if a @key annotation is present
                 val field = element.enclosedElements
+                    .asSequence()
                     .filterIsInstance<VariableElement>()
                     .firstOrNull { it.simpleName.toString() == simpleName }
 

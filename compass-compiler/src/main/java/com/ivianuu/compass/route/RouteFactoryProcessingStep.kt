@@ -21,7 +21,12 @@ import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.RouteFactory
-import com.ivianuu.compass.util.*
+import com.ivianuu.compass.util.TargetType
+import com.ivianuu.compass.util.destinationTarget
+import com.ivianuu.compass.util.packageName
+import com.ivianuu.compass.util.routeFactoryClassName
+import com.ivianuu.compass.util.targetType
+import com.ivianuu.compass.util.write
 import com.squareup.kotlinpoet.asClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
@@ -32,10 +37,12 @@ class RouteFactoryProcessingStep(private val processingEnv: ProcessingEnvironmen
 
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         elementsByAnnotation[Destination::class.java]
+            .asSequence()
             .filterIsInstance<TypeElement>()
             .mapNotNull(this::createDescriptor)
             .map(::RouteFactoryGenerator)
             .map(RouteFactoryGenerator::generate)
+            .toList()
             .forEach { it.write(processingEnv) }
 
         return mutableSetOf()

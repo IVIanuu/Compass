@@ -18,13 +18,18 @@ package com.ivianuu.compass.serializer
 
 import com.google.auto.common.MoreElements
 import com.ivianuu.compass.CompassConstructor
-import javax.lang.model.element.*
+import javax.lang.model.element.Element
+import javax.lang.model.element.ExecutableElement
+import javax.lang.model.element.Modifier
+import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 import javax.lang.model.util.ElementFilter
 
 object ConstructorSelector {
 
     fun getCompassConstructor(element: Element): ExecutableElement {
         val constructors = ElementFilter.constructorsIn(element.enclosedElements)
+            .asSequence()
             .filter { it.modifiers.contains(Modifier.PUBLIC) }
             .asSequence()
             .toList()
@@ -40,6 +45,7 @@ object ConstructorSelector {
 
     private fun List<ExecutableElement>.getAnnotatedConstructor(base: Element): ExecutableElement? {
         val annotatedConstructors = this
+            .asSequence()
             .filter { MoreElements.isAnnotationPresent(it, CompassConstructor::class.java) }
             .toList()
 
@@ -59,17 +65,21 @@ object ConstructorSelector {
             : ExecutableElement {
 
         val checkedConstructors = this
+            .asSequence()
             .sortedByDescending { it.parameters.size }
             .map { it to it.isSuitable(base) }
+            .toList()
 
 
         val suitableConstructors = checkedConstructors
+            .asSequence()
             .filter { it.second == null }
-            .toList();
+            .toList()
 
         if (suitableConstructors.isNotEmpty()) return suitableConstructors.first().first
 
         checkedConstructors
+            .asSequence()
             .mapNotNull { it.second }
             .firstOrNull()?.let { throw it }
 
@@ -88,12 +98,14 @@ object ConstructorSelector {
     private fun VariableElement.hasAccessor(base: Element): Throwable? {
         val containsFieldAccessor = ElementFilter
             .fieldsIn(base.enclosedElements)
+            .asSequence()
             .filter { it.modifiers.contains(Modifier.PUBLIC) }
             .filter { it.simpleName == this.simpleName }
             .any()
 
         val containsMethodAccessor = ElementFilter
             .methodsIn(base.enclosedElements)
+            .asSequence()
             .filter { it.modifiers.contains(Modifier.PUBLIC) }
             .filter { it.returnType.toString() == this.asType().toString() }
             .filter { it.parameters.isEmpty() }
