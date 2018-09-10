@@ -19,15 +19,19 @@ package com.ivianuu.compass.extension
 import com.google.common.base.CaseFormat
 import com.ivianuu.compass.util.CLASS_BUNDLE
 import com.ivianuu.compass.util.TargetType
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.ParameterizedTypeName
+import com.squareup.kotlinpoet.asClassName
 
 class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
 
     fun generate(): FileSpec {
         val file = FileSpec.builder(descriptor.packageName, descriptor.fileName)
         file.addFunction(destinationToBundle())
-        file.addFunction(tryBundleAsDestination())
-        file.addFunction(bundleAsDestination())
+        file.addFunction(asDestinationOrNull())
+        file.addFunction(asDestination())
         targetGetDestination()?.let(file::addFunction)
         targetBindDestination()?.let(file::addFunction)
         return file.build()
@@ -45,8 +49,8 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
             .build()
     }
 
-    private fun tryBundleAsDestination(): FunSpec {
-        return FunSpec.builder("tryAs${descriptor.destination.simpleName()}")
+    private fun asDestinationOrNull(): FunSpec {
+        return FunSpec.builder("as${descriptor.destination.simpleName()}OrNull")
             .receiver(CLASS_BUNDLE.asNullable())
             .returns(descriptor.destination.asNullable())
             .beginControlFlow("return try")
@@ -58,9 +62,9 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
             .build()
     }
 
-    private fun bundleAsDestination(): FunSpec {
+    private fun asDestination(): FunSpec {
         return FunSpec.builder("as${descriptor.destination.simpleName()}")
-            .receiver(ClassName("android.os", "Bundle").asNullable())
+            .receiver(CLASS_BUNDLE.asNullable())
             .returns(descriptor.destination)
             .beginControlFlow("return try")
             .addStatement("%T.fromBundle(this!!)", descriptor.serializer)
