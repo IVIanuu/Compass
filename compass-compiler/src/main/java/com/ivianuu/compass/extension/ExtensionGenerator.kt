@@ -18,6 +18,7 @@ package com.ivianuu.compass.extension
 
 import com.google.common.base.CaseFormat
 import com.ivianuu.compass.util.CLASS_BUNDLE
+import com.ivianuu.compass.util.CLASS_INTENT
 import com.ivianuu.compass.util.TargetType
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
@@ -29,23 +30,26 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
 
     fun generate(): FileSpec {
         val file = FileSpec.builder(descriptor.packageName, descriptor.fileName)
-        file.addFunction(destinationToBundle())
-        file.addFunction(asDestinationOrNull())
         file.addFunction(asDestination())
+        file.addFunction(asDestinationOrNull())
+        file.addFunction(destinationToBundle())
+        file.addFunction(destinationAddToBundle())
+        file.addFunction(destinationAddToIntent())
         targetGetDestination()?.let(file::addFunction)
         targetBindDestination()?.let(file::addFunction)
         return file.build()
     }
 
-    private fun destinationToBundle(): FunSpec {
-        return FunSpec.builder("toBundle")
-            .receiver(descriptor.destination)
-            .returns(CLASS_BUNDLE)
-            .addCode(
-                CodeBlock.builder()
-                    .addStatement("return %T.toBundle(this)", descriptor.serializer)
-                    .build()
-            )
+    private fun asDestination(): FunSpec {
+        return FunSpec.builder("as${descriptor.destination.simpleName()}")
+            .receiver(CLASS_BUNDLE.asNullable())
+            .returns(descriptor.destination)
+            .beginControlFlow("return try")
+            .addStatement("%T.fromBundle(this!!)", descriptor.serializer)
+            .endControlFlow()
+            .beginControlFlow("catch(e: Throwable)")
+            .addStatement("throw IllegalArgumentException(e)")
+            .endControlFlow()
             .build()
     }
 
@@ -62,16 +66,39 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
             .build()
     }
 
-    private fun asDestination(): FunSpec {
-        return FunSpec.builder("as${descriptor.destination.simpleName()}")
-            .receiver(CLASS_BUNDLE.asNullable())
-            .returns(descriptor.destination)
-            .beginControlFlow("return try")
-            .addStatement("%T.fromBundle(this!!)", descriptor.serializer)
-            .endControlFlow()
-            .beginControlFlow("catch(e: Throwable)")
-            .addStatement("throw IllegalArgumentException(e)")
-            .endControlFlow()
+    private fun destinationToBundle(): FunSpec {
+        return FunSpec.builder("toBundle")
+            .receiver(descriptor.destination)
+            .returns(CLASS_BUNDLE)
+            .addCode(
+                CodeBlock.builder()
+                    .addStatement("return %T.toBundle(this)", descriptor.serializer)
+                    .build()
+            )
+            .build()
+    }
+
+    private fun destinationAddToBundle(): FunSpec {
+        return FunSpec.builder("addToBundle")
+            .receiver(descriptor.destination)
+            .addParameter("bundle", CLASS_BUNDLE)
+            .addCode(
+                CodeBlock.Builder()
+                    .addStatement("bundle.putAll(toBundle())")
+                    .build()
+            )
+            .build()
+    }
+
+    private fun destinationAddToIntent(): FunSpec {
+        return FunSpec.builder("addToIntent")
+            .receiver(descriptor.destination)
+            .addParameter("intent", CLASS_INTENT)
+            .addCode(
+                CodeBlock.Builder()
+                    .addStatement("intent.extras.putAll(toBundle())")
+                    .build()
+            )
             .build()
     }
 
