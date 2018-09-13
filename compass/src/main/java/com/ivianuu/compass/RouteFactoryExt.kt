@@ -1,8 +1,5 @@
 package com.ivianuu.compass
 
-import android.content.Context
-import android.content.Intent
-import androidx.fragment.app.Fragment
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
 
@@ -54,31 +51,3 @@ fun <D : Any> fragmentRouteFactoryOrNull(destinationClass: KClass<out D>) = try 
 }
 
 fun <T : Any> T.fragmentRouteFactoryOrNull() = fragmentRouteFactoryOrNull(this::class)
-
-fun <D : Any> D.intent(context: Context): Intent {
-    val routeFactory = activityRouteFactory()
-    val intent = routeFactory.createActivityIntent(context, this)
-    val serializer = serializer()
-    intent.putExtras(serializer.toBundle(this))
-    return intent
-}
-
-fun <D : Any> D.intentOrNull(context: Context) = try {
-    intent(context)
-} catch (e: Exception) {
-    null
-}
-
-fun <D : Any> D.fragment(): Fragment {
-    val routeFactory = fragmentRouteFactory()
-    val fragment = routeFactory.createFragment(this)
-    val serializer = serializer()
-    fragment.arguments = serializer.toBundle(this)
-    return fragment
-}
-
-fun <D : Any> D.fragmentOrNull() = try {
-    fragment()
-} catch (e: Exception) {
-    null
-}
