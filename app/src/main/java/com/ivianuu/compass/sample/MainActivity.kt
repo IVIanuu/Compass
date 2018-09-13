@@ -1,6 +1,8 @@
 package com.ivianuu.compass.sample
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.compass.Destination
@@ -22,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            router.newRootScreen(Dummy.CounterDestination(1, ColorGenerator.generate()))
+            router.navigateTo(IntentDestination(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
+            // router.newRootScreen(Dummy.CounterDestination(1, ColorGenerator.generate()))
         }
     }
 

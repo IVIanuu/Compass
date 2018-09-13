@@ -8,8 +8,7 @@ import kotlin.reflect.KClass
 fun <D : Any> D.intent(context: Context): Intent {
     val routeFactory = activityRouteFactory()
     val intent = routeFactory.createActivityIntent(context, this)
-    val serializer = serializer()
-    intent.putExtras(serializer.toBundle(this))
+    serializerOrNull()?.let { intent.putExtras(it.toBundle(this)) }
     return intent
 }
 
@@ -22,8 +21,7 @@ fun <D : Any> D.intentOrNull(context: Context) = try {
 fun <D : Any> D.fragment(): Fragment {
     val routeFactory = fragmentRouteFactory()
     val fragment = routeFactory.createFragment(this)
-    val serializer = serializer()
-    fragment.arguments = serializer.toBundle(this)
+    fragment.arguments = serializerOrNull()?.toBundle(this)
     return fragment
 }
 
