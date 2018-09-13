@@ -28,7 +28,7 @@ import com.ivianuu.traveler.command.Replace
  */
 class CompassAppNavigatorHelper {
 
-    fun createActivityIntent(context: Context, key: Any, data: Any?) = key.getIntent(context)
+    fun createActivityIntent(context: Context, key: Any, data: Any?) = key.intentOrNull(context)
 
     fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
         val destination = when(command) {
@@ -37,7 +37,7 @@ class CompassAppNavigatorHelper {
             else -> throw IllegalArgumentException() // this should never happen
         }
 
-        return destination.getActivityDetour()
+        return destination.activityDetourOrNull()
             ?.createStartActivityOptions(destination, activityIntent)
     }
 }

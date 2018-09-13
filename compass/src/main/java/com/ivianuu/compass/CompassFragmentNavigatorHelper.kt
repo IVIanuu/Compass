@@ -27,7 +27,7 @@ import com.ivianuu.traveler.command.Replace
  */
 class CompassFragmentNavigatorHelper {
 
-    fun createFragment(key: Any, data: Any?): Fragment? = key.getFragment()
+    fun createFragment(key: Any, data: Any?): Fragment? = key.fragmentOrNull()
 
     fun setupFragmentTransaction(
         command: Command,
@@ -41,7 +41,7 @@ class CompassFragmentNavigatorHelper {
             else -> throw IllegalArgumentException()
         }
 
-        destination.getFragmentDetour()
+        destination.fragmentDetourOrNull()
             ?.setupTransaction(destination, currentFragment, nextFragment, transaction)
     }
 }
