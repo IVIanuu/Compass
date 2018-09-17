@@ -14,4 +14,15 @@
  * limitations under the License.
  */
 
-include ':sample', ':compass', ':compass-annotations', ':compass-compiler', ':playground'
+package com.ivianuu.compass.playground
+
+import com.ivianuu.compass.Destination
+
+@Destination(DummyFragment::class)
+data class DefaultNullableDestination(
+    val name: String,
+    val subs: Int?,
+    val purchased: String = "",
+    val score: Float,
+    val hasSomething: Boolean = true
+)

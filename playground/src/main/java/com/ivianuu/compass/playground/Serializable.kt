@@ -14,4 +14,16 @@
  * limitations under the License.
  */
 
-include ':sample', ':compass', ':compass-annotations', ':compass-compiler', ':playground'
+package com.ivianuu.compass.playground
+
+import com.ivianuu.compass.Destination
+import java.io.Serializable
+
+@Destination(DummyFragment::class)
+data class SerializableDestination(val serializable: Serializable)
+
+@Destination(DummyFragment::class)
+data class TypedSerializableDestination(val mySerializable: MySerializable)
+
+
+data class MySerializable(val value: String) : Serializable
