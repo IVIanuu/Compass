@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     val router get() = traveler.router
 
     private val navigator by lazy(LazyThreadSafetyMode.NONE) {
-        CompassFragmentAppNavigator(this, supportFragmentManager, android.R.id.content)
+        CompassFragmentAppNavigator(android.R.id.content)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

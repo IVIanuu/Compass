@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.traveler.Command
@@ -58,3 +59,11 @@ open class CompassFragmentAppNavigator(
     override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
         compassAppNavigatorHelper.createStartActivityOptions(command, activityIntent)
 }
+
+fun FragmentActivity.CompassFragmentAppNavigator(containerId: Int) = CompassFragmentAppNavigator(
+    this, supportFragmentManager, containerId
+)
+
+fun Fragment.CompassFragmentAppNavigator(containerId: Int) = CompassFragmentAppNavigator(
+    requireActivity(), childFragmentManager, containerId
+)

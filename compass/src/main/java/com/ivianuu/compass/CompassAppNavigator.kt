@@ -36,3 +36,5 @@ open class CompassAppNavigator(activity: Activity) : AppNavigator(activity) {
     override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
             appNavigatorHelper.createStartActivityOptions(command, activityIntent)
 }
+
+fun Activity.CompassAppNavigator() = CompassAppNavigator(this)
