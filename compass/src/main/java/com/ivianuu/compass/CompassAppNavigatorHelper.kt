@@ -19,9 +19,9 @@ package com.ivianuu.compass
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.ivianuu.traveler.command.Command
-import com.ivianuu.traveler.command.Forward
-import com.ivianuu.traveler.command.Replace
+import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Forward
+import com.ivianuu.traveler.Replace
 
 /**
  * @author Manuel Wrage (IVIanuu)

@@ -18,9 +18,9 @@ package com.ivianuu.compass
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.ivianuu.traveler.command.Command
-import com.ivianuu.traveler.command.Forward
-import com.ivianuu.traveler.command.Replace
+import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Forward
+import com.ivianuu.traveler.Replace
 
 /**
  * @author Manuel Wrage (IVIanuu)

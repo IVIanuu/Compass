@@ -20,8 +20,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.android.AppNavigator
-import com.ivianuu.traveler.command.Command
 
 /**
  * @author Manuel Wrage (IVIanuu)
