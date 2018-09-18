@@ -21,9 +21,19 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 
+/**
+ * Applies transitions
+ */
 interface CompassDetour
 
+/**
+ * Applies transitions to a [Fragment] or a [FragmentTransaction]
+ */
 interface FragmentDetour<T : Any> : CompassDetour {
+
+    /**
+     * Setup the [transaction] to apply transitions
+     */
     fun setupTransaction(
         destination: T,
         currentFragment: Fragment?,
@@ -32,8 +42,18 @@ interface FragmentDetour<T : Any> : CompassDetour {
     )
 }
 
+/**
+ * Creates activity start options for animating between screens
+ */
 interface ActivityDetour<T : Any> : CompassDetour {
+
+    /**
+     * Returns activity start options which will be passed with the [intent]
+     */
     fun createStartActivityOptions(destination : T, intent: Intent): Bundle?
 }
 
+/**
+ * Provides [CompassDetour]'s
+ */
 interface CompassDetourProvider

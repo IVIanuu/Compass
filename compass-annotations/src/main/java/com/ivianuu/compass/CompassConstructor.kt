@@ -16,6 +16,9 @@
 
 package com.ivianuu.compass
 
+/**
+ * Marks the constructor as the constructor which will be used by compass
+ */
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CONSTRUCTOR)
 annotation class CompassConstructor

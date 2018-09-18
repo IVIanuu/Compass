@@ -23,7 +23,7 @@ import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.android.FragmentNavigator
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A [FragmentNavigator] which uses compass
  */
 abstract class CompassFragmentNavigator(
     fragmentManager: FragmentManager,

@@ -24,7 +24,7 @@ import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.android.AppNavigator
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A [AppNavigator] which uses compass
  */
 open class CompassAppNavigator(activity: Activity) : AppNavigator(activity) {
 

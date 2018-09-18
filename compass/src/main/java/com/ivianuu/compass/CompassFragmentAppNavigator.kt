@@ -27,7 +27,7 @@ import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.android.FragmentAppNavigator
 
 /**
- * Compass navigator
+ * A [FragmentAppNavigator] which uses compass
  */
 @Suppress("UNCHECKED_CAST")
 open class CompassFragmentAppNavigator(

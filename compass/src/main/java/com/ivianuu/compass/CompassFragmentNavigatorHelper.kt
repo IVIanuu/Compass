@@ -23,7 +23,7 @@ import com.ivianuu.traveler.Forward
 import com.ivianuu.traveler.Replace
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Helper class for implementing an [FragmentNavigator] via compass
  */
 class CompassFragmentNavigatorHelper {
 

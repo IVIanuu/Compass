@@ -20,14 +20,32 @@ import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
 
+/**
+ * Creates route components e.g [Intent] or [Fragment] from a specific destination
+ */
 interface CompassRouteFactory
 
+/**
+ * Creates [Fragment] from Returns a new
+ */
 interface FragmentRouteFactory<T : Any> : CompassRouteFactory {
+    /**
+     * Returns a new [Fragment] associated with [this]
+     */
     fun createFragment(destination: T): Fragment
 }
 
+/**
+ * Creates [Intent] from [this]
+ */
 interface ActivityRouteFactory<T : Any> : CompassRouteFactory {
+    /**
+     * Returns a new [Intent] associated with [this]
+     */
     fun createActivityIntent(context: Context, destination: T): Intent
 }
 
+/**
+ * Provides [CompassRouteFactory] for a specific destination
+ */
 interface CompassRouteFactoryProvider

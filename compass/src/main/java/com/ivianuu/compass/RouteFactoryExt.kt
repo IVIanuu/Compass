@@ -6,6 +6,9 @@ import kotlin.reflect.KClass
 private const val SUFFIX_ROUTE_PROVIDER = "__RouteProvider"
 private val routeMethods = mutableMapOf<Class<*>, Method>()
 
+/**
+ * Returns a new [CompassRouteFactory] associated with the [destinationClass] or throws
+ */
 fun <T : CompassRouteFactory> routeFactory(destinationClass: KClass<*>): T {
     val routeProviderClass = findClazz(
         destinationClass.java.name.replace("\$", "_") + SUFFIX_ROUTE_PROVIDER,
@@ -16,14 +19,23 @@ fun <T : CompassRouteFactory> routeFactory(destinationClass: KClass<*>): T {
         .invoke(null) as T
 }
 
+/**
+ * Returns a new [CompassRouteFactory] associated with [this] or throws
+ */
 fun <T : CompassRouteFactory> Any.routeFactory() = routeFactory<T>(this::class)
 
+/**
+ * Returns a new [CompassRouteFactory] associated with the [destinationClass] or null
+ */
 fun <T : CompassRouteFactory> routeFactoryOrNull(destinationClass: KClass<*>) = try {
     routeFactory<T>(destinationClass)
 } catch (e: Exception) {
     null
 }
 
+/**
+ * Returns a new [CompassRouteFactory] associated with the [this] or null
+ */
 fun <T : CompassRouteFactory> Any.routeFactoryOrNull() = routeFactoryOrNull<T>(this::class)
 
 fun <D : Any> activityRouteFactory(destinationClass: KClass<out D>) =

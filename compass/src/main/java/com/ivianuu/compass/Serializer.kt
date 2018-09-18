@@ -19,7 +19,7 @@ package com.ivianuu.compass
 import android.os.Bundle
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A converter to create [this] from [Bundle] and vice versa
  */
 interface CompassSerializer<T : Any> {
 
@@ -34,4 +34,7 @@ interface CompassSerializer<T : Any> {
     }
 }
 
+/**
+ * Provides a [CompassSerializer]
+ */
 interface CompassSerializerProvider
