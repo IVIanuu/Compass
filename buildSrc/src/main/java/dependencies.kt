@@ -19,7 +19,7 @@ object Versions {
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
-    const val traveler = "e6e858548f"
+    const val traveler = "bdad7833f3"
 }
 
 object Deps {

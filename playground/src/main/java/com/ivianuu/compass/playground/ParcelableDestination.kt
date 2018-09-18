@@ -19,6 +19,7 @@ package com.ivianuu.compass.playground
 import android.os.Parcelable
 import android.util.SparseArray
 import com.ivianuu.compass.Destination
+import kotlinx.android.parcel.Parcelize
 
 @Destination(DummyFragment::class)
 data class ParcelableDestination(val somethingParcelable: SomethingParcelable)

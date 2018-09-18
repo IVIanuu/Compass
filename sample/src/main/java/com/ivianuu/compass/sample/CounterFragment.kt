@@ -21,8 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.ivianuu.traveler.exit
-import com.ivianuu.traveler.navigateTo
+import com.ivianuu.traveler.goBack
+import com.ivianuu.traveler.navigate
 import kotlinx.android.synthetic.main.fragment_counter.*
 
 /**
@@ -49,8 +49,8 @@ class CounterFragment : Fragment() {
         title.text = "Count: ${destination.count}"
         view.setBackgroundColor(destination.color)
 
-        up.setOnClickListener { router.navigateTo(destination.copy(count = destination.count + 1)) }
-        down.setOnClickListener { router.exit() }
+        up.setOnClickListener { router.navigate(destination.copy(count = destination.count + 1)) }
+        down.setOnClickListener { router.goBack() }
     }
 }
 
