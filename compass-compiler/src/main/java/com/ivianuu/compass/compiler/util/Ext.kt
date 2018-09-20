@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.util
+package com.ivianuu.compass.compiler.util
 
 import com.google.auto.common.MoreElements
-import com.ivianuu.compass.*
-import com.ivianuu.compass.serializer.ConstructorSelector
+import com.ivianuu.compass.Destination
+import com.ivianuu.compass.Detour
+import com.ivianuu.compass.DoNotSerialize
+import com.ivianuu.compass.RouteFactory
+import com.ivianuu.compass.Serializer
+import com.ivianuu.compass.compiler.serializer.ConstructorSelector
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import java.io.File
@@ -28,7 +32,6 @@ import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
 import javax.lang.model.type.MirroredTypesException
 import javax.lang.model.type.TypeMirror
-
 
 fun Element.shouldBeSerialized() =
     !MoreElements.isAnnotationPresent(this, DoNotSerialize::class.java)

@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.detour
+package com.ivianuu.compass.compiler.serializer
 
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
 
-data class DetourProviderDescriptor(
+data class SerializerProviderDescriptor(
     val element: TypeElement,
     val packageName: String,
-    val detourProvider: ClassName,
-    val detour: ClassName,
-    val isKotlinObject: Boolean
+    val serializerProvider: ClassName,
+    val serializer: ClassName
 )

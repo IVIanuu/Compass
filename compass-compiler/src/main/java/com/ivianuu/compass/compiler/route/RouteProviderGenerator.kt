@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.route
+package com.ivianuu.compass.compiler.route
 
-import com.ivianuu.compass.util.CLASS_ROUTE_FACTORY_PROVIDER
+import com.ivianuu.compass.compiler.util.CLASS_ROUTE_FACTORY_PROVIDER
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec

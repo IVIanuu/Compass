@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.serializer
+package com.ivianuu.compass.compiler.serializer
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
@@ -24,12 +24,12 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Key
 import com.ivianuu.compass.Serialize
 import com.ivianuu.compass.Serializer
-import com.ivianuu.compass.util.getCompassConstructor
-import com.ivianuu.compass.util.isKotlinObject
-import com.ivianuu.compass.util.packageName
-import com.ivianuu.compass.util.serializerClassName
-import com.ivianuu.compass.util.shouldBeSerialized
-import com.ivianuu.compass.util.write
+import com.ivianuu.compass.compiler.util.getCompassConstructor
+import com.ivianuu.compass.compiler.util.isKotlinObject
+import com.ivianuu.compass.compiler.util.packageName
+import com.ivianuu.compass.compiler.util.serializerClassName
+import com.ivianuu.compass.compiler.util.shouldBeSerialized
+import com.ivianuu.compass.compiler.util.write
 import com.squareup.kotlinpoet.asClassName
 import org.jetbrains.annotations.Nullable
 import javax.annotation.processing.ProcessingEnvironment

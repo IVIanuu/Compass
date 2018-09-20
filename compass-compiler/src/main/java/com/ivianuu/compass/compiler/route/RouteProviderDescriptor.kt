@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.serializer
+package com.ivianuu.compass.compiler.route
 
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
 
-data class SerializerProviderDescriptor(
+data class RouteProviderDescriptor(
     val element: TypeElement,
     val packageName: String,
-    val serializerProvider: ClassName,
-    val serializer: ClassName
+    val routeProvider: ClassName,
+    val routeFactory: ClassName,
+    val isKotlinObject: Boolean
 )

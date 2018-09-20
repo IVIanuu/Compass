@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.serializer
+package com.ivianuu.compass.compiler.serializer
 
-import com.ivianuu.compass.util.CLASS_BUNDLE
-import com.ivianuu.compass.util.CLASS_SERIALIZER
-import com.squareup.kotlinpoet.*
+import com.ivianuu.compass.compiler.util.CLASS_BUNDLE
+import com.ivianuu.compass.compiler.util.CLASS_SERIALIZER
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterizedTypeName
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.asTypeName
 
 class SerializerGenerator(private val descriptor: SerializerDescriptor) {
 

@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.route
+package com.ivianuu.compass.compiler.detour
 
-import com.ivianuu.compass.util.TargetType
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
 
-data class RouteFactoryDescriptor(
+data class DetourProviderDescriptor(
     val element: TypeElement,
     val packageName: String,
-    val routeFactory: ClassName,
-    val destination: ClassName,
-    val target: ClassName,
-    val targetType: TargetType
+    val detourProvider: ClassName,
+    val detour: ClassName,
+    val isKotlinObject: Boolean
 )

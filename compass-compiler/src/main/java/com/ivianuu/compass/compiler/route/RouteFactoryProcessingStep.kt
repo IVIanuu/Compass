@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.route
+package com.ivianuu.compass.compiler.route
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.RouteFactory
-import com.ivianuu.compass.util.TargetType
-import com.ivianuu.compass.util.destinationTarget
-import com.ivianuu.compass.util.packageName
-import com.ivianuu.compass.util.routeFactoryClassName
-import com.ivianuu.compass.util.targetType
-import com.ivianuu.compass.util.write
+import com.ivianuu.compass.compiler.util.TargetType
+import com.ivianuu.compass.compiler.util.destinationTarget
+import com.ivianuu.compass.compiler.util.packageName
+import com.ivianuu.compass.compiler.util.routeFactoryClassName
+import com.ivianuu.compass.compiler.util.targetType
+import com.ivianuu.compass.compiler.util.write
 import com.squareup.kotlinpoet.asClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.util
+package com.ivianuu.compass.compiler.util
 
 import com.squareup.kotlinpoet.ClassName
 

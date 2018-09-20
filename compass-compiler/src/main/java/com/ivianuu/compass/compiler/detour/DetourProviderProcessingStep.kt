@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.detour
+package com.ivianuu.compass.compiler.detour
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
-import com.ivianuu.compass.util.detourClass
-import com.ivianuu.compass.util.detourProviderClassName
-import com.ivianuu.compass.util.isKotlinObject
-import com.ivianuu.compass.util.packageName
-import com.ivianuu.compass.util.write
+import com.ivianuu.compass.compiler.util.detourClass
+import com.ivianuu.compass.compiler.util.detourProviderClassName
+import com.ivianuu.compass.compiler.util.isKotlinObject
+import com.ivianuu.compass.compiler.util.packageName
+import com.ivianuu.compass.compiler.util.write
 import com.squareup.kotlinpoet.asClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element

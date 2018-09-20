@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.util
+package com.ivianuu.compass.compiler.route
 
-/**
- * @author Manuel Wrage (IVIanuu)
- */
-enum class TargetType {
-    UNKNOWN,
-    ACTIVITY,
-    FRAGMENT
-}
+import com.ivianuu.compass.compiler.util.TargetType
+import com.squareup.kotlinpoet.ClassName
+import javax.lang.model.element.TypeElement
+
+data class RouteFactoryDescriptor(
+    val element: TypeElement,
+    val packageName: String,
+    val routeFactory: ClassName,
+    val destination: ClassName,
+    val target: ClassName,
+    val targetType: TargetType
+)

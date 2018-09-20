@@ -14,18 +14,32 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.extension
+package com.ivianuu.compass.compiler.serializer
 
-import com.ivianuu.compass.util.TargetType
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
+import javax.lang.model.element.VariableElement
 
-data class ExtensionDescriptor(
+data class SerializerDescriptor(
     val element: TypeElement,
     val packageName: String,
     val destination: ClassName,
-    val target: ClassName,
-    val targetType: TargetType,
-    val fileName: String,
-    val serializer: ClassName
+    val serializer: ClassName,
+    val isKotlinObject: Boolean,
+    val attributes: Set<SerializerAttribute>,
+    val keys: Set<SerializerAttributeKey>
+)
+
+data class SerializerAttribute(
+    val element: VariableElement,
+    val name: String,
+    val keyName: String,
+    val descriptor: SerializerAttributeDescriptor,
+    val isNullable: Boolean,
+    val hasDefaultParameter: Boolean
+)
+
+data class SerializerAttributeKey(
+    val name: String,
+    val value: String
 )

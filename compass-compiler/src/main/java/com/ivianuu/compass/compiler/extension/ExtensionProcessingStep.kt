@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.extension
+package com.ivianuu.compass.compiler.extension
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Serializer
-import com.ivianuu.compass.util.destinationTarget
-import com.ivianuu.compass.util.packageName
-import com.ivianuu.compass.util.serializerClass
-import com.ivianuu.compass.util.serializerClassName
-import com.ivianuu.compass.util.shouldBeSerialized
-import com.ivianuu.compass.util.targetType
-import com.ivianuu.compass.util.write
+import com.ivianuu.compass.compiler.util.destinationTarget
+import com.ivianuu.compass.compiler.util.packageName
+import com.ivianuu.compass.compiler.util.serializerClass
+import com.ivianuu.compass.compiler.util.serializerClassName
+import com.ivianuu.compass.compiler.util.shouldBeSerialized
+import com.ivianuu.compass.compiler.util.targetType
+import com.ivianuu.compass.compiler.util.write
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName

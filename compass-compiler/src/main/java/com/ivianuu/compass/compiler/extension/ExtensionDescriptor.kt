@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.route
+package com.ivianuu.compass.compiler.extension
 
+import com.ivianuu.compass.compiler.util.TargetType
 import com.squareup.kotlinpoet.ClassName
 import javax.lang.model.element.TypeElement
 
-data class RouteProviderDescriptor(
+data class ExtensionDescriptor(
     val element: TypeElement,
     val packageName: String,
-    val routeProvider: ClassName,
-    val routeFactory: ClassName,
-    val isKotlinObject: Boolean
+    val destination: ClassName,
+    val target: ClassName,
+    val targetType: TargetType,
+    val fileName: String,
+    val serializer: ClassName
 )

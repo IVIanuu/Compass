@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.route
+package com.ivianuu.compass.compiler.route
 
-import com.ivianuu.compass.util.*
-import com.squareup.kotlinpoet.*
+import com.ivianuu.compass.compiler.util.CLASS_ACTIVITY_ROUTE_FACTORY
+import com.ivianuu.compass.compiler.util.CLASS_CONTEXT
+import com.ivianuu.compass.compiler.util.CLASS_FRAGMENT
+import com.ivianuu.compass.compiler.util.CLASS_FRAGMENT_ROUTE_FACTORY
+import com.ivianuu.compass.compiler.util.CLASS_INTENT
+import com.ivianuu.compass.compiler.util.TargetType
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterizedTypeName
+import com.squareup.kotlinpoet.TypeSpec
 
 class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
 

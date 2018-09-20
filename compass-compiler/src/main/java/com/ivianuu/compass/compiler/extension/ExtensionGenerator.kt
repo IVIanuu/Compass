@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.extension
+package com.ivianuu.compass.compiler.extension
 
 import com.google.common.base.CaseFormat
-import com.ivianuu.compass.util.CLASS_BUNDLE
-import com.ivianuu.compass.util.CLASS_INTENT
-import com.ivianuu.compass.util.TargetType
+import com.ivianuu.compass.compiler.util.CLASS_BUNDLE
+import com.ivianuu.compass.compiler.util.CLASS_INTENT
+import com.ivianuu.compass.compiler.util.TargetType
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec

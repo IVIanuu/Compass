@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.serializer
+package com.ivianuu.compass.compiler.serializer
 
 import com.google.auto.common.MoreElements
 import com.ivianuu.compass.CompassConstructor

@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass
+package com.ivianuu.compass.compiler
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.service.AutoService
-import com.ivianuu.compass.detour.DetourProviderProcessingStep
-import com.ivianuu.compass.extension.ExtensionProcessingStep
-import com.ivianuu.compass.route.RouteFactoryProcessingStep
-import com.ivianuu.compass.route.RouteProviderProcessingStep
-import com.ivianuu.compass.serializer.SerializerProcessingStep
-import com.ivianuu.compass.serializer.SerializerProviderProcessingStep
-import com.ivianuu.compass.serializer.SupportedTypes
+import com.ivianuu.compass.compiler.detour.DetourProviderProcessingStep
+import com.ivianuu.compass.compiler.extension.ExtensionProcessingStep
+import com.ivianuu.compass.compiler.route.RouteFactoryProcessingStep
+import com.ivianuu.compass.compiler.route.RouteProviderProcessingStep
+import com.ivianuu.compass.compiler.serializer.SerializerProcessingStep
+import com.ivianuu.compass.compiler.serializer.SerializerProviderProcessingStep
+import com.ivianuu.compass.compiler.serializer.SupportedTypes
 import javax.annotation.processing.Processor
 
 @AutoService(Processor::class)
