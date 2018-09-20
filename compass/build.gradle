@@ -32,10 +32,8 @@ android {
 
 dependencies {
     api project(':compass-annotations')
-
-    api Deps.traveler
-
     api Deps.kotlinStdLib
+    api Deps.traveler
 }
 
 // build a jar with source files

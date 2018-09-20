@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass
+package com.ivianuu.compass.android
 
 import android.content.Context
 import android.content.Intent
@@ -28,16 +28,22 @@ import com.ivianuu.traveler.Replace
  */
 class CompassAppNavigatorHelper {
 
+    /**
+     * Returns a matching [Intent] or null
+     */
     fun createActivityIntent(context: Context, key: Any, data: Any?) = key.intentOrNull(context)
 
+    /**
+     * Returns matching activity start options or null
+     */
     fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
-        val destination = when(command) {
-            is Replace -> command.key
-            is Forward -> command.key
+        val (destination, data) = when (command) {
+            is Replace -> command.key to command.data
+            is Forward -> command.key to command.data
             else -> throw IllegalArgumentException() // this should never happen
         }
 
         return destination.activityDetourOrNull()
-            ?.createStartActivityOptions(destination, activityIntent)
+            ?.createStartActivityOptions(destination, data, activityIntent)
     }
 }

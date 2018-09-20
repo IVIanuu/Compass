@@ -5,8 +5,10 @@
       <module fileurl="file://$PROJECT_DIR$/Compass.iml" filepath="$PROJECT_DIR$/Compass.iml" />
       <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/compass/compass.iml" filepath="$PROJECT_DIR$/compass/compass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/compass-android/compass-android.iml" filepath="$PROJECT_DIR$/compass-android/compass-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/compass-annotations/compass-annotations.iml" filepath="$PROJECT_DIR$/compass-annotations/compass-annotations.iml" />
       <module fileurl="file://$PROJECT_DIR$/compass-compiler/compass-compiler.iml" filepath="$PROJECT_DIR$/compass-compiler/compass-compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/compass-fragment/compass-fragment.iml" filepath="$PROJECT_DIR$/compass-fragment/compass-fragment.iml" />
       <module fileurl="file://$PROJECT_DIR$/playground/playground.iml" filepath="$PROJECT_DIR$/playground/playground.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
     </modules>

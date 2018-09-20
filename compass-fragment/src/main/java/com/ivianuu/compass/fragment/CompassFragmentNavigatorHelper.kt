@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass
+package com.ivianuu.compass.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -27,21 +27,27 @@ import com.ivianuu.traveler.Replace
  */
 class CompassFragmentNavigatorHelper {
 
+    /**
+     * Returns a matching [Fragment] or null
+     */
     fun createFragment(key: Any, data: Any?): Fragment? = key.fragmentOrNull()
 
+    /**
+     * Setups the fragment transaction if a matching [FragmentDetour] was found
+     */
     fun setupFragmentTransaction(
         command: Command,
         currentFragment: Fragment?,
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        val destination = when(command) {
-            is Replace -> command.key
-            is Forward -> command.key
+        val (destination, data) = when (command) {
+            is Replace -> command.key to command.data
+            is Forward -> command.key to command.data
             else -> throw IllegalArgumentException()
         }
 
         destination.fragmentDetourOrNull()
-            ?.setupTransaction(destination, currentFragment, nextFragment, transaction)
+            ?.setupTransaction(destination, data, currentFragment, nextFragment, transaction)
     }
 }

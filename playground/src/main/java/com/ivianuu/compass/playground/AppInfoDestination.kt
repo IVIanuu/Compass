@@ -20,9 +20,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import com.ivianuu.compass.ActivityRouteFactory
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.RouteFactory
+import com.ivianuu.compass.android.ActivityRouteFactory
 
 /**
  * @author Manuel Wrage (IVIanuu)

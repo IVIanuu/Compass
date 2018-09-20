@@ -34,6 +34,8 @@ android {
 
 dependencies {
     api project(':compass')
+    api project(':compass-android')
+    api project(':compass-fragment')
     kapt project(':compass-compiler')
 }
 

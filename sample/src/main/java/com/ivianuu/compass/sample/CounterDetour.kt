@@ -5,11 +5,12 @@ import android.transition.Slide
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.ivianuu.compass.FragmentDetour
+import com.ivianuu.compass.fragment.FragmentDetour
 
 object CounterFragmentDetour : FragmentDetour<CounterDestination> {
     override fun setupTransaction(
         destination: CounterDestination,
+        data: Any?,
         currentFragment: Fragment?,
         nextFragment: Fragment,
         transaction: FragmentTransaction

@@ -2,10 +2,10 @@ package com.ivianuu.compass.sample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.ivianuu.compass.CompassFragmentAppNavigator
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.fragment.CompassFragmentAppNavigator
 import com.ivianuu.traveler.Traveler
-import com.ivianuu.traveler.setNavigator
+import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.setRoot
 
 @Destination(MainActivity::class)

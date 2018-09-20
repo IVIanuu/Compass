@@ -16,9 +16,9 @@
 
 package com.ivianuu.compass
 
-import android.content.Context
 import android.content.Intent
-import androidx.fragment.app.Fragment
+import java.lang.reflect.Method
+import kotlin.reflect.KClass
 
 /**
  * Creates route components e.g [Intent] or [Fragment] from a specific destination
@@ -26,26 +26,41 @@ import androidx.fragment.app.Fragment
 interface CompassRouteFactory
 
 /**
- * Creates [Fragment] from Returns a new
- */
-interface FragmentRouteFactory<T : Any> : CompassRouteFactory {
-    /**
-     * Returns a new [Fragment] associated with [this]
-     */
-    fun createFragment(destination: T): Fragment
-}
-
-/**
- * Creates [Intent] from [this]
- */
-interface ActivityRouteFactory<T : Any> : CompassRouteFactory {
-    /**
-     * Returns a new [Intent] associated with [this]
-     */
-    fun createActivityIntent(context: Context, destination: T): Intent
-}
-
-/**
  * Provides [CompassRouteFactory] for a specific destination
  */
 interface CompassRouteFactoryProvider
+
+private const val SUFFIX_ROUTE_PROVIDER = "__RouteProvider"
+private val routeMethods = mutableMapOf<Class<*>, Method>()
+
+/**
+ * Returns a new [CompassRouteFactory] associated with the [destinationClass] or throws
+ */
+fun <T : CompassRouteFactory> routeFactory(destinationClass: KClass<*>): T {
+    val routeProviderClass = findClazz(
+        destinationClass.java.name.replace("\$", "_") + SUFFIX_ROUTE_PROVIDER,
+        destinationClass.java.classLoader
+    )!!
+
+    return findMethod(routeProviderClass, METHOD_NAME_GET, routeMethods)!!
+        .invoke(null) as T
+}
+
+/**
+ * Returns a new [CompassRouteFactory] associated with [this] or throws
+ */
+fun <T : CompassRouteFactory> Any.routeFactory() = routeFactory<T>(this::class)
+
+/**
+ * Returns a new [CompassRouteFactory] associated with the [destinationClass] or null
+ */
+fun <T : CompassRouteFactory> routeFactoryOrNull(destinationClass: KClass<*>) = try {
+    routeFactory<T>(destinationClass)
+} catch (e: Exception) {
+    null
+}
+
+/**
+ * Returns a new [CompassRouteFactory] associated with the [this] or null
+ */
+fun <T : CompassRouteFactory> Any.routeFactoryOrNull() = routeFactoryOrNull<T>(this::class)

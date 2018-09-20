@@ -48,9 +48,10 @@ android {
 
 dependencies {
     implementation Deps.androidxAppCompat
-
-    implementation Deps.kotlinStdLib
-
-    implementation project(':compass')
+    api project(':compass')
+    api project(':compass-android')
+    api project(':compass-fragment')
     kapt project(':compass-compiler')
+    implementation Deps.kotlinStdLib
+    implementation Deps.travelerLifecycle
 }

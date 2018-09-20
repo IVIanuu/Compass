@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass
+package com.ivianuu.compass.android
 
 import android.app.Activity
 import android.content.Context
@@ -37,4 +37,7 @@ open class CompassAppNavigator(activity: Activity) : AppNavigator(activity) {
             appNavigatorHelper.createStartActivityOptions(command, activityIntent)
 }
 
+/**
+ * Returns a new [CompassAppNavigator] instance
+ */
 fun Activity.CompassAppNavigator() = CompassAppNavigator(this)

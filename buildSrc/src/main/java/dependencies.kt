@@ -15,11 +15,11 @@ object Versions {
     const val autoCommon = "0.10"
     const val autoService = "1.0-rc4"
 
-    const val kotlin = "1.2.61"
+    const val kotlin = "1.3.0-rc-57"
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
-    const val traveler = "bdad7833f3"
+    const val traveler = "bad12c82e7"
 }
 
 object Deps {
@@ -32,11 +32,16 @@ object Deps {
     const val autoService = "com.google.auto.service:auto-service:${Versions.autoService}"
 
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
-    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:${Versions.kotlin}"
+    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     const val kotlinPoet = "com.squareup:kotlinpoet:${Versions.kotlinPoet}"
     const val kotlinReflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradlePlugin}"
 
-    const val traveler = "com.github.IVIanuu:traveler:${Versions.traveler}"
+    const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
+    const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"
+    const val travelerFragment =
+        "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
+    const val travelerLifecycle =
+        "com.github.IVIanuu.traveler:traveler-lifecycle:${Versions.traveler}"
 }

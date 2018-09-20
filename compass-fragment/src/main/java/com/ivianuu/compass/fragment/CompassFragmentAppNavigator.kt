@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass
+package com.ivianuu.compass.fragment
 
 import android.app.Activity
 import android.content.Context
@@ -24,8 +24,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.ivianuu.compass.android.CompassAppNavigatorHelper
 import com.ivianuu.traveler.Command
-import com.ivianuu.traveler.android.FragmentAppNavigator
+import com.ivianuu.traveler.fragment.FragmentAppNavigator
 
 /**
  * A [FragmentAppNavigator] which uses compass
@@ -38,7 +39,8 @@ open class CompassFragmentAppNavigator(
 ) : FragmentAppNavigator(activity, fragmentManager, containerId) {
 
     private val compassAppNavigatorHelper = CompassAppNavigatorHelper()
-    private val compassFragmentNavigatorHelper = CompassFragmentNavigatorHelper()
+    private val compassFragmentNavigatorHelper =
+        CompassFragmentNavigatorHelper()
 
     override fun createFragment(key: Any, data: Any?): Fragment? =
         compassFragmentNavigatorHelper.createFragment(key, data)

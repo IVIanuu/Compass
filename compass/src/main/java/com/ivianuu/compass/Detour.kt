@@ -16,10 +16,8 @@
 
 package com.ivianuu.compass
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import java.lang.reflect.Method
+import kotlin.reflect.KClass
 
 /**
  * Applies transitions
@@ -27,33 +25,42 @@ import androidx.fragment.app.FragmentTransaction
 interface CompassDetour
 
 /**
- * Applies transitions to a [Fragment] or a [FragmentTransaction]
- */
-interface FragmentDetour<T : Any> : CompassDetour {
-
-    /**
-     * Setup the [transaction] to apply transitions
-     */
-    fun setupTransaction(
-        destination: T,
-        currentFragment: Fragment?,
-        nextFragment: Fragment,
-        transaction: FragmentTransaction
-    )
-}
-
-/**
- * Creates activity start options for animating between screens
- */
-interface ActivityDetour<T : Any> : CompassDetour {
-
-    /**
-     * Returns activity start options which will be passed with the [intent]
-     */
-    fun createStartActivityOptions(destination : T, intent: Intent): Bundle?
-}
-
-/**
  * Provides [CompassDetour]'s
  */
 interface CompassDetourProvider
+
+private const val SUFFIX_DETOUR_PROVIDER = "__DetourProvider"
+private val detourMethods = mutableMapOf<Class<*>, Method>()
+
+/**
+ * Returns a new [CompassDetour] associated with the [destinationClass] or throws
+ */
+@JvmName("detourTyped")
+fun <T : CompassDetour> detour(destinationClass: KClass<*>): T {
+    val detourProviderClass = findClazz(
+        destinationClass.java.name.replace("\$", "_") + SUFFIX_DETOUR_PROVIDER,
+        destinationClass.java.classLoader
+    )!!
+
+    return findMethod(detourProviderClass, METHOD_NAME_GET, detourMethods)!!
+        .invoke(null) as T
+}
+
+/**
+ * Returns a new [CompassDetour] associated with [this] or throws
+ */
+fun <T : CompassDetour> Any.detour() = detour<T>(this::class)
+
+/**
+ * Returns a new [CompassDetour] associated with the [destinationClass] or null
+ */
+fun <T : CompassDetour> detourOrNull(destinationClass: KClass<*>) = try {
+    detour<T>(destinationClass)
+} catch (e: Exception) {
+    null
+}
+
+/**
+ * Returns a new [CompassDetour] associated with [this] or null
+ */
+fun <T : CompassDetour> Any.detourOrNull() = detourOrNull<T>(this::class)
