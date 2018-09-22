@@ -27,7 +27,7 @@ import kotlin.reflect.KClass
  */
 interface FragmentRouteFactory<T : Any> : CompassRouteFactory {
     /**
-     * Returns a new [Fragment] associated with [this]
+     * Returns a new [Fragment] associated with the [destination]
      */
     fun createFragment(destination: T): Fragment
 }
