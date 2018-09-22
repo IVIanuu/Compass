@@ -30,11 +30,10 @@ object ColorGenerator {
 
     private var lastColor = -1
 
-    fun generate(): Int {
-        return COLORS.toList()
-            .shuffled()
-            .first { it != lastColor }
-            .also { lastColor = it }
-    }
+    fun generate() = COLORS
+        .filter { it != lastColor }
+        .shuffled()
+        .first()
+        .also { lastColor = it }
 
 }
