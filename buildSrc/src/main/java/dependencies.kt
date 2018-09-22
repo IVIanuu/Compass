@@ -10,7 +10,7 @@ object Versions {
 
     const val androidGradlePlugin = "3.3.0-alpha10"
 
-    const val androidx = "1.0.0-rc02"
+    const val androidx = "1.0.0"
 
     const val autoCommon = "0.10"
     const val autoService = "1.0-rc4"
