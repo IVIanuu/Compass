@@ -14,27 +14,10 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.android
+package com.ivianuu.compass.fragment
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import com.ivianuu.traveler.Command
-import com.ivianuu.traveler.android.AppNavigatorPlugin
-
-/**
- * Compass app navigator plugin
- */
-open class CompassAppNavigatorPlugin(context: Context) : AppNavigatorPlugin(context) {
-    private val appNavigatorHelper = CompassAppNavigatorHelper()
-
-    override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? =
-        appNavigatorHelper.createActivityIntent(context, key, data)
-
-    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
-        appNavigatorHelper.createStartActivityOptions(command, activityIntent)
-}
+import com.ivianuu.compass.android.CompassAppNavigatorPlugin
 
 /**
  * Returns a new [CompassAppNavigatorPlugin] instance

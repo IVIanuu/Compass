@@ -17,6 +17,7 @@
 package com.ivianuu.compass.android
 
 import android.app.Activity
+import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,7 +27,7 @@ import com.ivianuu.traveler.android.AppNavigator
 /**
  * A [AppNavigator] which uses compass
  */
-open class CompassAppNavigator(activity: Activity) : AppNavigator(activity) {
+open class CompassAppNavigator(context: Context) : AppNavigator(context) {
 
     private val appNavigatorHelper = CompassAppNavigatorHelper()
 
