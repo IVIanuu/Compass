@@ -130,6 +130,17 @@ class ExtensionGenerator(private val descriptor: ExtensionDescriptor) {
                     )
                     .build()
             }
+            TargetType.DIRECTOR_CONTROLLER -> {
+                FunSpec.builder(functionName)
+                    .receiver(descriptor.target)
+                    .returns(descriptor.destination)
+                    .addCode(
+                        CodeBlock.builder()
+                            .addStatement("return args.as$simpleName()")
+                            .build()
+                    )
+                    .build()
+            }
             TargetType.UNKNOWN -> null
         }
     }

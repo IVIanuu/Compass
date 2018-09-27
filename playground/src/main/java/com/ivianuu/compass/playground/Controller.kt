@@ -14,14 +14,29 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.compiler.util
+package com.ivianuu.compass.playground
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.ivianuu.compass.Destination
+import com.ivianuu.director.Controller
+import com.ivianuu.director.requireActivity
 
 /**
  * @author Manuel Wrage (IVIanuu)
  */
-enum class TargetType {
-    UNKNOWN,
-    ACTIVITY,
-    FRAGMENT,
-    DIRECTOR_CONTROLLER
+@Destination(MyController::class)
+object MyControllerDestination
+
+class MyController : Controller() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup,
+        savedViewState: Bundle?
+    ): View {
+        myControllerDestination()
+        return View(requireActivity())
+    }
 }

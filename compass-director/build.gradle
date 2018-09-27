@@ -16,8 +16,9 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: "kotlin-android-extensions"
-apply plugin: "kotlin-kapt"
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.ivianuu'
 
 android {
     compileSdkVersion Versions.compileSdk
@@ -25,19 +26,14 @@ android {
     defaultConfig {
         minSdkVersion Versions.minSdk
         targetSdkVersion Versions.targetSdk
-    }
-
-    androidExtensions {
-        experimental = true
+        consumerProguardFiles 'proguard-rules.txt'
     }
 }
 
 dependencies {
-    api project(':compass')
     api project(':compass-android')
-    api project(':compass-director')
-    api project(':compass-fragment')
-    kapt project(':compass-compiler')
+    api Deps.kotlinStdLib
+    api Deps.travelerDirector
 }
 
 // build a jar with source files

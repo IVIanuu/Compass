@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-include ':sample', ':compass', ':compass-annotations', ':compass-compiler', ':playground', ':compass-android', ':compass-fragment'
+include ':sample', ':compass', ':compass-annotations', ':compass-compiler', ':playground', ':compass-android', ':compass-fragment', ':compass-director'

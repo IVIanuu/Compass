@@ -25,7 +25,7 @@ import com.ivianuu.traveler.fragment.FragmentNavigatorPlugin
 /**
  * A [FragmentNavigatorPlugin] which uses compass
  */
-abstract class CompassFragmentNavigatorPlugin(
+open class CompassFragmentNavigatorPlugin(
     fragmentManager: FragmentManager,
     containerId: Int
 ) : FragmentNavigatorPlugin(fragmentManager, containerId) {
@@ -42,6 +42,7 @@ abstract class CompassFragmentNavigatorPlugin(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
+        super.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
         fragmentNavigatorHelper.setupFragmentTransaction(
             command, currentFragment, nextFragment, transaction
         )

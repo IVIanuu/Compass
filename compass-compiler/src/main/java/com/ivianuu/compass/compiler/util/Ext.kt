@@ -125,19 +125,27 @@ val Element.serializerClass: TypeMirror?
     }
 
 fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
-    return if (this != null) {
-        when {
-            processingEnv.typeUtils.isAssignable(
-                this.asType(),
-                processingEnv.elementUtils.getTypeElement(CLASS_ACTIVITY.toString()).asType()
-            ) -> TargetType.ACTIVITY
-            processingEnv.typeUtils.isAssignable(
-                this.asType(),
-                processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT.toString()).asType()
-            ) -> TargetType.FRAGMENT
-            else -> TargetType.UNKNOWN
+    return try {
+        if (this != null) {
+            when {
+                processingEnv.typeUtils.isAssignable(
+                    this.asType(),
+                    processingEnv.elementUtils.getTypeElement(CLASS_ACTIVITY.toString()).asType()
+                ) -> TargetType.ACTIVITY
+                processingEnv.typeUtils.isAssignable(
+                    this.asType(),
+                    processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT.toString()).asType()
+                ) -> TargetType.FRAGMENT
+                processingEnv.typeUtils.isAssignable(
+                    this.asType(),
+                    processingEnv.elementUtils.getTypeElement(CLASS_DIRECTOR_CONTROLLER.toString()).asType()
+                ) -> TargetType.DIRECTOR_CONTROLLER
+                else -> TargetType.UNKNOWN
+            }
+        } else {
+            TargetType.UNKNOWN
         }
-    } else {
+    } catch (e: Exception) {
         TargetType.UNKNOWN
     }
 }

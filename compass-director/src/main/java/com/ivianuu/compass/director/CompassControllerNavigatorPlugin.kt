@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package com.ivianuu.compass.compiler.util
+package com.ivianuu.compass.director
+
+import com.ivianuu.director.Router
+import com.ivianuu.traveler.director.ControllerNavigatorPlugin
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * A [ControllerNavigatorPlugin] which uses compass
  */
-enum class TargetType {
-    UNKNOWN,
-    ACTIVITY,
-    FRAGMENT,
-    DIRECTOR_CONTROLLER
+open class CompassControllerNavigatorPlugin(router: Router) : ControllerNavigatorPlugin(router) {
+
+    private val controllerNavigatorHelper = CompassControllerNavigatorHelper()
+
+    override fun createController(key: Any, data: Any?) =
+        controllerNavigatorHelper.createController(key, data)
+            ?: super.createController(key, data)
 }

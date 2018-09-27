@@ -19,7 +19,7 @@ object Versions {
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
-    const val traveler = "081997dfd5"
+    const val traveler = "66be77b8b4"
 }
 
 object Deps {
@@ -40,6 +40,8 @@ object Deps {
 
     const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
     const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"
+    const val travelerDirector =
+        "com.github.IVIanuu.traveler:traveler-director:${Versions.traveler}"
     const val travelerFragment =
         "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
     const val travelerLifecycle =

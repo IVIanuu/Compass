@@ -25,7 +25,7 @@ import com.ivianuu.traveler.fragment.FragmentNavigator
 /**
  * A [FragmentNavigator] which uses compass
  */
-abstract class CompassFragmentNavigator(
+open class CompassFragmentNavigator(
     fragmentManager: FragmentManager,
     containerId: Int
 ) : FragmentNavigator(fragmentManager, containerId) {
@@ -35,6 +35,7 @@ abstract class CompassFragmentNavigator(
 
     override fun createFragment(key: Any, data: Any?): Fragment? =
             fragmentNavigatorHelper.createFragment(key, data)
+                ?: super.createFragment(key, data)
 
     override fun setupFragmentTransaction(
         command: Command,
@@ -42,6 +43,7 @@ abstract class CompassFragmentNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
+        super.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
         fragmentNavigatorHelper.setupFragmentTransaction(
             command, currentFragment, nextFragment, transaction)
     }
