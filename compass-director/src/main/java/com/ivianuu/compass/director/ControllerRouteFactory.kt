@@ -49,6 +49,7 @@ fun <T : Any> T.controllerRouteFactory() = controllerRouteFactory(this::class)
 fun <D : Any> controllerRouteFactoryOrNull(destinationClass: KClass<out D>) = try {
     controllerRouteFactory(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 
@@ -73,21 +74,23 @@ fun <D : Any> D.controller(): Controller {
 fun <D : Any> D.controllerOrNull() = try {
     controller()
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 
 /**
- * Returns a new [F] associated this [this]
+ * Returns a new [C] associated this [this]
  */
-inline fun <D : Any, reified F : Controller> D.controller(controllerClass: KClass<F> = F::class) =
+inline fun <D : Any, reified C : Controller> D.controller(controllerClass: KClass<C> = C::class) =
     controllerClass.java.cast(controller())!!
 
 /**
- * Returns a new [F] associated with [this]
+ * Returns a new [C] associated with [this]
  */
-inline fun <D : Any, reified F : Controller> D.controllerOrNull(controllerClass: KClass<F> = F::class) =
+inline fun <D : Any, reified C : Controller> D.controllerOrNull(controllerClass: KClass<C> = C::class) =
     try {
         controller(controllerClass)
     } catch (e: Exception) {
+        e.printStackTrace()
         null
     }

@@ -42,7 +42,6 @@ open class CompassFragmentNavigatorPlugin(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        super.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
         fragmentNavigatorHelper.setupFragmentTransaction(
             command, currentFragment, nextFragment, transaction
         )

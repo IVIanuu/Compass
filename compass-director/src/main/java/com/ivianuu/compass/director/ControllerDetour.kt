@@ -53,6 +53,7 @@ fun <D : Any> D.controllerDetour() = controllerDetour(this::class)
 fun <D : Any> controllerDetourOrNull(destinationClass: KClass<out D>) = try {
     controllerDetour(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 

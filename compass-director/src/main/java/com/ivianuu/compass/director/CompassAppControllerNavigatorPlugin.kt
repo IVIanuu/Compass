@@ -44,7 +44,6 @@ open class CompassControllerAppNavigatorPlugin(
         compassControllerNavigatorHelper.createController(key, data)
 
     override fun setupTransaction(command: Command, transaction: RouterTransaction) {
-        super.setupTransaction(command, transaction)
         compassControllerNavigatorHelper.setupTransaction(command, transaction)
     }
 

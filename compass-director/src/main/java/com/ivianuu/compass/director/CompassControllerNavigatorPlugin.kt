@@ -17,6 +17,8 @@
 package com.ivianuu.compass.director
 
 import com.ivianuu.director.Router
+import com.ivianuu.director.RouterTransaction
+import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.director.ControllerNavigatorPlugin
 
 /**
@@ -28,5 +30,8 @@ open class CompassControllerNavigatorPlugin(router: Router) : ControllerNavigato
 
     override fun createController(key: Any, data: Any?) =
         controllerNavigatorHelper.createController(key, data)
-            ?: super.createController(key, data)
+
+    override fun setupTransaction(command: Command, transaction: RouterTransaction) {
+        controllerNavigatorHelper.setupTransaction(command, transaction)
+    }
 }

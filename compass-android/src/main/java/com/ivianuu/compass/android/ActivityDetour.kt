@@ -49,6 +49,7 @@ fun <D : Any> D.activityDetour() = activityDetour(this::class)
 fun <D : Any> activityDetourOrNull(destinationClass: KClass<out D>) = try {
     activityDetour(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 

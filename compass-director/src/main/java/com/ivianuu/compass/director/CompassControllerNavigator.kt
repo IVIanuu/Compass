@@ -33,10 +33,8 @@ open class CompassControllerNavigator(
 
     override fun createController(key: Any, data: Any?): Controller? =
         controllerNavigatorHelper.createController(key, data)
-            ?: super.createController(key, data)
 
     override fun setupTransaction(command: Command, transaction: RouterTransaction) {
-        super.setupTransaction(command, transaction)
         controllerNavigatorHelper.setupTransaction(command, transaction)
     }
 }

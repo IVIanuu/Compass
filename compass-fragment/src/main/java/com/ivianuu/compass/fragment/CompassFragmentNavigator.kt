@@ -35,7 +35,6 @@ open class CompassFragmentNavigator(
 
     override fun createFragment(key: Any, data: Any?): Fragment? =
             fragmentNavigatorHelper.createFragment(key, data)
-                ?: super.createFragment(key, data)
 
     override fun setupFragmentTransaction(
         command: Command,
@@ -43,7 +42,6 @@ open class CompassFragmentNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        super.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
         fragmentNavigatorHelper.setupFragmentTransaction(
             command, currentFragment, nextFragment, transaction)
     }

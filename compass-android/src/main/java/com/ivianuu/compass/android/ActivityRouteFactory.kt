@@ -50,6 +50,7 @@ fun <T : Any> T.activityRouteFactory() = activityRouteFactory(this::class)
 fun <D : Any> activityRouteFactoryOrNull(destinationClass: KClass<out D>) = try {
     activityRouteFactory(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 

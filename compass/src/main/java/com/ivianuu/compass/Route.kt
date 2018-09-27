@@ -57,6 +57,7 @@ fun <T : CompassRouteFactory> Any.routeFactory() = routeFactory<T>(this::class)
 fun <T : CompassRouteFactory> routeFactoryOrNull(destinationClass: KClass<*>) = try {
     routeFactory<T>(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 

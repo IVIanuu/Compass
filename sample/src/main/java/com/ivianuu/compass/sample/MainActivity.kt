@@ -1,9 +1,13 @@
 package com.ivianuu.compass.sample
 
 import android.os.Bundle
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.compass.Destination
+import com.ivianuu.compass.director.CompassControllerAppNavigatorPlugin
 import com.ivianuu.compass.fragment.CompassFragmentAppNavigatorPlugin
+import com.ivianuu.director.attachRouter
+import com.ivianuu.traveler.Replace
 import com.ivianuu.traveler.Traveler
 import com.ivianuu.traveler.lifecycle.setNavigator
 import com.ivianuu.traveler.plugin.pluginNavigatorOf
@@ -24,6 +28,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val rout = attachRouter(FrameLayout(this), null)
+        val nav = CompassControllerAppNavigatorPlugin(this, rout)
+
+        nav.applyCommand(Replace(MyDestination("hehe"), null))
 
         if (savedInstanceState == null) {
             router.setRoot(CounterDestination(1, ColorGenerator.generate()))

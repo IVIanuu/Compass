@@ -57,6 +57,7 @@ fun <T : CompassDetour> Any.detour() = detour<T>(this::class)
 fun <T : CompassDetour> detourOrNull(destinationClass: KClass<*>) = try {
     detour<T>(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 

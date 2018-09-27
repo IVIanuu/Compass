@@ -56,6 +56,7 @@ fun <D : Any> D.fragmentDetour() = fragmentDetour(this::class)
 fun <D : Any> fragmentDetourOrNull(destinationClass: KClass<out D>) = try {
     fragmentDetour(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 

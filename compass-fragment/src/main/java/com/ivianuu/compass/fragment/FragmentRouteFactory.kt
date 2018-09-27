@@ -49,6 +49,7 @@ fun <T : Any> T.fragmentRouteFactory() = fragmentRouteFactory(this::class)
 fun <D : Any> fragmentRouteFactoryOrNull(destinationClass: KClass<out D>) = try {
     fragmentRouteFactory(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 
@@ -73,6 +74,7 @@ fun <D : Any> D.fragment(): Fragment {
 fun <D : Any> D.fragmentOrNull() = try {
     fragment()
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 
@@ -89,5 +91,6 @@ inline fun <D : Any, reified F : Fragment> D.fragmentOrNull(fragmentClass: KClas
     try {
         fragment(fragmentClass)
     } catch (e: Exception) {
+        e.printStackTrace()
         null
     }

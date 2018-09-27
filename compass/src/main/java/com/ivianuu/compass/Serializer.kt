@@ -68,6 +68,7 @@ fun <D : Any> D.serializer() = serializer(this::class)
 fun <D : Any> serializerOrNull(destinationClass: KClass<out D>) = try {
     serializer(destinationClass)
 } catch (e: Exception) {
+    e.printStackTrace()
     null
 }
 
