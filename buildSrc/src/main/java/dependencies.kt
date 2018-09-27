@@ -6,7 +6,8 @@ object Versions {
     const val minSdk = 16
     const val targetSdk = 28
     const val versionCode = 1
-    const val versionName = "1.0"
+    const val versionName = "SNAPSHOT"
+    const val groupId = "com.ivianuu.compass"
 
     const val androidGradlePlugin = "3.2.0"
 
@@ -19,7 +20,7 @@ object Versions {
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
-    const val traveler = "a848150fd6"
+    const val traveler = "SNAPSHOT"
 }
 
 object Deps {
@@ -38,14 +39,14 @@ object Deps {
 
     const val mavenGradlePlugin = "com.github.dcendents:android-maven-gradle-plugin:${Versions.mavenGradlePlugin}"
 
-    const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
-    const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"
+    const val traveler = "com.ivianuu.traveler:traveler:${Versions.traveler}"
+    const val travelerAndroid = "com.ivianuu.traveler:traveler-android:${Versions.traveler}"
     const val travelerDirector =
-        "com.github.IVIanuu.traveler:traveler-director:${Versions.traveler}"
+        "com.ivianuu.traveler:traveler-director:${Versions.traveler}"
     const val travelerFragment =
-        "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
+        "com.ivianuu.traveler:traveler-fragment:${Versions.traveler}"
     const val travelerLifecycle =
-        "com.github.IVIanuu.traveler:traveler-lifecycle:${Versions.traveler}"
+        "com.ivianuu.traveler:traveler-lifecycle:${Versions.traveler}"
     const val travelerPlugin =
-        "com.github.IVIanuu.traveler:traveler-plugin:${Versions.traveler}"
+        "com.ivianuu.traveler:traveler-plugin:${Versions.traveler}"
 }

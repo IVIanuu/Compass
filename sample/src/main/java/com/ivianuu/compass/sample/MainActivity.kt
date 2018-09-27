@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.fragment.CompassFragmentAppNavigatorPlugin
+import com.ivianuu.traveler.Traveler
+import com.ivianuu.traveler.lifecycle.setNavigator
+import com.ivianuu.traveler.plugin.pluginNavigatorOf
+import com.ivianuu.traveler.setRoot
 
 @Destination(MainActivity::class)
 data class MainDestination(val something: String)
