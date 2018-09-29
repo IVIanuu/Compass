@@ -20,6 +20,8 @@ import com.ivianuu.director.Controller
 import com.ivianuu.director.Router
 import com.ivianuu.director.RouterTransaction
 import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Forward
+import com.ivianuu.traveler.Replace
 import com.ivianuu.traveler.director.ControllerNavigator
 
 /**
@@ -29,12 +31,36 @@ open class CompassControllerNavigator(
     router: Router
 ) : ControllerNavigator(router) {
 
-    private val controllerNavigatorHelper = CompassControllerNavigatorHelper()
+    override fun createController(key: Any, data: Any?): Controller? {
+        if (key is CompassControllerKey) return key.createController(data)
+        return key.controllerOrNull() ?: super.createController(key, data)
+    }
 
-    override fun createController(key: Any, data: Any?): Controller? =
-        controllerNavigatorHelper.createController(key, data)
+    override fun setupTransaction(
+        command: Command,
+        currentController: Controller?,
+        nextController: Controller,
+        transaction: RouterTransaction
+    ) {
+        val key = when (command) {
+            is Forward -> command.key
+            is Replace -> command.key
+            else -> null
+        }
 
-    override fun setupTransaction(command: Command, transaction: RouterTransaction) {
-        controllerNavigatorHelper.setupTransaction(command, transaction)
+        val data = when (command) {
+            is Forward -> command.data
+            is Replace -> command.data
+            else -> null
+        }
+
+        if (key is CompassControllerKey) {
+            key.setupTransaction(command, currentController, nextController, transaction)
+        } else if (key != null) {
+            key.controllerDetourOrNull()?.setupTransaction(
+                key, data,
+                currentController, nextController, transaction
+            )
+        }
     }
 }

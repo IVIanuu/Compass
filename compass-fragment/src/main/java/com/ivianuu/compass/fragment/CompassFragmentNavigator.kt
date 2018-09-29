@@ -17,9 +17,12 @@
 package com.ivianuu.compass.fragment
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Forward
+import com.ivianuu.traveler.Replace
 import com.ivianuu.traveler.fragment.FragmentNavigator
 
 /**
@@ -30,11 +33,10 @@ open class CompassFragmentNavigator(
     containerId: Int
 ) : FragmentNavigator(fragmentManager, containerId) {
 
-    private val fragmentNavigatorHelper =
-        CompassFragmentNavigatorHelper()
-
-    override fun createFragment(key: Any, data: Any?): Fragment? =
-            fragmentNavigatorHelper.createFragment(key, data)
+    override fun createFragment(key: Any, data: Any?): Fragment? {
+        if (key is CompassFragmentKey) return key.createFragment(data)
+        return key.fragmentOrNull() ?: super.createFragment(key, data)
+    }
 
     override fun setupFragmentTransaction(
         command: Command,
@@ -42,8 +44,38 @@ open class CompassFragmentNavigator(
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        fragmentNavigatorHelper.setupFragmentTransaction(
-            command, currentFragment, nextFragment, transaction)
+        val key = when (command) {
+            is Forward -> command.key
+            is Replace -> command.key
+            else -> null
+        }
+
+        val data = when (command) {
+            is Forward -> command.data
+            is Replace -> command.data
+            else -> null
+        }
+
+        if (key is CompassFragmentKey) {
+            key.setupFragmentTransaction(command, currentFragment, nextFragment, transaction)
+        } else if (key != null) {
+            key.fragmentDetourOrNull()?.setupTransaction(
+                key, data,
+                currentFragment, nextFragment, transaction
+            )
+        }
     }
 
 }
+
+/**
+ * Returns a new [CompassFragmentNavigator]
+ */
+fun FragmentActivity.CompassFragmentNavigator(containerId: Int) =
+    CompassFragmentNavigator(supportFragmentManager, containerId)
+
+/**
+ * Returns a new [CompassFragmentNavigator]
+ */
+fun Fragment.CompassFragmentNavigator(containerId: Int) =
+    CompassFragmentNavigator(childFragmentManager, containerId)

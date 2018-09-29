@@ -16,27 +16,27 @@
 
 package com.ivianuu.compass.android
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.traveler.Command
-import com.ivianuu.traveler.android.AppNavigatorPlugin
+import com.ivianuu.traveler.Forward
+import com.ivianuu.traveler.Replace
+import com.ivianuu.traveler.android.ActivityKey
 
 /**
- * Compass app navigator plugin
+ * @author Manuel Wrage (IVIanuu)
  */
-open class CompassAppNavigatorPlugin(context: Context) : AppNavigatorPlugin(context) {
-    private val appNavigatorHelper = CompassAppNavigatorHelper()
+interface CompassActivityKey : ActivityKey {
+    override fun createIntent(context: Context, data: Any?) = intent(context)
+    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
+        val data = when (command) {
+            is Forward -> command.data
+            is Replace -> command.data
+            else -> null
+        }
 
-    override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? =
-        appNavigatorHelper.createActivityIntent(context, key, data)
-
-    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
-        appNavigatorHelper.createStartActivityOptions(command, activityIntent)
+        return activityDetourOrNull()
+            ?.createStartActivityOptions(this, data, activityIntent)
+    }
 }
-
-/**
- * Returns a new [CompassAppNavigatorPlugin] instance
- */
-fun Context.CompassAppNavigatorPlugin() = CompassAppNavigatorPlugin(this)

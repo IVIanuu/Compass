@@ -18,6 +18,7 @@ package com.ivianuu.compass.director
 
 import com.ivianuu.compass.CompassDetour
 import com.ivianuu.compass.detour
+import com.ivianuu.director.Controller
 import com.ivianuu.director.RouterTransaction
 import kotlin.reflect.KClass
 
@@ -25,13 +26,14 @@ import kotlin.reflect.KClass
  * Applies change handlers to a [RouterTransaction]
  */
 interface ControllerDetour<T : Any> : CompassDetour {
-
     /**
      * Setup the [transaction] to apply transitions
      */
     fun setupTransaction(
         destination: T,
         data: Any?,
+        currentController: Controller?,
+        nextController: Controller,
         transaction: RouterTransaction
     )
 }

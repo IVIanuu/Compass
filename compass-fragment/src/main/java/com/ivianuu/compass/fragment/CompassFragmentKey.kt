@@ -21,33 +21,28 @@ import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.Forward
 import com.ivianuu.traveler.Replace
+import com.ivianuu.traveler.fragment.FragmentKey
 
 /**
- * Helper class for implementing an [FragmentNavigator] via compass
+ * A [ControllerKey] which creates a [Controller] via compass
  */
-class CompassFragmentNavigatorHelper {
-
-    /**
-     * Returns a matching [Fragment] or null
-     */
-    fun createFragment(key: Any, data: Any?): Fragment? = key.fragmentOrNull()
-
-    /**
-     * Setups the fragment transaction if a matching [FragmentDetour] was found
-     */
-    fun setupFragmentTransaction(
+interface CompassFragmentKey : FragmentKey {
+    override fun createFragment(data: Any?) = fragment()
+    override fun setupFragmentTransaction(
         command: Command,
         currentFragment: Fragment?,
         nextFragment: Fragment,
         transaction: FragmentTransaction
     ) {
-        val (destination, data) = when (command) {
-            is Replace -> command.key to command.data
-            is Forward -> command.key to command.data
-            else -> throw IllegalArgumentException()
+        val data = when (command) {
+            is Forward -> command.data
+            is Replace -> command.data
+            else -> null
         }
 
-        destination.fragmentDetourOrNull()
-            ?.setupTransaction(destination, data, currentFragment, nextFragment, transaction)
+        fragmentDetourOrNull()?.setupTransaction(
+            this, data,
+            currentFragment, nextFragment, transaction
+        )
     }
 }

@@ -6,7 +6,7 @@ object Versions {
     const val minSdk = 16
     const val targetSdk = 28
     const val versionCode = 1
-    const val versionName = "0.0.1-dev1"
+    const val versionName = "0.0.1-dev2"
     const val groupId = "com.ivianuu.compass"
 
     const val androidGradlePlugin = "3.2.0"
@@ -20,7 +20,7 @@ object Versions {
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
-    const val traveler = "0.0.1-dev1"
+    const val traveler = "0.0.1-dev3"
 }
 
 object Deps {

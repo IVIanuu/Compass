@@ -21,31 +21,28 @@ import com.ivianuu.director.RouterTransaction
 import com.ivianuu.traveler.Command
 import com.ivianuu.traveler.Forward
 import com.ivianuu.traveler.Replace
+import com.ivianuu.traveler.director.ControllerKey
 
 /**
- * Helper class for implementing an [ControllerNavigator] via compass
+ * A [ControllerKey] which creates a [Controller] via compass
  */
-class CompassControllerNavigatorHelper {
-
-    /**
-     * Returns a matching [Controller] or null
-     */
-    fun createController(key: Any, data: Any?): Controller? = key.controllerOrNull()
-
-    /**
-     * Setups the router transaction if a matching [ControllerDetour] was found
-     */
-    fun setupTransaction(
+interface CompassControllerKey : ControllerKey {
+    override fun createController(data: Any?) = controller()
+    override fun setupTransaction(
         command: Command,
+        currentController: Controller?,
+        nextController: Controller,
         transaction: RouterTransaction
     ) {
-        val (destination, data) = when (command) {
-            is Replace -> command.key to command.data
-            is Forward -> command.key to command.data
-            else -> throw IllegalArgumentException()
+        val data = when (command) {
+            is Forward -> command.data
+            is Replace -> command.data
+            else -> null
         }
 
-        destination.controllerDetourOrNull()
-            ?.setupTransaction(destination, data, transaction)
+        controllerDetourOrNull()?.setupTransaction(
+            this,
+            data, currentController, nextController, transaction
+        )
     }
 }

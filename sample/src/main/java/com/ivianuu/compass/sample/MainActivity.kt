@@ -3,10 +3,9 @@ package com.ivianuu.compass.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.compass.Destination
-import com.ivianuu.compass.fragment.CompassFragmentAppNavigatorPlugin
+import com.ivianuu.compass.fragment.CompassFragmentNavigator
 import com.ivianuu.traveler.Traveler
 import com.ivianuu.traveler.lifecycle.setNavigator
-import com.ivianuu.traveler.plugin.pluginNavigatorOf
 import com.ivianuu.traveler.setRoot
 
 @Destination(MainActivity::class)
@@ -19,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     val router get() = traveler.router
 
     private val navigator by lazy(LazyThreadSafetyMode.NONE) {
-        pluginNavigatorOf(CompassFragmentAppNavigatorPlugin(android.R.id.content))
+        CompassFragmentNavigator(android.R.id.content)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

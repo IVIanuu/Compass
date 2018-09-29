@@ -17,11 +17,12 @@
 package com.ivianuu.compass.android
 
 import android.app.Activity
-import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.ivianuu.traveler.Command
+import com.ivianuu.traveler.Forward
+import com.ivianuu.traveler.Replace
 import com.ivianuu.traveler.android.AppNavigator
 
 /**
@@ -29,13 +30,33 @@ import com.ivianuu.traveler.android.AppNavigator
  */
 open class CompassAppNavigator(context: Context) : AppNavigator(context) {
 
-    private val appNavigatorHelper = CompassAppNavigatorHelper()
+    override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? {
+        if (key is CompassActivityKey) return key.createIntent(context, data)
+        return key.intentOrNull(context) ?: super.createActivityIntent(context, key, data)
+    }
 
-    override fun createActivityIntent(context: Context, key: Any, data: Any?): Intent? =
-        appNavigatorHelper.createActivityIntent(context, key, data)
+    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? {
+        val key = when (command) {
+            is Forward -> command.key
+            is Replace -> command.key
+            else -> null
+        }
 
-    override fun createStartActivityOptions(command: Command, activityIntent: Intent): Bundle? =
-            appNavigatorHelper.createStartActivityOptions(command, activityIntent)
+        val data = when (command) {
+            is Forward -> command.data
+            is Replace -> command.data
+            else -> null
+        }
+
+        if (key is CompassActivityKey) return key.createStartActivityOptions(
+            command,
+            activityIntent
+        )
+
+        return key?.activityDetourOrNull()
+            ?.createStartActivityOptions(key, data, activityIntent)
+            ?: super.createStartActivityOptions(command, activityIntent)
+    }
 }
 
 /**
