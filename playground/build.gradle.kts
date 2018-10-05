@@ -14,28 +14,35 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: "kotlin-android-extensions"
-apply plugin: "kotlin-kapt"
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("kotlin-kapt")
+}
 
 android {
-    compileSdkVersion Versions.compileSdk
+    compileSdkVersion(Build.compileSdk)
 
     defaultConfig {
-        minSdkVersion Versions.minSdk
-        targetSdkVersion Versions.targetSdk
+        buildToolsVersion = Build.buildToolsVersion
+        minSdkVersion(Build.minSdk)
+        targetSdkVersion(Build.targetSdk)
     }
 
     androidExtensions {
-        experimental = true
+        isExperimental = true
+    }
+
+    kapt {
+        correctErrorTypes = true
     }
 }
 
 dependencies {
-    api project(':compass')
-    api project(':compass-android')
-    api project(':compass-director')
-    api project(':compass-fragment')
-    kapt project(':compass-compiler')
+    api(project(":compass"))
+    api(project(":compass-android"))
+    api(project(":compass-director"))
+    api(project(":compass-fragment"))
+    kapt(project(":compass-compiler"))
 }

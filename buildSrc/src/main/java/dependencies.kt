@@ -1,13 +1,17 @@
 @file:Suppress("ClassName", "unused")
 
-object Versions {
-    // android
+object Build {
+    const val applicationId = "com.ivianuu.compass.sample"
+    const val buildToolsVersion = "28.0.2"
+
     const val compileSdk = 28
     const val minSdk = 16
     const val targetSdk = 28
     const val versionCode = 1
     const val versionName = "0.0.1"
+}
 
+object Versions {
     const val androidGradlePlugin = "3.2.0"
 
     const val androidx = "1.0.0"
@@ -19,7 +23,7 @@ object Versions {
     const val kotlinPoet = "0.7.0"
 
     const val mavenGradlePlugin = "2.1"
-    const val traveler = "a710148189"
+    const val traveler = "788a0f325c"
 }
 
 object Deps {

@@ -13,5 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-include ':sample', ':compass', ':compass-annotations', ':compass-compiler', ':playground', ':compass-android', ':compass-fragment', ':compass-director'
+include(
+    ":compass",
+    ":compass-android",
+    ":compass-annotations",
+    ":compass-compiler",
+    ":compass-director",
+    ":compass-fragment",
+    ":playground",
+    ":sample"
+)
