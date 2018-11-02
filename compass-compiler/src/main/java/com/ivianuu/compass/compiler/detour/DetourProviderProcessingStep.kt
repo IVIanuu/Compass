@@ -17,7 +17,6 @@
 package com.ivianuu.compass.compiler.detour
 
 import com.google.auto.common.BasicAnnotationProcessor
-import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
@@ -25,7 +24,8 @@ import com.ivianuu.compass.compiler.util.detourClass
 import com.ivianuu.compass.compiler.util.detourProviderClassName
 import com.ivianuu.compass.compiler.util.isKotlinObject
 import com.ivianuu.compass.compiler.util.packageName
-import com.ivianuu.compass.compiler.util.write
+import com.ivianuu.processingx.hasAnnotation
+import com.ivianuu.processingx.write
 import com.squareup.kotlinpoet.asClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
@@ -52,7 +52,7 @@ class DetourProviderProcessingStep(private val processingEnv: ProcessingEnvironm
     override fun annotations() = mutableSetOf(Detour::class.java)
 
     private fun createDescriptor(element: TypeElement): DetourProviderDescriptor? {
-        if (!MoreElements.isAnnotationPresent(element, Destination::class.java)) {
+        if (!element.hasAnnotation<Destination>()) {
             processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
                 "missing @Destination annotation", element)
             return null

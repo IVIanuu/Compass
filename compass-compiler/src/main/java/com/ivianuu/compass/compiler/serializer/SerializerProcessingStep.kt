@@ -17,7 +17,6 @@
 package com.ivianuu.compass.compiler.serializer
 
 import com.google.auto.common.BasicAnnotationProcessor
-import com.google.auto.common.MoreElements
 import com.google.common.base.CaseFormat
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
@@ -29,7 +28,8 @@ import com.ivianuu.compass.compiler.util.isKotlinObject
 import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.compass.compiler.util.serializerClassName
 import com.ivianuu.compass.compiler.util.shouldBeSerialized
-import com.ivianuu.compass.compiler.util.write
+import com.ivianuu.processingx.hasAnnotation
+import com.ivianuu.processingx.write
 import com.squareup.kotlinpoet.asClassName
 import org.jetbrains.annotations.Nullable
 import javax.annotation.processing.ProcessingEnvironment
@@ -65,7 +65,7 @@ class SerializerProcessingStep(
         mutableSetOf(Destination::class.java, Serialize::class.java)
 
     private fun createDescriptor(element: TypeElement): SerializerDescriptor? {
-        if (MoreElements.isAnnotationPresent(element, Serializer::class.java)) {
+        if (element.hasAnnotation<Serializer>()) {
             return null
         }
 
@@ -96,7 +96,7 @@ class SerializerProcessingStep(
                     .firstOrNull { it.simpleName.toString() == simpleName }
 
                 val keyValue = if (field != null
-                    && MoreElements.isAnnotationPresent(field, Key::class.java)
+                        && field.hasAnnotation<Key>()
                 ) {
                     val value = field.getAnnotation(Key::class.java).value
                     if (value.isEmpty()) {
@@ -112,7 +112,7 @@ class SerializerProcessingStep(
                     element.asType().toString() + "." + attr.simpleName
                 }
 
-                val isNullable = MoreElements.isAnnotationPresent(attr, Nullable::class.java)
+                val isNullable = attr.hasAnnotation<Nullable>()
 
                 attributes.add(
                     SerializerAttribute(

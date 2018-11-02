@@ -32,7 +32,7 @@ class CompassProcessor : BasicAnnotationProcessor() {
 
     private val supportedTypes by lazy { SupportedTypes(processingEnv) }
 
-    override fun initSteps(): MutableIterable<ProcessingStep> =
+    override fun initSteps() =
         mutableSetOf(
             SerializerProcessingStep(processingEnv, supportedTypes),
             SerializerProviderProcessingStep(processingEnv),

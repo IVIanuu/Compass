@@ -16,8 +16,8 @@
 
 package com.ivianuu.compass.compiler.serializer
 
-import com.google.auto.common.MoreElements
 import com.ivianuu.compass.CompassConstructor
+import com.ivianuu.processingx.hasAnnotation
 import javax.lang.model.element.Element
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
@@ -46,7 +46,7 @@ object ConstructorSelector {
     private fun List<ExecutableElement>.getAnnotatedConstructor(base: Element): ExecutableElement? {
         val annotatedConstructors = this
             .asSequence()
-            .filter { MoreElements.isAnnotationPresent(it, CompassConstructor::class.java) }
+            .filter { it.hasAnnotation<CompassConstructor>() }
             .toList()
 
         return when {

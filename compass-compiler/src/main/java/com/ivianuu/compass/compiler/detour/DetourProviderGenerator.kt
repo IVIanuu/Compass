@@ -29,7 +29,7 @@ class DetourProviderGenerator(private val descriptor: DetourProviderDescriptor) 
         val file = FileSpec.builder(descriptor.packageName,
             descriptor.detourProvider.simpleName())
 
-        val type =  TypeSpec.objectBuilder(descriptor.detourProvider)
+        val type = TypeSpec.objectBuilder(descriptor.detourProvider)
             .addSuperinterface(CLASS_DETOUR_PROVIDER)
             .addFunction(get())
 

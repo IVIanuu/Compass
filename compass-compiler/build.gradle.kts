@@ -31,16 +31,10 @@ java {
 }
 
 dependencies {
-    implementation(Deps.autoCommon)
-
-    implementation(Deps.autoService)
-    kapt(Deps.autoService)
-
     implementation(project(":compass-annotations"))
-
-    implementation(Deps.kotlinPoet)
-
     implementation(Deps.kotlinStdLib)
+    implementation(Deps.processingX)
+    kapt(Deps.processingX)
 }
 
 val sourcesJar = task("sourcesJar", Jar::class) {

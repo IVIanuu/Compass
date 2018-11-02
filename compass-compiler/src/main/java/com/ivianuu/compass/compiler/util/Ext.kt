@@ -16,29 +16,25 @@
 
 package com.ivianuu.compass.compiler.util
 
-import com.google.auto.common.MoreElements
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
 import com.ivianuu.compass.Serializer
 import com.ivianuu.compass.compiler.serializer.ConstructorSelector
+import com.ivianuu.processingx.getAnnotationMirrorOrNull
+import com.ivianuu.processingx.getAsTypeOrNull
+import com.ivianuu.processingx.getPackage
+import com.ivianuu.processingx.hasAnnotation
 import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import java.io.File
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
-import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
-import javax.lang.model.type.MirroredTypesException
-import javax.lang.model.type.TypeMirror
 
-fun Element.shouldBeSerialized() =
-    !MoreElements.isAnnotationPresent(this, DoNotSerialize::class.java)
+fun Element.shouldBeSerialized() = !hasAnnotation<DoNotSerialize>()
 
-fun Element.getCompassConstructor(): ExecutableElement {
-    return ConstructorSelector.getCompassConstructor(this)
-}
+fun Element.getCompassConstructor() =
+    ConstructorSelector.getCompassConstructor(this)
 
 fun TypeElement.serializerClassName() = className("__Serializer")
 
@@ -61,7 +57,7 @@ private fun TypeElement.baseClassName(): String {
 }
 
 fun Element.packageName() =
-    MoreElements.getPackage(enclosingElement).qualifiedName.toString()
+    enclosingElement.getPackage().qualifiedName.toString()
 
 val Element.isKotlinObject: Boolean get() {
     return if (this is TypeElement) {
@@ -72,57 +68,21 @@ val Element.isKotlinObject: Boolean get() {
     }
 }
 
-val Element.destinationTarget: TypeMirror?
-    get() {
-        try {
-            this.getAnnotation(Destination::class.java).target
-        } catch (e: MirroredTypesException) {
-            return e.typeMirrors.firstOrNull()
-        } catch (e: Exception) {
-            return null
-        }
+val Element.destinationTarget
+    get() = getAnnotationMirrorOrNull<Destination>()
+        ?.getAsTypeOrNull("target")
 
-        return null
-    }
+val Element.routeFactoryClass
+    get() = getAnnotationMirrorOrNull<RouteFactory>()
+        ?.getAsTypeOrNull("clazz")
 
-val Element.routeFactoryClass: TypeMirror?
-    get() {
-        try {
-            this.getAnnotation(RouteFactory::class.java).clazz
-        } catch (e: MirroredTypesException) {
-            return e.typeMirrors.firstOrNull()
-        } catch (e: Exception) {
-            return null
-        }
+val Element.detourClass
+    get() = getAnnotationMirrorOrNull<Detour>()
+        ?.getAsTypeOrNull("clazz")
 
-        return null
-    }
-
-val Element.detourClass: TypeMirror?
-    get() {
-        try {
-            this.getAnnotation(Detour::class.java).clazz
-        } catch (e: MirroredTypesException) {
-            return e.typeMirrors.firstOrNull()
-        } catch (e: Exception) {
-            return null
-        }
-
-        return null
-    }
-
-val Element.serializerClass: TypeMirror?
-    get() {
-        try {
-            this.getAnnotation(Serializer::class.java).clazz
-        } catch (e: MirroredTypesException) {
-            return e.typeMirrors.firstOrNull()
-        } catch (e: Exception) {
-            return null
-        }
-
-        return null
-    }
+val Element.serializerClass
+    get() = getAnnotationMirrorOrNull<Serializer>()
+        ?.getAsTypeOrNull("clazz")
 
 fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
     return try {
@@ -148,10 +108,4 @@ fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
     } catch (e: Exception) {
         TargetType.UNKNOWN
     }
-}
-
-fun FileSpec.write(processingEnv: ProcessingEnvironment) {
-    val path = processingEnv.options["kapt.kotlin.generated"]
-        ?.replace("kaptKotlin", "kapt")!!
-    writeTo(File(path))
 }

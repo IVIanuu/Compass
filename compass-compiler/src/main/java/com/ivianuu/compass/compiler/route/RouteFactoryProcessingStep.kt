@@ -17,7 +17,6 @@
 package com.ivianuu.compass.compiler.route
 
 import com.google.auto.common.BasicAnnotationProcessor
-import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.RouteFactory
@@ -26,7 +25,8 @@ import com.ivianuu.compass.compiler.util.destinationTarget
 import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.compass.compiler.util.routeFactoryClassName
 import com.ivianuu.compass.compiler.util.targetType
-import com.ivianuu.compass.compiler.util.write
+import com.ivianuu.processingx.hasAnnotation
+import com.ivianuu.processingx.write
 import com.squareup.kotlinpoet.asClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
@@ -52,7 +52,7 @@ class RouteFactoryProcessingStep(private val processingEnv: ProcessingEnvironmen
 
     private fun createDescriptor(element: TypeElement): RouteFactoryDescriptor? {
         // the user provided his own route factory so return
-        if (MoreElements.isAnnotationPresent(element, RouteFactory::class.java)) {
+        if (element.hasAnnotation<RouteFactory>()) {
             return null
         }
 

@@ -17,7 +17,6 @@
 package com.ivianuu.compass.compiler.extension
 
 import com.google.auto.common.BasicAnnotationProcessor
-import com.google.auto.common.MoreElements
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Serializer
@@ -27,7 +26,8 @@ import com.ivianuu.compass.compiler.util.serializerClass
 import com.ivianuu.compass.compiler.util.serializerClassName
 import com.ivianuu.compass.compiler.util.shouldBeSerialized
 import com.ivianuu.compass.compiler.util.targetType
-import com.ivianuu.compass.compiler.util.write
+import com.ivianuu.processingx.hasAnnotation
+import com.ivianuu.processingx.write
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
@@ -64,8 +64,8 @@ class ExtensionProcessingStep(private val processingEnv: ProcessingEnvironment) 
         }) ?: return null
 
         val serializerClassName =
-            if (MoreElements.isAnnotationPresent(element, Serializer::class.java)) {
-                if (!MoreElements.isAnnotationPresent(element, Destination::class.java)) {
+            if (element.hasAnnotation<Serializer>()) {
+                if (!element.hasAnnotation<Destination>()) {
                     processingEnv.messager.printMessage(
                         Diagnostic.Kind.ERROR,
                         "you cannot annotate a non @destination class with @serializer", element

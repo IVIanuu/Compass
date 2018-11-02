@@ -25,7 +25,7 @@ import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.compass.compiler.util.routeFactoryClass
 import com.ivianuu.compass.compiler.util.routeFactoryClassName
 import com.ivianuu.compass.compiler.util.routeProviderClassName
-import com.ivianuu.compass.compiler.util.write
+import com.ivianuu.processingx.write
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asTypeName
 import javax.annotation.processing.ProcessingEnvironment

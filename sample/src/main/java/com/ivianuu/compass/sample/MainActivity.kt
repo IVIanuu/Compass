@@ -1,6 +1,7 @@
 package com.ivianuu.compass.sample
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.fragment.CompassFragmentNavigator
 import com.ivianuu.traveler.Traveler
