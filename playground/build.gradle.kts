@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.internal.AndroidExtensionsExtension
+
 /*
  * Copyright 2017 Manuel Wrage
  *
@@ -31,7 +33,10 @@ android {
     }
 
     androidExtensions {
-        isExperimental = true
+        // isExperimental = true
+        configure(delegateClosureOf<AndroidExtensionsExtension> {
+            isExperimental = true
+        })
     }
 
     kapt {
@@ -42,7 +47,6 @@ android {
 dependencies {
     api(project(":compass"))
     api(project(":compass-android"))
-    api(project(":compass-director"))
     api(project(":compass-fragment"))
     kapt(project(":compass-compiler"))
 }

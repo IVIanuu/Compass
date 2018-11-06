@@ -18,7 +18,6 @@ include(
     ":compass-android",
     ":compass-annotations",
     ":compass-compiler",
-    ":compass-director",
     ":compass-fragment",
     ":playground",
     ":sample"

@@ -22,7 +22,7 @@ object Versions {
 
     const val processingX = "a286c8ac5f"
 
-    const val traveler = "788a0f325c"
+    const val traveler = "21c2bf5f07"
 }
 
 object Deps {
@@ -39,8 +39,6 @@ object Deps {
 
     const val traveler = "com.github.IVIanuu.traveler:traveler:${Versions.traveler}"
     const val travelerAndroid = "com.github.IVIanuu.traveler:traveler-android:${Versions.traveler}"
-    const val travelerDirector =
-        "com.github.IVIanuu.traveler:traveler-director:${Versions.traveler}"
     const val travelerFragment =
         "com.github.IVIanuu.traveler:traveler-fragment:${Versions.traveler}"
     const val travelerLifecycle =

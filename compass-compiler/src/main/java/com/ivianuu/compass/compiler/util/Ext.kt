@@ -96,10 +96,6 @@ fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
                     this.asType(),
                     processingEnv.elementUtils.getTypeElement(CLASS_FRAGMENT.toString()).asType()
                 ) -> TargetType.FRAGMENT
-                processingEnv.typeUtils.isAssignable(
-                    this.asType(),
-                    processingEnv.elementUtils.getTypeElement(CLASS_DIRECTOR_CONTROLLER.toString()).asType()
-                ) -> TargetType.DIRECTOR_CONTROLLER
                 else -> TargetType.UNKNOWN
             }
         } else {

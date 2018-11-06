@@ -18,8 +18,6 @@ package com.ivianuu.compass.compiler.route
 
 import com.ivianuu.compass.compiler.util.CLASS_ACTIVITY_ROUTE_FACTORY
 import com.ivianuu.compass.compiler.util.CLASS_CONTEXT
-import com.ivianuu.compass.compiler.util.CLASS_DIRECTOR_CONTROLLER
-import com.ivianuu.compass.compiler.util.CLASS_DIRECTOR_CONTROLLER_ROUTE_FACTORY
 import com.ivianuu.compass.compiler.util.CLASS_FRAGMENT
 import com.ivianuu.compass.compiler.util.CLASS_FRAGMENT_ROUTE_FACTORY
 import com.ivianuu.compass.compiler.util.CLASS_INTENT
@@ -38,34 +36,10 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
 
         when {
             descriptor.targetType == TargetType.ACTIVITY -> file.addType(activityRouteFactory())
-            descriptor.targetType == TargetType.DIRECTOR_CONTROLLER -> file.addType(
-                directorControllerRouteFactory()
-            )
             descriptor.targetType == TargetType.FRAGMENT -> file.addType(fragmentRouteFactory())
         }
 
         return file.build()
-    }
-
-    private fun directorControllerRouteFactory(): TypeSpec {
-        val type = TypeSpec.objectBuilder(descriptor.routeFactory)
-            .addSuperinterface(
-                ParameterizedTypeName.get(
-                    CLASS_DIRECTOR_CONTROLLER_ROUTE_FACTORY,
-                    descriptor.destination
-                )
-            )
-
-        val createBuilder = FunSpec.builder("createController")
-            .addModifiers(KModifier.OVERRIDE)
-            .addParameter("destination", descriptor.destination)
-            .returns(CLASS_DIRECTOR_CONTROLLER)
-            .addStatement("return %T()", descriptor.target)
-            .build()
-
-        type.addFunction(createBuilder)
-
-        return type.build()
     }
 
     private fun fragmentRouteFactory(): TypeSpec {

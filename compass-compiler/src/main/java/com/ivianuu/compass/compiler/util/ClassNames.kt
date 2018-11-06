@@ -22,7 +22,6 @@ val CLASS_BUNDLE_HOLDER = ClassName("com.ivianuu.compass", "BundleHolder")
 
 val CLASS_DETOUR = ClassName("com.ivianuu.compass", "CompassDetour")
 val CLASS_ACTIVITY_DETOUR = ClassName("com.ivianuu.compass.android", "ActivityDetour")
-val CLASS_DIRECTOR_CONTROLLER_DETOUR = ClassName("com.ivianuu.compass.director", "ControllerDetour")
 val CLASS_FRAGMENT_DETOUR = ClassName("com.ivianuu.compass.fragment", "FragmentDetour")
 
 val CLASS_DETOUR_PROVIDER = ClassName("com.ivianuu.compass", "CompassDetourProvider")
@@ -31,8 +30,6 @@ val CLASS_ROUTE_FACTORY = ClassName("com.ivianuu.compass", "CompassRouteFactory"
 val CLASS_ROUTE_FACTORY_PROVIDER = ClassName("com.ivianuu.compass", "CompassRouteFactoryProvider")
 val CLASS_ACTIVITY_ROUTE_FACTORY = ClassName("com.ivianuu.compass.android", "ActivityRouteFactory")
 val CLASS_FRAGMENT_ROUTE_FACTORY = ClassName("com.ivianuu.compass.fragment", "FragmentRouteFactory")
-val CLASS_DIRECTOR_CONTROLLER_ROUTE_FACTORY =
-    ClassName("com.ivianuu.compass.director", "ControllerRouteFactory")
 
 val CLASS_SERIALIZER = ClassName("com.ivianuu.compass", "CompassSerializer")
 val CLASS_SERIALIZER_PROVIDER = ClassName("com.ivianuu.compass", "CompassSerializerProvider")
@@ -42,6 +39,5 @@ val CLASS_INTENT = ClassName("android.content", "Intent")
 
 val CLASS_ACTIVITY = ClassName("android.app", "Activity")
 val CLASS_FRAGMENT = ClassName("androidx.fragment.app", "Fragment")
-val CLASS_DIRECTOR_CONTROLLER = ClassName("com.ivianuu.director", "Controller")
 
 val CLASS_CONTEXT = ClassName("android.content", "Context")

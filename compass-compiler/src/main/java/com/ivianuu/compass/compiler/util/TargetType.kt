@@ -22,6 +22,5 @@ package com.ivianuu.compass.compiler.util
 enum class TargetType {
     UNKNOWN,
     ACTIVITY,
-    FRAGMENT,
-    DIRECTOR_CONTROLLER
+    FRAGMENT
 }

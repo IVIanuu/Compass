@@ -55,7 +55,6 @@ dependencies {
 
     api(project(":compass"))
     api(project(":compass-android"))
-    api(project(":compass-director"))
     api(project(":compass-fragment"))
     kapt(project(":compass-compiler"))
 
