@@ -42,13 +42,7 @@ class RouteProviderGenerator(private val descriptor: RouteProviderDescriptor) {
             .returns(descriptor.routeFactory)
             .addCode(
                 CodeBlock.builder()
-                    .apply {
-                        if (descriptor.isKotlinObject) {
-                            addStatement("return %T", descriptor.routeFactory)
-                        } else {
-                            addStatement("return %T()", descriptor.routeFactory)
-                        }
-                    }
+                    .addStatement("return %T()", descriptor.routeFactory)
                     .build()
             )
             .build()

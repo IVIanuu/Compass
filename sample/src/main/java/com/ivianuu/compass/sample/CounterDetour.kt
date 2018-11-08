@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.ivianuu.compass.fragment.FragmentDetour
 
-object CounterFragmentDetour : FragmentDetour<CounterDestination> {
+class CounterFragmentDetour : FragmentDetour<CounterDestination> {
     override fun setupTransaction(
         destination: CounterDestination,
         data: Any?,

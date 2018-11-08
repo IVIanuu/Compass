@@ -44,13 +44,7 @@ class DetourProviderGenerator(private val descriptor: DetourProviderDescriptor) 
             .returns(CLASS_DETOUR)
             .addCode(
                 CodeBlock.builder()
-                    .apply {
-                        if (descriptor.isKotlinObject) {
-                            addStatement("return %T", descriptor.detour)
-                        } else {
-                            addStatement("return %T()", descriptor.detour)
-                        }
-                    }
+                    .addStatement("return %T()", descriptor.detour)
                     .build()
             )
             .build()

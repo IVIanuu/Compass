@@ -88,16 +88,12 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
             .returns(descriptor.destination)
             .addParameter("bundle", CLASS_BUNDLE)
 
-        if (descriptor.attributes.isNotEmpty() || !descriptor.isKotlinObject) {
-            descriptor.attributes.forEach { function.addBundleGetter(it) }
+        descriptor.attributes.forEach { function.addBundleGetter(it) }
 
-            val constructorStatement = "return %T(${
-            descriptor.attributes.joinToString(", ") { it.name }})"
+        val constructorStatement = "return %T(${
+        descriptor.attributes.joinToString(", ") { it.name }})"
 
-            function.addStatement(constructorStatement,descriptor.destination)
-        } else {
-            function.addStatement("return %T", descriptor.destination)
-        }
+        function.addStatement(constructorStatement, descriptor.destination)
 
         return function.build()
     }

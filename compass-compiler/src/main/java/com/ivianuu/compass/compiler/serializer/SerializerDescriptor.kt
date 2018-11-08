@@ -25,7 +25,6 @@ data class SerializerDescriptor(
     val packageName: String,
     val destination: ClassName,
     val serializer: ClassName,
-    val isKotlinObject: Boolean,
     val attributes: Set<SerializerAttribute>,
     val keys: Set<SerializerAttributeKey>
 )

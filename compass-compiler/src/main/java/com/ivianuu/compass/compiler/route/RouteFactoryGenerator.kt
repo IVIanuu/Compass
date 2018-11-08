@@ -43,7 +43,7 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
     }
 
     private fun fragmentRouteFactory(): TypeSpec {
-        val type = TypeSpec.objectBuilder(descriptor.routeFactory)
+        val type = TypeSpec.classBuilder(descriptor.routeFactory)
             .addSuperinterface(
                 ParameterizedTypeName.get(
                     CLASS_FRAGMENT_ROUTE_FACTORY,
@@ -64,7 +64,7 @@ class RouteFactoryGenerator(private val descriptor: RouteFactoryDescriptor) {
     }
 
     private fun activityRouteFactory(): TypeSpec {
-        val type = TypeSpec.objectBuilder(descriptor.routeFactory)
+        val type = TypeSpec.classBuilder(descriptor.routeFactory)
             .addSuperinterface(
                 ParameterizedTypeName.get(
                     CLASS_ACTIVITY_ROUTE_FACTORY,

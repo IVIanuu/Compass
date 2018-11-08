@@ -30,7 +30,7 @@ import com.ivianuu.compass.android.ActivityRouteFactory
 @DoNotSerialize
 @Destination
 object NoSerializeDestination {
-    object RouteFactory : ActivityRouteFactory<NoSerializeDestination> {
+    class RouteFactory : ActivityRouteFactory<NoSerializeDestination> {
         override fun createActivityIntent(context: Context, destination: NoSerializeDestination): Intent {
             return Intent()
         }

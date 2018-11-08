@@ -23,6 +23,5 @@ data class DetourProviderDescriptor(
     val element: TypeElement,
     val packageName: String,
     val detourProvider: ClassName,
-    val detour: ClassName,
-    val isKotlinObject: Boolean
+    val detour: ClassName
 )

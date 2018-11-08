@@ -20,7 +20,7 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.compiler.util.destinationTarget
-import com.ivianuu.compass.compiler.util.isKotlinObject
+import com.ivianuu.compass.compiler.util.hasEmptyConstructor
 import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.compass.compiler.util.routeFactoryClass
 import com.ivianuu.compass.compiler.util.routeFactoryClassName
@@ -56,11 +56,15 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
 
         val routeFactory = element.routeFactoryClass
 
-        val isKotlinObject = if (routeFactory != null) {
+        if (routeFactory != null) {
             val type = processingEnv.elementUtils.getTypeElement(routeFactory.toString())
-            type.isKotlinObject
-        } else {
-            true
+            if (!type.hasEmptyConstructor) {
+                processingEnv.messager.printMessage(
+                    Diagnostic.Kind.ERROR,
+                    "route factory must have a empty constructor", element
+                )
+                return null
+            }
         }
 
         if (routeFactory != null && target != null && target.toString() != "java.lang.Void") {
@@ -89,8 +93,7 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
             element,
             element.packageName(),
             element.routeProviderClassName(),
-            factoryName,
-            isKotlinObject
+            factoryName
         )
     }
 }

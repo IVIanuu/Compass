@@ -30,7 +30,7 @@ import com.ivianuu.compass.android.ActivityRouteFactory
 @Destination
 data class WebsiteDestination(val url : String)
 
-object WebsiteRouteFactory : ActivityRouteFactory<WebsiteDestination> {
+class WebsiteRouteFactory : ActivityRouteFactory<WebsiteDestination> {
     override fun createActivityIntent(context: Context, destination: WebsiteDestination): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(destination.url)

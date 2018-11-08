@@ -23,6 +23,5 @@ data class RouteProviderDescriptor(
     val element: TypeElement,
     val packageName: String,
     val routeProvider: ClassName,
-    val routeFactory: ClassName,
-    val isKotlinObject: Boolean
+    val routeFactory: ClassName
 )

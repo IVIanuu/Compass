@@ -21,10 +21,8 @@ import com.google.common.base.CaseFormat
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Key
-import com.ivianuu.compass.Serialize
 import com.ivianuu.compass.Serializer
 import com.ivianuu.compass.compiler.util.getCompassConstructor
-import com.ivianuu.compass.compiler.util.isKotlinObject
 import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.compass.compiler.util.serializerClassName
 import com.ivianuu.compass.compiler.util.shouldBeSerialized
@@ -46,7 +44,6 @@ class SerializerProcessingStep(
     override fun process(elementsByAnnotation: SetMultimap<Class<out Annotation>, Element>): MutableSet<Element> {
         val elements = mutableSetOf<Element>()
         elements.addAll(elementsByAnnotation[Destination::class.java])
-        elements.addAll(elementsByAnnotation[Serialize::class.java])
 
         elements
             .asSequence()
@@ -62,7 +59,7 @@ class SerializerProcessingStep(
     }
 
     override fun annotations() =
-        mutableSetOf(Destination::class.java, Serialize::class.java)
+        mutableSetOf(Destination::class.java)
 
     private fun createDescriptor(element: TypeElement): SerializerDescriptor? {
         if (element.hasAnnotation<Serializer>()) {
@@ -72,57 +69,57 @@ class SerializerProcessingStep(
         val attributes = mutableSetOf<SerializerAttribute>()
         val keys = mutableSetOf<SerializerAttributeKey>()
 
-        if (!element.isKotlinObject) {
-            val constructor = element.getCompassConstructor()
+        val constructor = element.getCompassConstructor()
 
-            constructor.parameters.forEach { attr ->
-                if (!supportedTypes.isSupported(attr)) {
-                    processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
-                        "unsupported parameter $element -> ${attr.simpleName}", attr)
+        constructor.parameters.forEach { attr ->
+            if (!supportedTypes.isSupported(attr)) {
+                processingEnv.messager.printMessage(
+                    Diagnostic.Kind.ERROR,
+                    "unsupported parameter $element -> ${attr.simpleName}", attr
+                )
+                return null
+            }
+
+            val simpleName = attr.simpleName.toString()
+
+            val keyName = "KEY_" + CaseFormat.LOWER_CAMEL.converterTo(
+                CaseFormat.UPPER_UNDERSCORE
+            ).convert(simpleName)!!
+
+            // find the field for the constructor element
+            // to check if a @key annotation is present
+            val field = element.enclosedElements
+                .asSequence()
+                .filterIsInstance<VariableElement>()
+                .firstOrNull { it.simpleName.toString() == simpleName }
+
+            val keyValue = if (field != null
+                    && field.hasAnnotation<Key>()
+            ) {
+                val value = field.getAnnotation(Key::class.java).value
+                if (value.isEmpty()) {
+                    processingEnv.messager.printMessage(
+                        Diagnostic.Kind.ERROR,
+                        "key value must be not empty",
+                        field
+                    )
                     return null
                 }
-
-                val simpleName = attr.simpleName.toString()
-
-                val keyName = "KEY_" + CaseFormat.LOWER_CAMEL.converterTo(
-                    CaseFormat.UPPER_UNDERSCORE
-                ).convert(simpleName)!!
-
-                // find the field for the constructor element
-                // to check if a @key annotation is present
-                val field = element.enclosedElements
-                    .asSequence()
-                    .filterIsInstance<VariableElement>()
-                    .firstOrNull { it.simpleName.toString() == simpleName }
-
-                val keyValue = if (field != null
-                        && field.hasAnnotation<Key>()
-                ) {
-                    val value = field.getAnnotation(Key::class.java).value
-                    if (value.isEmpty()) {
-                        processingEnv.messager.printMessage(
-                            Diagnostic.Kind.ERROR,
-                            "key value must be not empty",
-                            field
-                        )
-                        return null
-                    }
-                    value
-                } else {
-                    element.asType().toString() + "." + attr.simpleName
-                }
-
-                val isNullable = attr.hasAnnotation<Nullable>()
-
-                attributes.add(
-                    SerializerAttribute(
-                            attr, simpleName, keyName, supportedTypes.get(attr),
-                            isNullable, false
-                        )
-                    )
-
-                keys.add(SerializerAttributeKey(keyName, keyValue))
+                value
+            } else {
+                element.asType().toString() + "." + attr.simpleName
             }
+
+            val isNullable = attr.hasAnnotation<Nullable>()
+
+            attributes.add(
+                SerializerAttribute(
+                    attr, simpleName, keyName, supportedTypes.get(attr),
+                    isNullable, false
+                )
+            )
+
+            keys.add(SerializerAttributeKey(keyName, keyValue))
         }
 
         return SerializerDescriptor(
@@ -130,7 +127,6 @@ class SerializerProcessingStep(
             element.packageName(),
             element.asClassName(),
             element.serializerClassName(),
-            element.isKotlinObject,
             attributes,
             keys
         )

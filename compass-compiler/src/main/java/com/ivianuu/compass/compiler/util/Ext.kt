@@ -29,6 +29,9 @@ import com.ivianuu.processingx.hasAnnotation
 import com.squareup.kotlinpoet.ClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
+import javax.lang.model.element.ElementKind
+import javax.lang.model.element.ExecutableElement
+import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 
 fun Element.shouldBeSerialized() = !hasAnnotation<DoNotSerialize>()
@@ -58,15 +61,6 @@ private fun TypeElement.baseClassName(): String {
 
 fun Element.packageName() =
     enclosingElement.getPackage().qualifiedName.toString()
-
-val Element.isKotlinObject: Boolean get() {
-    return if (this is TypeElement) {
-        enclosedElements
-            .any { it.simpleName.toString() == "INSTANCE" }
-    } else {
-        false
-    }
-}
 
 val Element.destinationTarget
     get() = getAnnotationMirrorOrNull<Destination>()
@@ -105,3 +99,11 @@ fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
         TargetType.UNKNOWN
     }
 }
+
+val TypeElement.hasEmptyConstructor
+    get() = enclosedElements
+        .asSequence()
+        .filterIsInstance<ExecutableElement>()
+        .filter { it.kind == ElementKind.CONSTRUCTOR }
+        .filter { it.modifiers.contains(Modifier.PUBLIC) }
+        .any { it.parameters.isEmpty() }

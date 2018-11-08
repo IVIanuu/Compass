@@ -22,15 +22,13 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.compass.compiler.util.detourClass
 import com.ivianuu.compass.compiler.util.detourProviderClassName
-import com.ivianuu.compass.compiler.util.isKotlinObject
+import com.ivianuu.compass.compiler.util.hasEmptyConstructor
 import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.processingx.hasAnnotation
 import com.ivianuu.processingx.write
 import com.squareup.kotlinpoet.asClassName
 import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
-import javax.lang.model.element.ElementKind
-import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
 import javax.tools.Diagnostic
 
@@ -58,23 +56,17 @@ class DetourProviderProcessingStep(private val processingEnv: ProcessingEnvironm
             return null
         }
 
-        val detour = element.detourClass?.let {
+        val detourType = element.detourClass?.let {
             processingEnv.elementUtils.getTypeElement(it.toString())
         }
 
-        if (detour == null) {
+        if (detourType == null) {
             processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
                 "couldn't resolve detour", element)
             return null
         }
 
-        val hasEmptyConstructor = detour.enclosedElements
-            .asSequence()
-            .filterIsInstance<ExecutableElement>()
-            .filter { it.kind == ElementKind.CONSTRUCTOR }
-            .all { it.parameters.isEmpty() }
-
-        if (!hasEmptyConstructor) {
+        if (!detourType.hasEmptyConstructor) {
             processingEnv.messager.printMessage(Diagnostic.Kind.ERROR,
                 "detour must have a empty constructor", element)
             return null
@@ -84,8 +76,7 @@ class DetourProviderProcessingStep(private val processingEnv: ProcessingEnvironm
             element,
             element.packageName(),
             element.detourProviderClassName(),
-            detour.asClassName(),
-            detour.isKotlinObject
+            detourType.asClassName()
         )
     }
 }
