@@ -20,7 +20,6 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.base.CaseFormat
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
-import com.ivianuu.compass.Serializer
 import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.compass.compiler.util.serializerClassName
 import com.ivianuu.compass.compiler.util.shouldBeSerialized
@@ -61,10 +60,6 @@ class SerializerProcessingStep(
         mutableSetOf(Destination::class.java)
 
     private fun createDescriptor(element: TypeElement): SerializerDescriptor? {
-        if (element.hasAnnotation<Serializer>()) {
-            return null
-        }
-
         val attributes = mutableSetOf<SerializerAttribute>()
         val keys = mutableSetOf<SerializerAttributeKey>()
 

@@ -18,11 +18,10 @@ package com.ivianuu.compass.compiler
 
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.service.AutoService
-import com.ivianuu.compass.compiler.detour.DetourProviderProcessingStep
+import com.ivianuu.compass.compiler.detour.DetourProcessingStep
 import com.ivianuu.compass.compiler.route.RouteFactoryProcessingStep
 import com.ivianuu.compass.compiler.route.RouteProviderProcessingStep
 import com.ivianuu.compass.compiler.serializer.SerializerProcessingStep
-import com.ivianuu.compass.compiler.serializer.SerializerProviderProcessingStep
 import com.ivianuu.compass.compiler.serializer.SupportedTypes
 import javax.annotation.processing.Processor
 
@@ -34,9 +33,8 @@ class CompassProcessor : BasicAnnotationProcessor() {
     override fun initSteps() =
         mutableSetOf(
             SerializerProcessingStep(processingEnv, supportedTypes),
-            SerializerProviderProcessingStep(processingEnv),
             RouteFactoryProcessingStep(processingEnv),
             RouteProviderProcessingStep(processingEnv),
-            DetourProviderProcessingStep(processingEnv)
+            DetourProcessingStep(processingEnv)
         )
 }

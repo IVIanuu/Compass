@@ -21,11 +21,8 @@ import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
 import com.ivianuu.compass.compiler.util.destinationTarget
 import com.ivianuu.compass.compiler.util.hasEmptyConstructor
-import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.compass.compiler.util.routeFactoryClass
 import com.ivianuu.compass.compiler.util.routeFactoryClassName
-import com.ivianuu.compass.compiler.util.routeProviderClassName
-import com.ivianuu.processingx.write
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.asTypeName
 import javax.annotation.processing.ProcessingEnvironment
@@ -39,11 +36,7 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
         elementsByAnnotation[Destination::class.java]
             .asSequence()
             .filterIsInstance<TypeElement>()
-            .mapNotNull(this::createDescriptor)
-            .map(::RouteProviderGenerator)
-            .map(RouteProviderGenerator::generate)
-            .toList()
-            .forEach { it.write(processingEnv) }
+            .forEach { validate(it) }
 
         return mutableSetOf()
     }
@@ -51,7 +44,7 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
     override fun annotations() =
         mutableSetOf(Destination::class.java)
 
-    private fun createDescriptor(element: TypeElement): RouteProviderDescriptor? {
+    private fun validate(element: TypeElement) {
         val target = element.destinationTarget
 
         val routeFactory = element.routeFactoryClass
@@ -63,7 +56,7 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
                     Diagnostic.Kind.ERROR,
                     "route factory must have a empty constructor", element
                 )
-                return null
+                return
             }
         }
 
@@ -72,7 +65,7 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
                 Diagnostic.Kind.ERROR,
                 "you cannot specify a target AND a route factory", element
             )
-            return null
+            return
         }
 
         val factoryName = when {
@@ -86,14 +79,7 @@ class RouteProviderProcessingStep(private val processingEnv: ProcessingEnvironme
                 Diagnostic.Kind.ERROR,
                 "either a valid target or route factory must be specified", element
             )
-            return null
+            return
         }
-
-        return RouteProviderDescriptor(
-            element,
-            element.packageName(),
-            element.routeProviderClassName(),
-            factoryName
-        )
     }
 }

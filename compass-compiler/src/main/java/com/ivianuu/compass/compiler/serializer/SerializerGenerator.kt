@@ -44,7 +44,7 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
             .filter { it.import }
             .forEach { file.addStaticImport("com.ivianuu.compass", it.name) }
 
-        val type = TypeSpec.objectBuilder(descriptor.serializer)
+        val type = TypeSpec.classBuilder(descriptor.serializer)
             .addSuperinterface(
                 ParameterizedTypeName.get(
                     CLASS_SERIALIZER,
@@ -52,14 +52,19 @@ class SerializerGenerator(private val descriptor: SerializerDescriptor) {
                 )
             )
 
-        type.addProperties(keyProperties())
         type.addFunction(toBundle())
         type.addFunction(fromBundle())
+        type.addType(companionObject())
 
         file.addType(type.build())
 
         return file.build()
     }
+
+    private fun companionObject(): TypeSpec =
+        TypeSpec.companionObjectBuilder()
+            .addProperties(keyProperties())
+            .build()
 
     private fun keyProperties(): Set<PropertySpec> {
         return descriptor.keys

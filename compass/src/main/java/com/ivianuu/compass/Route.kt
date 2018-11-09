@@ -17,7 +17,6 @@
 package com.ivianuu.compass
 
 import android.content.Intent
-import java.lang.reflect.Method
 import kotlin.reflect.KClass
 
 /**
@@ -25,25 +24,34 @@ import kotlin.reflect.KClass
  */
 interface CompassRouteFactory
 
-/**
- * Provides [CompassRouteFactory] for a specific destination
- */
-interface CompassRouteFactoryProvider
-
-private const val SUFFIX_ROUTE_PROVIDER = "__RouteProvider"
-private val routeMethods = mutableMapOf<Class<*>, Method>()
+private const val SUFFIX_ROUTE_FACTORY = "__RouteFactory"
+private val routeFactories = mutableMapOf<Class<*>, Class<*>>()
 
 /**
  * Returns a new [CompassRouteFactory] associated with the [destinationClass] or throws
  */
 fun <T : CompassRouteFactory> routeFactory(destinationClass: KClass<*>): T {
-    val routeProviderClass = findClazz(
-        destinationClass.java.name.replace("\$", "_") + SUFFIX_ROUTE_PROVIDER,
-        destinationClass.java.classLoader
-    )!!
+    val routeFactoryClass = routeFactories.getOrPut(destinationClass.java) {
+        val generatedRouteFactory = if (destinationClass.java
+                    .getAnnotation(Destination::class.java)?.target != Nothing::class
+        ) {
+            findClazz(
+                destinationClass.java.name.replace("\$", "_") + SUFFIX_ROUTE_FACTORY,
+                destinationClass.java.classLoader
+            )
+        } else {
+            null
+        }
 
-    return findMethod(routeProviderClass, METHOD_NAME_GET, routeMethods)!!
-        .invoke(null) as T
+        val routeFactoryAnnotationClass = destinationClass.java
+            .getAnnotation(RouteFactory::class.java)?.clazz
+
+        generatedRouteFactory
+            ?: routeFactoryAnnotationClass?.java
+            ?: throw IllegalArgumentException("either a @Destination.target or a @RouteFactory annotation must be provided")
+    }
+
+    return routeFactoryClass.newInstance() as T
 }
 
 /**

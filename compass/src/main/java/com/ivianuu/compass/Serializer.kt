@@ -17,7 +17,6 @@
 package com.ivianuu.compass
 
 import android.os.Bundle
-import java.lang.reflect.Method
 import kotlin.reflect.KClass
 
 /**
@@ -36,25 +35,18 @@ interface CompassSerializer<T : Any> {
     }
 }
 
-/**
- * Provides a [CompassSerializer]
- */
-interface CompassSerializerProvider
-
-private const val SUFFIX_SERIALIZER_PROVIDER = "__SerializerProvider"
-private val serializerMethods = mutableMapOf<Class<*>, Method>()
+private const val SUFFIX_SERIALIZER = "__Serializer"
 
 /**
  * Returns a new [CompassSerializer] associated with the [destinationClass] or throws
  */
 fun <D : Any> serializer(destinationClass: KClass<out D>): CompassSerializer<D> {
-    val serializerProviderClass = findClazz(
-        destinationClass.java.name.replace("\$", "_") + SUFFIX_SERIALIZER_PROVIDER,
+    val serializerClass = findClazz(
+        destinationClass.java.name.replace("\$", "_") + SUFFIX_SERIALIZER,
         destinationClass.java.classLoader
     )!!
 
-    return findMethod(serializerProviderClass, METHOD_NAME_GET, serializerMethods)!!
-        .invoke(null) as CompassSerializer<D>
+    return serializerClass.newInstance() as CompassSerializer<D>
 }
 
 /**

@@ -16,7 +16,6 @@
 
 package com.ivianuu.compass
 
-import java.lang.reflect.Method
 import kotlin.reflect.KClass
 
 /**
@@ -24,26 +23,20 @@ import kotlin.reflect.KClass
  */
 interface CompassDetour
 
-/**
- * Provides [CompassDetour]'s
- */
-interface CompassDetourProvider
-
-private const val SUFFIX_DETOUR_PROVIDER = "__DetourProvider"
-private val detourMethods = mutableMapOf<Class<*>, Method>()
+private val detourClasses = mutableMapOf<Class<*>, Class<*>>()
 
 /**
  * Returns a new [CompassDetour] associated with the [destinationClass] or throws
  */
 @JvmName("detourTyped")
 fun <T : CompassDetour> detour(destinationClass: KClass<*>): T {
-    val detourProviderClass = findClazz(
-        destinationClass.java.name.replace("\$", "_") + SUFFIX_DETOUR_PROVIDER,
-        destinationClass.java.classLoader
-    )!!
+    val detourClass = detourClasses.getOrPut(destinationClass.java) {
+        val detourAnnotation = destinationClass.java.getAnnotation(Detour::class.java)
+            ?: throw IllegalArgumentException("missing @Detour annotation $destinationClass")
+        detourAnnotation.clazz.java
+    }
 
-    return findMethod(detourProviderClass, METHOD_NAME_GET, detourMethods)!!
-        .invoke(null) as T
+    return detourClass.newInstance() as T
 }
 
 /**

@@ -20,7 +20,6 @@ import com.ivianuu.compass.Destination
 import com.ivianuu.compass.Detour
 import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
-import com.ivianuu.compass.Serializer
 import com.ivianuu.processingx.getAnnotationMirrorOrNull
 import com.ivianuu.processingx.getAsTypeOrNull
 import com.ivianuu.processingx.getPackage
@@ -68,10 +67,6 @@ val Element.routeFactoryClass
 
 val Element.detourClass
     get() = getAnnotationMirrorOrNull<Detour>()
-        ?.getAsTypeOrNull("clazz")
-
-val Element.serializerClass
-    get() = getAnnotationMirrorOrNull<Serializer>()
         ?.getAsTypeOrNull("clazz")
 
 fun Element?.targetType(processingEnv: ProcessingEnvironment): TargetType {
