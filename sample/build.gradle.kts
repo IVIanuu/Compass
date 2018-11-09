@@ -35,8 +35,8 @@ android {
 
     buildTypes {
         getByName("debug") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
@@ -57,6 +57,8 @@ dependencies {
     api(project(":compass-android"))
     api(project(":compass-fragment"))
     kapt(project(":compass-compiler"))
+
+    implementation(Deps.kotlinReflect)
 
     implementation(Deps.travelerLifecycle)
 }

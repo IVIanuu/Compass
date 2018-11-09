@@ -20,9 +20,7 @@ import com.google.auto.common.BasicAnnotationProcessor
 import com.google.common.base.CaseFormat
 import com.google.common.collect.SetMultimap
 import com.ivianuu.compass.Destination
-import com.ivianuu.compass.Key
 import com.ivianuu.compass.Serializer
-import com.ivianuu.compass.compiler.util.getCompassConstructor
 import com.ivianuu.compass.compiler.util.packageName
 import com.ivianuu.compass.compiler.util.serializerClassName
 import com.ivianuu.compass.compiler.util.shouldBeSerialized
@@ -36,6 +34,7 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.tools.Diagnostic
 
+// todo check if destination is a public class etc
 class SerializerProcessingStep(
     private val processingEnv: ProcessingEnvironment,
     private val supportedTypes: SupportedTypes
@@ -69,7 +68,9 @@ class SerializerProcessingStep(
         val attributes = mutableSetOf<SerializerAttribute>()
         val keys = mutableSetOf<SerializerAttributeKey>()
 
-        val constructor = element.getCompassConstructor()
+        val constructorSelector = ConstructorSelector(processingEnv)
+
+        val constructor = constructorSelector.getCompassConstructor(element) ?: return null
 
         constructor.parameters.forEach { attr ->
             if (!supportedTypes.isSupported(attr)) {
@@ -93,22 +94,7 @@ class SerializerProcessingStep(
                 .filterIsInstance<VariableElement>()
                 .firstOrNull { it.simpleName.toString() == simpleName }
 
-            val keyValue = if (field != null
-                    && field.hasAnnotation<Key>()
-            ) {
-                val value = field.getAnnotation(Key::class.java).value
-                if (value.isEmpty()) {
-                    processingEnv.messager.printMessage(
-                        Diagnostic.Kind.ERROR,
-                        "key value must be not empty",
-                        field
-                    )
-                    return null
-                }
-                value
-            } else {
-                element.asType().toString() + "." + attr.simpleName
-            }
+            val keyValue = element.asType().toString() + "." + attr.simpleName
 
             val isNullable = attr.hasAnnotation<Nullable>()
 

@@ -32,6 +32,7 @@ android {
         buildToolsVersion = Build.buildToolsVersion
         minSdkVersion(Build.minSdk)
         targetSdkVersion(Build.targetSdk)
+        consumerProguardFile("proguard-rules.txt")
     }
 }
 

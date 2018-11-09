@@ -19,7 +19,6 @@ package com.ivianuu.compass.compiler
 import com.google.auto.common.BasicAnnotationProcessor
 import com.google.auto.service.AutoService
 import com.ivianuu.compass.compiler.detour.DetourProviderProcessingStep
-import com.ivianuu.compass.compiler.extension.ExtensionProcessingStep
 import com.ivianuu.compass.compiler.route.RouteFactoryProcessingStep
 import com.ivianuu.compass.compiler.route.RouteProviderProcessingStep
 import com.ivianuu.compass.compiler.serializer.SerializerProcessingStep
@@ -38,7 +37,6 @@ class CompassProcessor : BasicAnnotationProcessor() {
             SerializerProviderProcessingStep(processingEnv),
             RouteFactoryProcessingStep(processingEnv),
             RouteProviderProcessingStep(processingEnv),
-            DetourProviderProcessingStep(processingEnv),
-            ExtensionProcessingStep(processingEnv)
+            DetourProviderProcessingStep(processingEnv)
         )
 }

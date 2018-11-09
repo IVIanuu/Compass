@@ -16,6 +16,5 @@
 
 package com.ivianuu.compass
 
-@Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)
 annotation class DoNotSerialize

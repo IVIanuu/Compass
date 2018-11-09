@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ivianuu.compass.fragment.destination
 import com.ivianuu.traveler.goBack
 import com.ivianuu.traveler.navigate
 import kotlinx.android.synthetic.main.fragment_counter.*
@@ -44,7 +45,7 @@ class CounterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val destination = counterDestination()
+        val destination = destination<CounterDestination>()
 
         title.text = "Count: ${destination.count}"
         view.setBackgroundColor(destination.color)

@@ -18,6 +18,7 @@ package com.ivianuu.compass.fragment
 
 import androidx.fragment.app.Fragment
 import com.ivianuu.compass.CompassRouteFactory
+import com.ivianuu.compass.Destination
 import com.ivianuu.compass.routeFactory
 import com.ivianuu.compass.serializerOrNull
 import kotlin.reflect.KClass
@@ -30,6 +31,33 @@ interface FragmentRouteFactory<T : Any> : CompassRouteFactory {
      * Returns a new [Fragment] associated with the [destination]
      */
     fun createFragment(destination: T): Fragment
+}
+
+class ReflectFragmentRouteFactory<T : Any> : FragmentRouteFactory<T> {
+    override fun createFragment(destination: T): Fragment {
+        val fragmentClass = cachedFragmentClasses.getOrPut(destination.javaClass) {
+            val annotation = destination.javaClass.getAnnotation(Destination::class.java)
+                ?: throw IllegalArgumentException("missing @Destination annotation")
+
+            val fragmentClass = annotation.target.java
+
+            if (!Fragment::class.java.isAssignableFrom(fragmentClass)) {
+                throw IllegalArgumentException("target is not a Fragment")
+            }
+
+            fragmentClass as Class<Fragment>
+        }
+
+        return try {
+            fragmentClass.newInstance() as Fragment
+        } catch (e: InstantiationException) {
+            throw InstantiationException("failed to create fragment $fragmentClass, $e")
+        }
+    }
+
+    private companion object {
+        private val cachedFragmentClasses = mutableMapOf<Class<*>, Class<Fragment>>()
+    }
 }
 
 /**

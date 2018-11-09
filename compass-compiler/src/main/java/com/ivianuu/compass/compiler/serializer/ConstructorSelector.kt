@@ -16,86 +16,47 @@
 
 package com.ivianuu.compass.compiler.serializer
 
-import com.ivianuu.compass.CompassConstructor
-import com.ivianuu.processingx.hasAnnotation
+import javax.annotation.processing.ProcessingEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
-import javax.lang.model.element.TypeElement
 import javax.lang.model.element.VariableElement
 import javax.lang.model.util.ElementFilter
+import javax.tools.Diagnostic
 
-object ConstructorSelector {
+class ConstructorSelector(private val processingEnv: ProcessingEnvironment) {
 
-    fun getCompassConstructor(element: Element): ExecutableElement {
+    fun getCompassConstructor(element: Element): ExecutableElement? {
         val constructors = ElementFilter.constructorsIn(element.enclosedElements)
             .asSequence()
             .filter { it.modifiers.contains(Modifier.PUBLIC) }
             .asSequence()
             .toList()
 
-        if (constructors.isEmpty()) throw Exception(
-            "${element.simpleName}: No public constructor found"
-        )
-
-        constructors.getAnnotatedConstructor(element)?.let { return it }
-        constructors.getLongestSuitableConstructor(element).let { return it }
-    }
-
-
-    private fun List<ExecutableElement>.getAnnotatedConstructor(base: Element): ExecutableElement? {
-        val annotatedConstructors = this
-            .asSequence()
-            .filter { it.hasAnnotation<CompassConstructor>() }
-            .toList()
-
-        return when {
-            annotatedConstructors.isEmpty() -> null
-            annotatedConstructors.size == 1 -> annotatedConstructors.first()
-            annotatedConstructors.size > 1 -> throw Exception(
-                "${base.simpleName} has more than one constructors annotated with " +
-                        "'CompassConstructor'."
+        if (constructors.isEmpty()) {
+            processingEnv.messager.printMessage(
+                Diagnostic.Kind.ERROR, "must have a public constructor", element
             )
-            else -> null
+            return null
+        }
+
+        val bestConstructor = constructors.asSequence()
+            .sortedByDescending { it.parameters.size }
+            .filter { constructor -> constructor.parameters.all { it.hasAccessor(element) } }
+            .firstOrNull()
+
+        if (bestConstructor != null) {
+            return bestConstructor
+        } else {
+            processingEnv.messager.printMessage(
+                Diagnostic.Kind.ERROR,
+                "No suitable constructor found", element
+            )
+            return null
         }
     }
 
-
-    private fun List<ExecutableElement>.getLongestSuitableConstructor(base: Element)
-            : ExecutableElement {
-
-        val checkedConstructors = this
-            .asSequence()
-            .sortedByDescending { it.parameters.size }
-            .map { it to it.isSuitable(base) }
-            .toList()
-
-
-        val suitableConstructors = checkedConstructors
-            .asSequence()
-            .filter { it.second == null }
-            .toList()
-
-        if (suitableConstructors.isNotEmpty()) return suitableConstructors.first().first
-
-        checkedConstructors
-            .asSequence()
-            .mapNotNull { it.second }
-            .firstOrNull()?.let { throw it }
-
-        throw IllegalStateException(
-            "No suitable constructor found. No error message available. " +
-                    "This is a bug, for sure!"
-        )
-    }
-
-    private fun ExecutableElement.isSuitable(base: Element): Throwable? {
-        return this.parameters.asSequence()
-            .map { it.hasAccessor(base) }
-            .firstOrNull()
-    }
-
-    private fun VariableElement.hasAccessor(base: Element): Throwable? {
+    private fun VariableElement.hasAccessor(base: Element): Boolean {
         val containsFieldAccessor = ElementFilter
             .fieldsIn(base.enclosedElements)
             .asSequence()
@@ -116,29 +77,7 @@ object ConstructorSelector {
             }
             .any()
 
-        return if (!containsFieldAccessor && !containsMethodAccessor) {
-            getNoAccessorThrowable(
-                base as TypeElement,
-                this
-            )
-        } else null
+        return containsFieldAccessor || containsMethodAccessor
     }
-
-    private fun getNoAccessorThrowable(baseElement: TypeElement, attribute: VariableElement)
-            : Throwable {
-        val message = "No accessor found for ${attribute.simpleName}:${attribute.asType()}\n" +
-                "Fields: ${ElementFilter.fieldsIn(baseElement.enclosedElements)
-                    .map {
-                        "${it.modifiers.joinToString(" ")} " +
-                                "${it.simpleName}"
-                    }} \n" +
-                "Methods: ${ElementFilter.methodsIn(baseElement.enclosedElements)
-                    .map {
-                        "${it.modifiers.joinToString(" ")} " +
-                                "${it.simpleName}"
-                    }}"
-        throw Throwable(message)
-    }
-
 
 }

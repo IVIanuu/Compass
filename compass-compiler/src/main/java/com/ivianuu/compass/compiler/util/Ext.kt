@@ -21,7 +21,6 @@ import com.ivianuu.compass.Detour
 import com.ivianuu.compass.DoNotSerialize
 import com.ivianuu.compass.RouteFactory
 import com.ivianuu.compass.Serializer
-import com.ivianuu.compass.compiler.serializer.ConstructorSelector
 import com.ivianuu.processingx.getAnnotationMirrorOrNull
 import com.ivianuu.processingx.getAsTypeOrNull
 import com.ivianuu.processingx.getPackage
@@ -35,9 +34,6 @@ import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 
 fun Element.shouldBeSerialized() = !hasAnnotation<DoNotSerialize>()
-
-fun Element.getCompassConstructor() =
-    ConstructorSelector.getCompassConstructor(this)
 
 fun TypeElement.serializerClassName() = className("__Serializer")
 
